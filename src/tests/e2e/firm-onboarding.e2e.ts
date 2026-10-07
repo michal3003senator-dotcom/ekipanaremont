@@ -1,9 +1,13 @@
-import { execFileSync } from 'node:child_process'
-
-import { expect as baseExpect, type Page, test } from '@playwright/test'
+import { expect as baseExpect, test } from '@playwright/test'
 import sharp from 'sharp'
 
-import { collectErrors, expectNoAxeViolations } from './support'
+import {
+  collectErrors,
+  expectNoAxeViolations,
+  pickLocality,
+  runScript,
+  waitForTurnstile,
+} from './support'
 
 const PASSWORD = 'Fuga-Gres-Kielnia-48!'
 // Serwer deweloperski kompiluje każdą stronę przy pierwszym wejściu – dłuższe oczekiwanie na widoki.
@@ -25,14 +29,7 @@ function fakeNip(seed: number): string {
   }
 }
 
-function verificationToken(email: string): string {
-  const output = execFileSync(
-    'pnpm',
-    ['-s', 'payload', 'run', 'scripts/e2e/verification-token.ts', email],
-    { encoding: 'utf8' },
-  )
-  return output.trim().split('\n').pop()!.trim()
-}
+const verificationToken = (email: string) => runScript('verification-token', email)
 
 const photo = async (shade: number) => ({
   name: `budowa-${shade}.png`,
@@ -43,25 +40,6 @@ const photo = async (shade: number) => ({
     .png()
     .toBuffer(),
 })
-
-/** Z kluczem Turnstile (CI: klucze testowe) czekamy na token widżetu przed wysłaniem formularza. */
-async function waitForTurnstile(page: Page) {
-  if (!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) return
-  await expect
-    .poll(() =>
-      page
-        .locator('input[name="cf-turnstile-response"]')
-        .inputValue()
-        .catch(() => ''),
-    )
-    .not.toBe('')
-}
-
-async function pickLocality(page: Page, label: string, query: string) {
-  const field = page.getByRole('combobox', { name: label })
-  await field.fill(query)
-  await page.getByRole('option', { name: /^Łódź/ }).first().click()
-}
 
 test('rejestracja → NIP → profil → wysłanie do akceptacji; termin potwierdzony jednym dotknięciem', async ({
   page,

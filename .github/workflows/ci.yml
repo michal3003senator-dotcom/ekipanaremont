@@ -110,6 +110,8 @@ jobs:
           done
       - name: Migracje na pustej bazie
         run: pnpm payload migrate
+      - name: Słowniki (miejscowości TERYT, usługi) dla testów E2E
+        run: pnpm seed
       - run: pnpm build
       - name: Przeglądarka do testu dymnego
         run: pnpm exec playwright install --with-deps chromium

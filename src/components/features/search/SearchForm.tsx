@@ -79,10 +79,12 @@ export function SearchForm({
         className,
       )}
     >
+      {/* Pola dobrowolne (puste = wszystkie firmy); `required` w Field tylko ukrywa „(opcjonalnie)”. */}
       <Field id={`${variant}-usluga`} label="Czego szukasz?" required className="md:col-span-4">
         {(control) => (
           <Combobox
             {...control}
+            required={false}
             label="Usługa"
             name="usluga"
             options={services}
@@ -96,6 +98,7 @@ export function SearchForm({
         {(control) => (
           <Combobox
             {...control}
+            required={false}
             label="Miejscowość"
             name="gdzie"
             options={places}
@@ -111,6 +114,7 @@ export function SearchForm({
         {(control) => (
           <Select
             {...control}
+            required={false}
             name="termin"
             options={TERMS}
             value={when}
