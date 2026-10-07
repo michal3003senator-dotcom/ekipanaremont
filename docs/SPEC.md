@@ -1,6 +1,6 @@
 # Ekipa na Termin – specyfikacja
 
-Wersja 1.0, 7 października 2026. Źródło prawdy dla wymagań. Zmiany tylko po akceptacji właściciela.
+Wersja 1.1, 7 października 2026 (1.1: renderowanie stron publicznych w sekcji 6, ADR 0009). Źródło prawdy dla wymagań. Zmiany tylko po akceptacji właściciela.
 
 ---
 
@@ -171,7 +171,7 @@ Indeksy: firms(status, availability.date), firms(slug), firms(nip), inquiries(fi
 ## 6. Wymagania niefunkcjonalne
 - **Bezpieczeństwo:** zasady z `CLAUDE.md`; punkt odniesienia OWASP ASVS poziom 2.
 - **RODO:** dane w UE, minimalizacja, retencja z `settings`, eksport i usunięcie danych na żądanie, rejestr zgód z wersją treści, brak danych osobowych w logach i e-mailach powiadomień.
-- **Wydajność:** na telefonie LCP < 2,5 s, INP < 200 ms, CLS < 0,1. Strony publiczne generowane statycznie i odświeżane po zmianie w CMS (`revalidateTag`).
+- **Wydajność:** na telefonie LCP < 2,5 s, INP < 200 ms, CLS < 0,1. Strony publiczne renderowane dynamicznie (wymóg CSP z nonce, ADR 0009) z cache danych odświeżanym po zmianie w CMS (`revalidateTag`).
 - **Dostępność:** WCAG 2.2 AA.
 - **Przeglądarki:** dwie ostatnie wersje Chrome, Safari (w tym iOS), Firefox, Edge.
 - **Język:** tylko polski. Formaty dat, liczb i walut polskie.
