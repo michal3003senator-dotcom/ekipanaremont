@@ -42,7 +42,10 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/setup
       - name: Jednorazowy PAYLOAD_SECRET
-        run: echo "PAYLOAD_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+        run: |
+          secret="$(openssl rand -hex 32)"
+          echo "::add-mask::$secret"
+          echo "PAYLOAD_SECRET=$secret" >> "$GITHUB_ENV"
       - run: pnpm typecheck
       - name: Pliki generowane przez Payload są aktualne
         run: |
@@ -93,7 +96,10 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/setup
       - name: Jednorazowy PAYLOAD_SECRET
-        run: echo "PAYLOAD_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+        run: |
+          secret="$(openssl rand -hex 32)"
+          echo "::add-mask::$secret"
+          echo "PAYLOAD_SECRET=$secret" >> "$GITHUB_ENV"
       - name: Migracje na pustej bazie
         run: pnpm payload migrate
       - run: pnpm build
