@@ -5,6 +5,7 @@ import type { JobsConfig, PayloadRequest, TaskConfig } from 'payload'
 import { isVerifiedStaff, nobody, staff } from '@/access'
 
 import { expireAvailability, remindAvailability, remindTrialEnding } from './firms'
+import { requestReviews } from './reviews'
 
 /**
  * Zadania cykliczne (SPEC 5). Vercel Cron wywołuje `/api/payload-jobs/run?queue=…` z nagłówkiem
@@ -51,5 +52,11 @@ export const jobs: JobsConfig = {
       delete: staff('admin'),
     },
   }),
-  tasks: [purgeExpiredLeads, remindAvailability, expireAvailability, remindTrialEnding],
+  tasks: [
+    purgeExpiredLeads,
+    remindAvailability,
+    expireAvailability,
+    remindTrialEnding,
+    requestReviews,
+  ],
 }

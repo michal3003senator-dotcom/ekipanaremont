@@ -153,6 +153,7 @@ export interface Config {
       remindAvailability: TaskRemindAvailability;
       expireAvailability: TaskExpireAvailability;
       remindTrialEnding: TaskRemindTrialEnding;
+      requestReviews: TaskRequestReviews;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -1049,6 +1050,7 @@ export interface PayloadJob {
           | 'remindAvailability'
           | 'expireAvailability'
           | 'remindTrialEnding'
+          | 'requestReviews'
           | 'schedulePublish';
         taskID: string;
         input?:
@@ -1089,6 +1091,7 @@ export interface PayloadJob {
         | 'remindAvailability'
         | 'expireAvailability'
         | 'remindTrialEnding'
+        | 'requestReviews'
         | 'schedulePublish'
       )
     | null;
@@ -2143,6 +2146,14 @@ export interface TaskExpireAvailability {
  * via the `definition` "TaskRemindTrialEnding".
  */
 export interface TaskRemindTrialEnding {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskRequestReviews".
+ */
+export interface TaskRequestReviews {
   input?: unknown;
   output?: unknown;
 }

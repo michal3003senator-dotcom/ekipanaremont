@@ -167,3 +167,25 @@ export const inquirySchema = z.object({
 })
 
 export type InquiryInput = z.input<typeof inquirySchema>
+
+/** Opinia z jednorazowego linku (SPEC 3.7). */
+export const reviewSchema = z.object({
+  token: z.string().regex(/^[\w-]{20,64}$/, 'Link jest nieprawidłowy.'),
+  rating: z
+    .number('Wybierz ocenę od 1 do 5.')
+    .int()
+    .min(1, 'Wybierz ocenę od 1 do 5.')
+    .max(5, 'Wybierz ocenę od 1 do 5.'),
+  title: optionalText(120),
+  body: z
+    .string()
+    .trim()
+    .min(30, 'Napisz co najmniej 30 znaków: co firma zrobiła i jak przebiegła współpraca.')
+    .max(1500, 'Najwyżej 1500 znaków.'),
+  authorDisplayName: z
+    .string()
+    .trim()
+    .regex(/^[^,]{2,40},\s*[^,]{2,40}$/, 'Podpisz się jak w przykładzie: „Anna, Widzew”.'),
+})
+
+export type ReviewInput = z.input<typeof reviewSchema>

@@ -163,3 +163,25 @@ export function inquiryConfirmation(firmName: string, profileUrl: string): Email
     ),
   }
 }
+
+/** Prośba o opinię po zapytaniu (SPEC 3.6–3.7): jednorazowy link ważny 30 dni. */
+export function reviewRequest(url: string, firmName: string): EmailTemplate {
+  return {
+    subject: `Jak oceniasz firmę ${firmName}?`,
+    body: (
+      <EmailLayout
+        preview="Twoja opinia pomoże innym wybrać ekipę. Zajmie 2 minuty."
+        heading="Jak poszła współpraca?"
+      >
+        <Paragraph>
+          Kilka dni temu Twoje zapytanie trafiło do firmy {firmName}. Napisz, jak przebiegł kontakt
+          albo prace – opinia pomoże innym wybrać ekipę.
+        </Paragraph>
+        <Action href={url}>Wystawiam opinię</Action>
+        <Note>
+          Link działa 30 dni i tylko raz. Opinię publikujemy po sprawdzeniu przez moderatora.
+        </Note>
+      </EmailLayout>
+    ),
+  }
+}
