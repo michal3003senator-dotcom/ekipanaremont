@@ -9,6 +9,8 @@ import {
   formatShortDate,
   formatShortDateWithWeekday,
   formatWeekdayInitial,
+  fromLocalDate,
+  toLocalDate,
   todayInWarsaw,
   weekdayIndex,
 } from '../../lib/format/date'
@@ -61,5 +63,15 @@ describe('formaty polskie (DESIGN §8)', () => {
     expect(formatRelativeDays(1)).toBe('jutro')
     expect(formatRelativeDays(-2)).toBe('2 dni temu')
     expect(formatRelativeDays(7)).toBe('za 7 dni')
+  })
+})
+
+describe('daty dla kalendarza', () => {
+  it('zamienia datę kalendarzową na lokalną północ i z powrotem', () => {
+    const local = toLocalDate('2026-10-25')
+    expect([local.getFullYear(), local.getMonth(), local.getDate(), local.getHours()]).toEqual([
+      2026, 9, 25, 0,
+    ])
+    expect(fromLocalDate(local)).toBe('2026-10-25')
   })
 })

@@ -258,6 +258,23 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Okno dialogowe: 16 px marginesu od krawędzi ekranu, szerokość do 32 rem. */
+  .dialog-panel {
+    inline-size: min(100vw - var(--spacing) * 8, var(--container-lg));
+    max-block-size: calc(100dvh - var(--spacing) * 8);
+  }
+
+  /* Dolny panel: odstęp od dolnej krawędzi z uwzględnieniem paska systemowego (DESIGN §5). */
+  .sheet-panel {
+    max-block-size: calc(100dvh - var(--spacing) * 12);
+    padding-block-end: max(var(--spacing) * 6, env(safe-area-inset-bottom));
+  }
+
+  /* Powiadomienia nad dolną krawędzią i paskiem systemowym telefonu. */
+  .toast-viewport {
+    padding-block-end: max(var(--spacing) * 4, env(safe-area-inset-bottom));
+  }
+
   /* Kafel terminu (DESIGN §2): 14 dni od dziś, szersza fuga między tygodniami. */
   .tiles,
   .tiles-labels {

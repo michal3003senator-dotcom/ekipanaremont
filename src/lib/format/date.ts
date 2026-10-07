@@ -66,6 +66,18 @@ export function weekdayIndex(date: CalendarDate): number {
   return (toUtc(date).getUTCDay() + 6) % 7
 }
 
+/** Data kalendarzowa jako lokalna północ – format oczekiwany przez kalendarz (react-day-picker). */
+export function toLocalDate(date: CalendarDate): Date {
+  const utc = toUtc(date)
+  return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate())
+}
+
+/** Odwrotność `toLocalDate`. */
+export function fromLocalDate(date: Date): CalendarDate {
+  const pad = (value: number) => String(value).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` as CalendarDate
+}
+
 /** „14 paź” */
 export const formatShortDate = (date: CalendarDate) => formatters.short.format(toUtc(date))
 
