@@ -6,7 +6,9 @@ import { cn } from '@/lib/cn'
 import type { FirmPhotoData } from './types'
 
 type Props = {
-  photo: FirmPhotoData
+  photo?: FirmPhotoData
+  /** Inicjały pokazywane, gdy firma nie dodała jeszcze zdjęć. */
+  fallback?: string
   sizes: string
   /** Wspólna nazwa zdjęcia karty i nagłówka profilu: przejście View Transitions (DESIGN §6). */
   transitionName?: string
@@ -15,8 +17,18 @@ type Props = {
 }
 
 /** Zdjęcie realizacji: stałe proporcje, rozmyty podgląd, powiększenie o 3% przy najechaniu na kartę. */
-export function FirmPhoto({ photo, sizes, transitionName, eager, className }: Props) {
-  const image = (
+export function FirmPhoto({ photo, fallback, sizes, transitionName, eager, className }: Props) {
+  const image = !photo ? (
+    <div
+      className={cn(
+        'relative flex items-center justify-center overflow-hidden bg-surface-2',
+        className,
+      )}
+      aria-hidden="true"
+    >
+      <span className="font-display text-h2 font-medium text-text-muted">{fallback}</span>
+    </div>
+  ) : (
     <div className={cn('photo-frame relative overflow-hidden bg-surface-2', className)}>
       <Image
         src={photo.src}
@@ -45,3 +57,12 @@ export function FirmPhoto({ photo, sizes, transitionName, eager, className }: Pr
 }
 
 export const firmPhotoTransition = (slug: string) => `firm-photo-${slug}`
+
+/** „Płytka i Fuga” → „PI” – zastępuje zdjęcie, gdy firma nie ma jeszcze realizacji. */
+export const initialsOf = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter((word) => word.length > 1)
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join('')

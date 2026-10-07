@@ -1,3 +1,5 @@
+import type { PostgresAdapter } from '@payloadcms/db-postgres'
+import { sql } from '@payloadcms/db-postgres'
 import type { Payload } from 'payload'
 
 import { normalizeSearch } from '@/lib/format/search'
@@ -24,28 +26,38 @@ export const toOption = (locality: Locality): LocalityOption => ({
   description: localityDescription(locality),
 })
 
-/** Podpowiedzi miejscowości bez polskich znaków (indeks pg_trgm); miasta przed wsiami. */
+/**
+ * Podpowiedzi miejscowości bez polskich znaków i odporne na literówki (SPEC 3.1, pg_trgm):
+ * najpierw dokładna nazwa, potem nazwy zaczynające się od frazy, potem najbardziej podobne.
+ */
 export async function searchLocalities(
   payload: Payload,
   query: string,
-  limit = 10,
+  { limit = 10, value = 'id' }: { limit?: number; value?: 'id' | 'slug' } = {},
 ): Promise<LocalityOption[]> {
   const needle = normalizeSearch(query).slice(0, 60)
   if (needle.length < 2) return []
+  const db = (payload.db as unknown as PostgresAdapter).drizzle
+  const { rows } = await db.execute<{ id: string }>(sql`
+    SELECT id FROM localities
+    WHERE type IN ('miejscowosc', 'dzielnica')
+      AND (name_search LIKE ${`${needle}%`} OR name_search % ${needle})
+    ORDER BY name_search = ${needle} DESC, name_search LIKE ${`${needle}%`} DESC,
+      similarity(name_search, ${needle}) DESC, length(name) ASC
+    LIMIT ${limit}
+  `)
+  if (!rows.length) return []
+  const ids = rows.map((row) => row.id)
   const { docs } = await payload.find({
     collection: 'localities',
-    where: { nameSearch: { like: needle }, type: { in: ['miejscowosc', 'dzielnica'] } },
-    sort: 'name',
-    limit: 40,
+    where: { id: { in: ids } },
     depth: 2,
+    pagination: false,
     overrideAccess: true,
   })
-  return docs
-    .sort((a, b) => rank(a, needle) - rank(b, needle) || a.name.length - b.name.length)
-    .slice(0, limit)
-    .map(toOption)
+  const byId = new Map(docs.map((doc) => [doc.id, doc]))
+  return ids
+    .map((id) => byId.get(id))
+    .filter((doc): doc is Locality => Boolean(doc))
+    .map((doc) => ({ ...toOption(doc), value: value === 'slug' ? (doc.slug ?? doc.id) : doc.id }))
 }
-
-/** Najpierw nazwy zaczynające się od frazy. */
-const rank = (locality: Locality, needle: string) =>
-  (locality.nameSearch ?? '').startsWith(needle) ? 0 : 1

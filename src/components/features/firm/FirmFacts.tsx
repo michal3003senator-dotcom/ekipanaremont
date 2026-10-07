@@ -23,7 +23,11 @@ export function FirmFacts({ firm, className }: { firm: FirmSummary; className?: 
       ) : (
         <Rating value={firm.rating} count={firm.reviews} />
       )}
-      <span>W rejestrze {firm.registry}</span>
+      {firm.registry && (
+        <span>
+          {firm.registry === 'VAT' ? 'Na Białej liście VAT' : `W rejestrze ${firm.registry}`}
+        </span>
+      )}
     </div>
   )
 }

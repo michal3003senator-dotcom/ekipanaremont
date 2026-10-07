@@ -19,10 +19,12 @@ export type FirmSummary = {
   areaExtra: number
   rating: number | null
   reviews: number
-  registry: 'CEIDG' | 'KRS'
+  /** Rejestr, w którym sprawdziliśmy NIP; `null` – weryfikacja ręczna przez moderatora. */
+  registry: 'CEIDG' | 'KRS' | 'VAT' | null
   availableFrom: CalendarDate | null
   confirmedOn?: CalendarDate
-  photo: FirmPhotoData
+  /** Okładka: pierwsze zdjęcie pierwszej realizacji; brak – neutralne pole z inicjałami. */
+  photo?: FirmPhotoData
 }
 
 export type Project = {

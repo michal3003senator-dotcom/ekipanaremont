@@ -2,8 +2,7 @@ export type NavLink = { href: string; label: string }
 
 export const SITE_NAV: readonly NavLink[] = [
   { href: '/szukaj', label: 'Szukaj firm' },
-  { href: '/artykuly', label: 'Poradnik' },
-  { href: '/kalkulatory', label: 'Kalkulatory' },
+  // Poradnik i kalkulatory wrócą do menu w fazie 6 (CMS).
   { href: '/rejestracja', label: 'Dla firm' },
 ]
 

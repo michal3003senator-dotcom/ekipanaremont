@@ -11,6 +11,10 @@ export const LIMITS = {
   nipLookup: { points: 20, windowSeconds: 60 * 60 },
   panelAction: { points: 120, windowSeconds: 60 },
   upload: { points: 60, windowSeconds: 60 * 60 },
+  suggest: { points: 120, windowSeconds: 60 },
+  inquiry: { points: 5, windowSeconds: 60 * 60 },
+  review: { points: 10, windowSeconds: 60 * 60 },
+  phone: { points: 60, windowSeconds: 60 * 60 },
 } as const
 
 export type LimitName = keyof typeof LIMITS

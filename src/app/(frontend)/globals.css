@@ -427,3 +427,11 @@
     animation-delay: 0s !important;
   }
 }
+
+/* Wyniki wyszukiwania: karty wchodzą po kolei co 30 ms, tylko przy wczytaniu strony (DESIGN §6). */
+@media (prefers-reduced-motion: no-preference) {
+  .results > li {
+    animation: fade-in var(--duration-enter) cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 30ms);
+  }
+}

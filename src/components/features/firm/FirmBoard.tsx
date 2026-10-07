@@ -10,7 +10,7 @@ import { cn } from '@/lib/cn'
 import { type CalendarDate, formatWeekdayInitial } from '@/lib/format/date'
 import { formatRating } from '@/lib/format/number'
 
-import { FirmPhoto } from './FirmPhoto'
+import { FirmPhoto, initialsOf } from './FirmPhoto'
 import type { FirmSummary } from './types'
 
 type Props = {
@@ -57,7 +57,8 @@ export function FirmBoard({ firms, today, className }: Props) {
                 className="group flex items-center gap-4 lg:col-span-4"
               >
                 <FirmPhoto
-                  photo={{ ...firm.photo, demo: false }}
+                  photo={firm.photo && { ...firm.photo, demo: false }}
+                  fallback={initialsOf(firm.name)}
                   sizes="96px"
                   className="aspect-4/3 w-24 shrink-0 rounded-badge"
                 />

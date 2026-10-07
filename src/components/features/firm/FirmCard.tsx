@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn'
 import type { CalendarDate } from '@/lib/format/date'
 
 import { firmArea, FirmFacts } from './FirmFacts'
-import { FirmPhoto, firmPhotoTransition } from './FirmPhoto'
+import { FirmPhoto, firmPhotoTransition, initialsOf } from './FirmPhoto'
 import type { FirmSummary } from './types'
 
 type Props = {
@@ -32,6 +32,7 @@ export function FirmCard({ firm, today, href = `/firma/${firm.slug}`, className 
     >
       <FirmPhoto
         photo={firm.photo}
+        fallback={initialsOf(firm.name)}
         sizes="(min-width: 768px) 25vw, 100vw"
         transitionName={firmPhotoTransition(firm.slug)}
         className="aspect-4/3 md:col-span-3"

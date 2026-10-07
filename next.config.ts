@@ -15,6 +15,13 @@ const nextConfig: NextConfig = {
   turbopack: { root: dirname },
   // Zdjęcia realizacji idą po jednym, zmniejszone w przeglądarce; Vercel i tak tnie ciało żądania przy 4,5 MB.
   experimental: { serverActions: { bodySizeLimit: '5mb' } },
+  // Optymalizacja tylko zdjęć z Payload i plików z builda – bez dowolnych adresów lokalnych.
+  images: {
+    localPatterns: [
+      { pathname: '/api/media/file/**', search: '' },
+      { pathname: '/_next/static/media/**', search: '' },
+    ],
+  },
   async headers() {
     return [
       {
