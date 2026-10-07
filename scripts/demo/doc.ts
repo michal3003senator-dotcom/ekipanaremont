@@ -17,7 +17,7 @@ export type DocPart =
   | { firms: { service: string; locality?: string } }
   | { cta: { label: string; href: string } }
 
-type LexicalNode = Record<string, unknown>
+type LexicalNode = { type: string; version: number; [key: string]: unknown }
 
 const base = { version: 1, direction: 'ltr' as const, format: '' as const, indent: 0 }
 const BOLD = 1

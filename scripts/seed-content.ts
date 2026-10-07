@@ -1,10 +1,14 @@
 /**
- * Treści startowe (faza 6): szkice kalkulatorów i stron – bez cen i bez tekstów prawnych,
- * redakcja uzupełnia je w panelu i publikuje. Demo (tylko lokalnie): kategoria i artykuł.
+ * Treści startowe (faza 6): szkice kalkulatorów (bez cen) i stron (dokumenty do przeglądu przez
+ * prawnika) – redakcja uzupełnia je w panelu i publikuje. Demo (tylko lokalnie): kategoria i artykuł.
  */
 import type { Payload } from 'payload'
 
+import { type DocRefs, toBlocks } from './demo/doc'
+import { SEED_PAGES } from './demo/pages'
+
 const system = { overrideAccess: true, depth: 0 } as const
+const NO_REFS: DocRefs = { calculators: {}, services: {}, localities: {} }
 
 /** Minimalny dokument Lexical z akapitów. */
 export function richText(...paragraphs: string[]) {
@@ -77,48 +81,16 @@ export async function seedCalculators(payload: Payload) {
   return created
 }
 
-const PAGES = [
-  {
-    title: 'Regulamin',
-    legalKind: 'terms' as const,
-    body: [
-      'Treść regulaminu przygotowuje prawnik. Wklej ją tutaj, podaj wersję i datę obowiązywania, potem opublikuj.',
-    ],
-  },
-  {
-    title: 'Polityka prywatności',
-    legalKind: 'privacy' as const,
-    body: [
-      'Treść polityki prywatności przygotowuje prawnik. Wklej ją tutaj, podaj wersję i datę obowiązywania, potem opublikuj.',
-    ],
-  },
-  {
-    title: 'Jak sprawdzamy opinie',
-    body: [
-      'Opinię może wystawić tylko klient, który wysłał zapytanie do firmy przez Ekipę na Termin. Po wysłaniu zapytania dostaje e-mailem jednorazowy link, ważny 30 dni. Z jednego zapytania powstaje najwyżej jedna opinia.',
-      'Każdą opinię przed publikacją czyta moderator. Sprawdzamy, czy dotyczy kontaktu z firmą albo wykonanych prac i czy nie zawiera danych osobowych, wulgaryzmów ani treści niezwiązanych z firmą.',
-      'Firma może raz publicznie odpowiedzieć na opinię i zgłosić ją do ponownego sprawdzenia, jeśli uważa, że narusza zasady.',
-    ],
-  },
-  {
-    title: 'Zasady moderacji',
-    body: [
-      'Moderatorzy sprawdzają profile firm, opinie oraz – gdy działają – posty na forum i ogłoszenia na giełdzie.',
-      'Każda decyzja ograniczająca (odrzucenie, ukrycie, blokada) ma uzasadnienie. Autor dostaje je e-mailem razem z informacją, jak się odwołać.',
-      'Treść, która narusza prawo albo regulamin, można zgłosić przyciskiem „Zgłoś” przy profilu, opinii, poście lub ogłoszeniu.',
-    ],
-  },
-  { title: 'Kontakt', body: ['Uzupełnij dane kontaktowe serwisu i opublikuj stronę.'] },
-  { title: 'O nas', body: ['Uzupełnij opis serwisu i opublikuj stronę.'] },
-]
-
-/** Szkice stron podlinkowanych w stopce – stopka pokazuje je dopiero po publikacji. */
+/**
+ * Szkice stron podlinkowanych w stopce (regulamin, polityka, …) – treść do przeglądu przez prawnika.
+ * Stopka pokazuje je dopiero po publikacji w panelu.
+ */
 export async function seedPages(payload: Payload) {
   let created = 0
-  for (const page of PAGES) {
+  for (const page of SEED_PAGES) {
     const exists = await payload.count({
       collection: 'pages',
-      where: { title: { equals: page.title } },
+      where: { slug: { equals: page.slug } },
       ...system,
     })
     if (exists.totalDocs) continue
@@ -126,8 +98,11 @@ export async function seedPages(payload: Payload) {
       collection: 'pages',
       data: {
         title: page.title,
-        legalKind: 'legalKind' in page ? page.legalKind : undefined,
-        content: [{ blockType: 'text', body: richText(...page.body) }],
+        slug: page.slug,
+        legalKind: page.legalKind,
+        legalVersion: page.legalVersion,
+        effectiveFrom: page.effectiveFrom,
+        content: toBlocks(page.parts, NO_REFS) as never,
         _status: 'draft',
       },
       draft: true,
