@@ -4,10 +4,20 @@ type CspOptions = {
   isDev: boolean
   /** Tylko przy HTTPS – lokalnie (http://localhost) zablokowałoby zasoby. */
   upgradeInsecureRequests: boolean
+  /** Odpowiedź w trybie podglądu redakcji: wolno ją osadzić w panelu tej samej domeny (ADR 0023). */
+  previewFraming?: boolean
+  /** Panel /admin osadza podgląd strony w ramce (`frame-src 'self'`). */
+  framesSelf?: boolean
 }
 
 /** Buduje Content-Security-Policy z nonce (ADR 0009). */
-export function buildCsp({ nonce, isDev, upgradeInsecureRequests }: CspOptions): string {
+export function buildCsp({
+  nonce,
+  isDev,
+  upgradeInsecureRequests,
+  previewFraming = false,
+  framesSelf = false,
+}: CspOptions): string {
   const directives: Record<string, string[]> = {
     'default-src': ["'self'"],
     'script-src': [
@@ -22,11 +32,11 @@ export function buildCsp({ nonce, isDev, upgradeInsecureRequests }: CspOptions):
     'font-src': ["'self'"],
     'connect-src': ["'self'"],
     // Cloudflare Turnstile osadza widżet w ramce (formularze kont, zapytań i zgłoszeń).
-    'frame-src': ['https://challenges.cloudflare.com'],
+    'frame-src': [...(framesSelf ? ["'self'"] : []), 'https://challenges.cloudflare.com'],
     'object-src': ["'none'"],
     'base-uri': ["'self'"],
     'form-action': ["'self'"],
-    'frame-ancestors': ["'none'"],
+    'frame-ancestors': [previewFraming ? "'self'" : "'none'"],
   }
 
   const policy = Object.entries(directives).map(([name, values]) => `${name} ${values.join(' ')}`)

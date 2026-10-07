@@ -6,9 +6,12 @@ import { withSentryConfig } from '@sentry/nextjs/config'
 import type { NextConfig } from 'next'
 
 import { isProductionDeployment } from './src/lib/runtime'
-import { securityHeaders } from './src/lib/security/headers'
+import { DRAFT_MODE_COOKIE, securityHeaders } from './src/lib/security/headers'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
+const serverHost = process.env.NEXT_PUBLIC_SERVER_URL
+  ? new URL(process.env.NEXT_PUBLIC_SERVER_URL).host
+  : undefined
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -16,7 +19,13 @@ const nextConfig: NextConfig = {
   // Sentry tylko do błędów (ADR 0011): bez kodu śledzenia wydajności i logów SDK w paczce przeglądarki.
   compiler: { define: { __SENTRY_DEBUG__: false, __SENTRY_TRACING__: false } },
   // Zdjęcia realizacji idą po jednym, zmniejszone w przeglądarce; Vercel i tak tnie ciało żądania przy 4,5 MB.
-  experimental: { serverActions: { bodySizeLimit: '5mb' } },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '5mb',
+      // Za proxy (np. GitHub Codespaces) nagłówek Host to localhost – dopuszczamy własny adres serwisu.
+      allowedOrigins: serverHost ? [serverHost] : undefined,
+    },
+  },
   // Optymalizacja tylko zdjęć z Payload i plików z builda – bez dowolnych adresów lokalnych.
   images: {
     localPatterns: [
@@ -28,7 +37,14 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/:path*',
+        missing: [{ type: 'cookie', key: DRAFT_MODE_COOKIE }],
         headers: securityHeaders({ indexable: isProductionDeployment() }),
+      },
+      {
+        // Podgląd na żywo (ADR 0023): strona w ramce panelu /admin tej samej domeny.
+        source: '/:path*',
+        has: [{ type: 'cookie', key: DRAFT_MODE_COOKIE }],
+        headers: securityHeaders({ indexable: isProductionDeployment(), framing: 'sameorigin' }),
       },
     ]
   },

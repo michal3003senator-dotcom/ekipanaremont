@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
 import { buildCsp, createNonce } from '@/lib/security/csp'
+import { DRAFT_MODE_COOKIE } from '@/lib/security/headers'
 
 export function proxy(request: NextRequest) {
   const nonce = createNonce()
@@ -8,6 +9,9 @@ export function proxy(request: NextRequest) {
     nonce,
     isDev: process.env.NODE_ENV === 'development',
     upgradeInsecureRequests: request.nextUrl.protocol === 'https:',
+    // Ramka tylko w podglądzie redakcji; ciasteczko podpisuje Next, ustawia je tylko /podglad.
+    previewFraming: request.cookies.has(DRAFT_MODE_COOKIE),
+    framesSelf: request.nextUrl.pathname.startsWith('/admin'),
   })
 
   // Next odczytuje nonce z nagłówka CSP żądania i dodaje go do swoich skryptów.
