@@ -13,6 +13,8 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   turbopack: { root: dirname },
+  // Zdjęcia realizacji idą po jednym, zmniejszone w przeglądarce; Vercel i tak tnie ciało żądania przy 4,5 MB.
+  experimental: { serverActions: { bodySizeLimit: '5mb' } },
   async headers() {
     return [
       {

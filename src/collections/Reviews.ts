@@ -23,8 +23,14 @@ const moderationOnly = {
 }
 
 /** Odpowiedź pisze tylko firma, której dotyczy opinia (albo moderacja). */
-const ownerOrModeration: FieldAccess = ({ req: { user }, doc }) =>
-  verifiedModeration(user) || (firmIdOf(user) !== null && firmIdOf(user) === idOf(doc?.firm))
+const REPLY_EDIT_MS = 24 * 60 * 60 * 1000
+
+/** Odpowiedź publikuje firma, której dotyczy opinia, raz, z możliwością edycji przez 24 h (SPEC 3.4). */
+const replyAccess: FieldAccess = ({ req: { user }, doc }) => {
+  if (verifiedModeration(user)) return true
+  if (firmIdOf(user) === null || firmIdOf(user) !== idOf(doc?.firm)) return false
+  return !doc?.firmReplyAt || Date.now() - new Date(doc.firmReplyAt).getTime() < REPLY_EDIT_MS
+}
 
 const length = (min: number, max: number) => (value: unknown) =>
   (typeof value === 'string' && value.trim().length >= min && value.length <= max) ||
@@ -51,8 +57,8 @@ export const Reviews: CollectionConfig = {
     beforeChange: [
       ({ data, originalDoc }) => {
         const next = { ...data }
-        if (data.firmReply !== undefined && data.firmReply !== originalDoc?.firmReply)
-          next.firmReplyAt = new Date().toISOString()
+        // Data pierwszej odpowiedzi – od niej liczymy 24 h na poprawki.
+        if (data.firmReply && !originalDoc?.firmReplyAt) next.firmReplyAt = new Date().toISOString()
         if (data.status === 'approved' && !originalDoc?.publishedAt)
           next.publishedAt = new Date().toISOString()
         return next
@@ -109,7 +115,7 @@ export const Reviews: CollectionConfig = {
       type: 'textarea',
       label: 'Odpowiedź firmy',
       maxLength: 1500,
-      access: { update: ownerOrModeration },
+      access: { update: replyAccess },
     },
     { name: 'firmReplyAt', type: 'date', label: 'Odpowiedź dodana', access: systemOnly },
     {

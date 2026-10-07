@@ -22,5 +22,13 @@ services:
       timeout: 3s
       retries: 30
 
+  # Lokalna skrzynka na e-maile (SMTP 1025, podgląd http://localhost:8025). Nic nie wychodzi na zewnątrz.
+  mailpit:
+    image: axllent/mailpit:v1.31
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:1025:1025'
+      - '127.0.0.1:8025:8025'
+
 volumes:
   postgres-data:

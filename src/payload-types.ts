@@ -254,6 +254,12 @@ export interface Firm {
   trialStartsAt?: string | null;
   trialEndsAt?: string | null;
   subscriptionStatus: 'trial' | 'active' | 'past_due' | 'canceled';
+  mailLog?: {
+    availabilityReminderAt?: string | null;
+    availabilityExpiredAt?: string | null;
+    trialEnding7At?: string | null;
+    trialEnding1At?: string | null;
+  };
   ratingAvg?: number | null;
   ratingCount?: number | null;
   updatedAt: string;
@@ -785,15 +791,12 @@ export interface FirmAccount {
   firm?: (string | null) | Firm;
   termsVersion?: string | null;
   termsAcceptedAt?: string | null;
-  notificationPrefs?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  notificationPrefs?: {
+    inquiries?: boolean | null;
+    availabilityReminders?: boolean | null;
+    reviews?: boolean | null;
+  };
+  verificationSentAt?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -1272,6 +1275,14 @@ export interface FirmsSelect<T extends boolean = true> {
   trialStartsAt?: T;
   trialEndsAt?: T;
   subscriptionStatus?: T;
+  mailLog?:
+    | T
+    | {
+        availabilityReminderAt?: T;
+        availabilityExpiredAt?: T;
+        trialEnding7At?: T;
+        trialEnding1At?: T;
+      };
   ratingAvg?: T;
   ratingCount?: T;
   updatedAt?: T;
@@ -1817,7 +1828,14 @@ export interface FirmAccountsSelect<T extends boolean = true> {
   firm?: T;
   termsVersion?: T;
   termsAcceptedAt?: T;
-  notificationPrefs?: T;
+  notificationPrefs?:
+    | T
+    | {
+        inquiries?: T;
+        availabilityReminders?: T;
+        reviews?: T;
+      };
+  verificationSentAt?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

@@ -14,6 +14,7 @@ import {
   where,
 } from '@/access'
 import { auditHooks } from '@/hooks/audit'
+import { notifyModerationDecision, startTrialOnApproval } from '@/hooks/firmModeration'
 import {
   checkAvailabilityDate,
   HTTPS_URL,
@@ -61,12 +62,14 @@ export const Firms: CollectionConfig = {
   },
   indexes: [{ fields: ['status', 'availability.date'] }],
   hooks: {
-    ...auditHooks,
+    afterChange: [...auditHooks.afterChange, notifyModerationDecision],
+    afterDelete: auditHooks.afterDelete,
     beforeValidate: [
       ({ data }) =>
         typeof data?.nip === 'string' ? { ...data, nip: normalizeNip(data.nip) } : data,
     ],
     beforeChange: [
+      startTrialOnApproval,
       // Każde potwierdzenie terminu (nowa data albo jawne potwierdzenie) odświeża `confirmedAt` (SPEC 3.5).
       ({ context, data, originalDoc }) => {
         const date = data.availability?.date
@@ -210,6 +213,20 @@ export const Firms: CollectionConfig = {
         canceled: 'Anulowany',
       }),
       access: internal,
+    },
+    {
+      // Znaczniki wysłanych przypomnień – zadania nie wysyłają tego samego dwa razy (SPEC 5).
+      name: 'mailLog',
+      type: 'group',
+      label: 'Wysłane przypomnienia',
+      access: { read: ownerOrModeration, ...systemOnly },
+      admin: { readOnly: true },
+      fields: [
+        { name: 'availabilityReminderAt', type: 'date', label: 'Przypomnienie o terminie' },
+        { name: 'availabilityExpiredAt', type: 'date', label: 'Termin wygasł' },
+        { name: 'trialEnding7At', type: 'date', label: 'Koniec okresu próbnego za 7 dni' },
+        { name: 'trialEnding1At', type: 'date', label: 'Koniec okresu próbnego za 1 dzień' },
+      ],
     },
     {
       name: 'ratingAvg',

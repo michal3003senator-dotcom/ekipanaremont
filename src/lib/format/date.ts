@@ -100,3 +100,16 @@ export const formatWeekdayInitial = (date: CalendarDate) =>
 export function formatRelativeDays(days: number): string {
   return NEAR_DAYS.get(days) ?? relative.format(days, 'day')
 }
+
+const instantDate = new Intl.DateTimeFormat('pl-PL', {
+  timeZone: TIME_ZONE,
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+
+/** Chwila z bazy (UTC) jako „14 października 2026” w strefie Europe/Warsaw. */
+export const formatInstantDate = (iso: string | Date) => instantDate.format(new Date(iso))
+
+/** Dzień kalendarzowy chwili w strefie Europe/Warsaw. */
+export const calendarDateOf = (iso: string | Date) => todayInWarsaw(new Date(iso))

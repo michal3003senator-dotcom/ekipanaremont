@@ -1,10 +1,26 @@
-import type { CollectionConfig } from 'payload'
+import { APIError, type CollectionBeforeChangeHook, type CollectionConfig } from 'payload'
 
-import { admin, either, firmAccount, moderation, ownFirm, staff, where } from '@/access'
+import { admin, either, firmAccount, isFirmUser, moderation, ownFirm, staff, where } from '@/access'
 import { assignOwnFirm } from '@/hooks/assignOwner'
 import { CALENDAR_MONTH } from '@/lib/validation'
 
 import { options } from './fields'
+
+/** Najwyżej 30 realizacji na firmę (SPEC 3.4). */
+export const MAX_PROJECTS = 30
+
+const limitProjects: CollectionBeforeChangeHook = async ({ data, operation, req }) => {
+  if (operation !== 'create' || !isFirmUser(req.user)) return data
+  const { totalDocs } = await req.payload.count({
+    collection: 'projects',
+    where: { firm: { equals: data.firm } },
+    overrideAccess: true,
+    req,
+  })
+  if (totalDocs >= MAX_PROJECTS)
+    throw new APIError(`Możesz mieć najwyżej ${MAX_PROJECTS} realizacji.`, 400, null, true)
+  return data
+}
 
 /** Realizacja firmy (SPEC 4): do 12 zdjęć, publicznie tylko opublikowane. */
 export const Projects: CollectionConfig = {
@@ -21,7 +37,7 @@ export const Projects: CollectionConfig = {
     update: either(moderation, ownFirm()),
     delete: either(moderation, ownFirm()),
   },
-  hooks: { beforeValidate: [assignOwnFirm()] },
+  hooks: { beforeValidate: [assignOwnFirm()], beforeChange: [limitProjects] },
   defaultSort: 'order',
   fields: [
     {

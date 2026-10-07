@@ -12,6 +12,7 @@ const SKIPPED_FILES = [
   'app/(frontend)/globals.css', // definicje tokenów
   'payload-types.ts', // generowany
   'lib/theme/index.ts', // meta theme-color wymaga literału; wartości = token bg obu motywów
+  'emails/theme.ts', // programy pocztowe nie znają zmiennych CSS; wartości = tokeny jasnego motywu
 ]
 
 const RULES = [

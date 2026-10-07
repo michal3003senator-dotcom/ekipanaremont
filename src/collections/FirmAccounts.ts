@@ -21,6 +21,8 @@ export const FirmAccounts: CollectionConfig = {
     // Sesja 30 dni (PLAN pyt. 5); zmiana e-maila, hasła, eksport i usunięcie wymagają hasła (faza 4).
     tokenExpiration: THIRTY_DAYS_S,
     verify: true,
+    // Link do zmiany hasła ważny godzinę (ADR 0018); e-mail wysyła Server Action z wersją tekstową.
+    forgotPassword: { expiration: 60 * 60 * 1000 },
   },
   access: {
     // Ciasteczko sesji jest wspólne dla kolekcji z logowaniem – konto firmy nie wchodzi do panelu Payload.
@@ -53,6 +55,28 @@ export const FirmAccounts: CollectionConfig = {
       label: 'Akceptacja regulaminu',
       access: { update: fieldFor(verifiedAdmin) },
     },
-    { name: 'notificationPrefs', type: 'json', label: 'Powiadomienia e-mail' },
+    {
+      name: 'notificationPrefs',
+      type: 'group',
+      label: 'Powiadomienia e-mail',
+      fields: [
+        { name: 'inquiries', type: 'checkbox', label: 'Nowe zapytania', defaultValue: true },
+        {
+          name: 'availabilityReminders',
+          type: 'checkbox',
+          label: 'Przypomnienia o terminie',
+          defaultValue: true,
+        },
+        { name: 'reviews', type: 'checkbox', label: 'Nowe opinie', defaultValue: true },
+      ],
+    },
+    {
+      // Link weryfikacyjny jest ważny 24 h od wysłania (ADR 0018).
+      name: 'verificationSentAt',
+      type: 'date',
+      label: 'Link weryfikacyjny wysłany',
+      access: { create: () => false, update: () => false },
+      admin: { readOnly: true },
+    },
   ],
 }

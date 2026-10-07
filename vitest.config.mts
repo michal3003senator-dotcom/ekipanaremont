@@ -15,7 +15,12 @@ Object.assign(process.env, {
 
 export default defineConfig({
   // Ten sam alias co w tsconfig.json (`@/` → `src/`).
-  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
+  resolve: {
+    alias: {
+      '@payload-config': fileURLToPath(new URL('./src/payload.config.ts', import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   test: {
     projects: [
       {

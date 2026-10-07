@@ -21,6 +21,8 @@ export function buildCsp({ nonce, isDev, upgradeInsecureRequests }: CspOptions):
     'img-src': ["'self'", 'blob:', 'data:'],
     'font-src': ["'self'"],
     'connect-src': ["'self'"],
+    // Cloudflare Turnstile osadza widżet w ramce (formularze kont, zapytań i zgłoszeń).
+    'frame-src': ['https://challenges.cloudflare.com'],
     'object-src': ["'none'"],
     'base-uri': ["'self'"],
     'form-action': ["'self'"],

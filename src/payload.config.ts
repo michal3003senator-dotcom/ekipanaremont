@@ -27,6 +27,7 @@ import { Staff } from './collections/Staff'
 import { Settings } from './globals/Settings'
 import { jobs } from './jobs'
 import { encryptedFieldHooks } from './lib/crypto'
+import { emailAdapter } from './lib/email/adapter'
 import { env } from './lib/env'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -94,6 +95,7 @@ export default buildConfig({
   }),
   defaultDepth: 1,
   editor: lexicalEditor(),
+  email: emailAdapter(),
   graphQL: { disable: true },
   i18n: { fallbackLanguage: 'pl', supportedLanguages: { pl } },
   jobs,
