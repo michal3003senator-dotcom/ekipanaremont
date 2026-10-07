@@ -35,6 +35,8 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'int',
+          // Wtyczka 2FA czyta ciasteczka przez next/headers – inline, żeby działały atrapy w testach akcji.
+          server: { deps: { inline: ['payload-totp'] } },
           environment: 'node',
           include: ['src/tests/int/**/*.int.test.ts'],
           globalSetup: ['src/tests/int/global-setup.ts'],

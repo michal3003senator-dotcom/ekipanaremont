@@ -3,6 +3,7 @@ import * as migration_20261007_045232_phase3_collections from './20261007_045232
 import * as migration_20261007_045300_localities_trgm from './20261007_045300_localities_trgm'
 import * as migration_20261007_050800_inquiry_statuses from './20261007_050800_inquiry_statuses'
 import * as migration_20261007_054348_phase4_accounts from './20261007_054348_phase4_accounts'
+import * as migration_20261007_061554_phase4_jobs from './20261007_061554_phase4_jobs'
 
 export const migrations = [
   {
@@ -29,5 +30,10 @@ export const migrations = [
     up: migration_20261007_054348_phase4_accounts.up,
     down: migration_20261007_054348_phase4_accounts.down,
     name: '20261007_054348_phase4_accounts',
+  },
+  {
+    up: migration_20261007_061554_phase4_jobs.up,
+    down: migration_20261007_061554_phase4_jobs.down,
+    name: '20261007_061554_phase4_jobs',
   },
 ]

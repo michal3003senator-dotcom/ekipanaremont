@@ -71,30 +71,35 @@ export async function createFirmAction(input: unknown): Promise<ActionResult> {
       fieldErrors: { name: 'Podaj nazwę firmy – nie znaleźliśmy jej w rejestrach.' },
     }
 
-  try {
-    const firm = await ctx.payload.create({
-      collection: 'firms',
-      data: {
-        name: record ? toTitleCase(record.name) : name,
-        nip: parsed.data.nip,
-        status: 'draft',
-        subscriptionStatus: 'trial',
-        registrySource: record?.source,
-        registryData: record ? { ...record } : undefined,
-        // Weryfikacja automatyczna tylko dla firmy aktywnej w rejestrze; inaczej sprawdza moderator.
-        registryVerifiedAt: record?.active ? record.checkedAt : undefined,
-      },
-      overrideAccess: true,
-    })
-    await ctx.payload.update({
-      collection: 'firmAccounts',
-      id: ctx.session.id,
-      data: { firm: firm.id },
-      overrideAccess: true,
-    })
-  } catch {
+  // Jeden NIP = jeden profil (SPEC 3.3); sprawdzenie przed zapisem, unikalny indeks pilnuje wyścigu.
+  const taken = await ctx.payload.count({
+    collection: 'firms',
+    where: { nip: { equals: parsed.data.nip } },
+    overrideAccess: true,
+  })
+  if (taken.totalDocs > 0)
     return { ok: false, fieldErrors: { nip: 'Ten NIP ma już profil w serwisie.' } }
-  }
+
+  const firm = await ctx.payload.create({
+    collection: 'firms',
+    data: {
+      name: record ? toTitleCase(record.name) : name,
+      nip: parsed.data.nip,
+      status: 'draft',
+      subscriptionStatus: 'trial',
+      registrySource: record?.source,
+      registryData: record ? { ...record } : undefined,
+      // Weryfikacja automatyczna tylko dla firmy aktywnej w rejestrze; inaczej sprawdza moderator.
+      registryVerifiedAt: record?.active ? record.checkedAt : undefined,
+    },
+    overrideAccess: true,
+  })
+  await ctx.payload.update({
+    collection: 'firmAccounts',
+    id: ctx.session.id,
+    data: { firm: firm.id },
+    overrideAccess: true,
+  })
   revalidatePath('/panel', 'layout')
   return { ok: true }
 }

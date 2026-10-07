@@ -11,13 +11,16 @@ Wymagania: Node 24 (`.nvmrc`), pnpm przez Corepack (`corepack enable`), Docker.
 ```bash
 pnpm install
 pnpm env:init                   # tworzy .env.local i sam wpisuje sekrety
-docker compose up -d --wait     # PostgreSQL 17 + baza testowa
+docker compose up -d --wait     # PostgreSQL 17 + baza testowa + Mailpit
 pnpm dev                        # migracje, potem serwer deweloperski
 pnpm seed demo                  # w drugim terminalu: miejscowości, usługi, firmy przykładowe
 ```
 
+- Panel firmy: http://localhost:3000/logowanie – konto `demo@ekipanatermin.test`, hasło w `.env.local` (`SEED_DEMO_PASSWORD`).
+- E-maile lokalnie: http://localhost:8025 (Mailpit z `docker compose`).
+- Panel personelu: http://localhost:3000/admin – pierwsze konto jest administratorem, potem ustawiasz 2FA w aplikacji (Google Authenticator, Authy).
+
 - Strona: http://localhost:3000
-- Panel: http://localhost:3000/admin – przy pierwszym wejściu tworzysz konto personelu.
 
 ## Dane
 

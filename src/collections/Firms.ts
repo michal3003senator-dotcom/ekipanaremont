@@ -23,7 +23,7 @@ import {
   PHONE_PL,
 } from '@/lib/validation'
 
-import { options, slugField, systemOnly } from './fields'
+import { options, slugField, systemOnly, uniqueSlug } from './fields'
 
 /** Właściciel profilu albo zweryfikowany personel moderacji. */
 const ownerOrModeration: FieldAccess = ({ req: { user }, doc, id }) =>
@@ -65,6 +65,7 @@ export const Firms: CollectionConfig = {
     afterChange: [...auditHooks.afterChange, notifyModerationDecision],
     afterDelete: auditHooks.afterDelete,
     beforeValidate: [
+      uniqueSlug('firms'),
       ({ data }) =>
         typeof data?.nip === 'string' ? { ...data, nip: normalizeNip(data.nip) } : data,
     ],

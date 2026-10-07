@@ -60,10 +60,8 @@ export const firmNameSchema = z.object({
 
 export const servicesStepSchema = z.object({
   services: z.array(id).min(1, 'Wybierz co najmniej jedną usługę.').max(15, 'Najwyżej 15 usług.'),
-  serviceArea: z
-    .array(id)
-    .min(1, 'Dodaj co najmniej jedną miejscowość.')
-    .max(60, 'Najwyżej 60 miejscowości.'),
+  // Siedziba dochodzi do obszaru na serwerze, więc lista może być pusta.
+  serviceArea: z.array(id).max(60, 'Najwyżej 60 miejscowości.'),
   baseLocality: id,
 })
 

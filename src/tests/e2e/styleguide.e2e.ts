@@ -1,7 +1,6 @@
-import AxeBuilder from '@axe-core/playwright'
-import { expect, type Page, test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
-import { collectErrors } from './support'
+import { collectErrors, expectNoAxeViolations } from './support'
 
 const PAGES = [
   '/styleguide',
@@ -15,17 +14,6 @@ const PAGES = [
   '/styleguide/przejscie',
   '/styleguide/przejscie/pracownia-glazury-kowal',
 ]
-
-async function expectNoAxeViolations(page: Page) {
-  const results = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-    .analyze()
-  const summary = results.violations.map(
-    (violation) =>
-      `${violation.id}: ${violation.nodes.map((node) => node.target.join(' ')).join(', ')}`,
-  )
-  expect(summary).toEqual([])
-}
 
 test.describe('styleguide', () => {
   for (const path of PAGES) {

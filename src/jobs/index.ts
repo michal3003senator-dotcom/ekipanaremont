@@ -4,6 +4,8 @@ import type { JobsConfig, PayloadRequest, TaskConfig } from 'payload'
 
 import { isVerifiedStaff, nobody, staff } from '@/access'
 
+import { expireAvailability, remindAvailability, remindTrialEnding } from './firms'
+
 /**
  * Zadania cykliczne (SPEC 5). Vercel Cron wywołuje `/api/payload-jobs/run?queue=…` z nagłówkiem
  * `Authorization: Bearer CRON_SECRET`; endpoint sam kolejkuje zadania z harmonogramem i je wykonuje.
@@ -49,5 +51,5 @@ export const jobs: JobsConfig = {
       delete: staff('admin'),
     },
   }),
-  tasks: [purgeExpiredLeads],
+  tasks: [purgeExpiredLeads, remindAvailability, expireAvailability, remindTrialEnding],
 }

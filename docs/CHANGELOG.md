@@ -4,6 +4,18 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 4 – konta i panel firmy (2026-10-07)
+- ADR 0018 (uwierzytelnianie firm) i ADR 0019 (rejestry NIP).
+- Konta: rejestracja (hasło min. 12 znaków z oceną siły, zgoda z wersją regulaminu, Turnstile, limit prób), potwierdzenie e-maila linkiem ważnym 24 h, logowanie z blokadą po 5 próbach, reset hasła (link 1 h). Odpowiedzi nie zdradzają, czy konto istnieje.
+- Weryfikacja NIP: suma kontrolna → CEIDG (z tokenem) → Biała lista VAT → KRS; firma spoza rejestrów podaje nazwę, a moderator sprawdza ją ręcznie.
+- Kreator profilu w 5 krokach: NIP, usługi i obszar (TERYT), o firmie, realizacje (min. 3 zdjęcia), wysłanie do akceptacji. Okres próbny (30 dni) startuje przy zatwierdzeniu, firma dostaje e-mail z decyzją.
+- Panel firmy (najpierw telefon, dolna nawigacja): pulpit z brakami profilu, kafel terminu z potwierdzeniem jednym dotknięciem, zapytania ze statusami i szybkim kontaktem, realizacje ze zdjęciami z aparatu (zmniejszanie w przeglądarce, WebP bez EXIF w kilku rozmiarach, kolejność przeciąganiem albo strzałkami), opinie z odpowiedzią (edycja 24 h), ustawienia: powiadomienia, hasło, e-mail, eksport JSON, usunięcie konta.
+- E-maile React Email (HTML i tekst): potwierdzenie adresu, reset hasła, decyzja moderatora, przypomnienie i wygaśnięcie terminu, koniec okresu próbnego za 7 i 1 dzień. Lokalnie Mailpit (`http://localhost:8025`).
+- Zadania dzienne: przypomnienie o terminie z jednorazowym linkiem (potwierdzenie przyciskiem na stronie), wygaszanie terminów, koniec okresu próbnego; każde wysyła raz.
+- Pierwsze konto personelu w `/admin` jest administratorem. Unikalne adresy firm i wątków przy powtórzonej nazwie.
+- `pnpm seed demo`: konto `demo@ekipanatermin.test` z zapytaniami i opinią (hasło w `.env.local`, `SEED_DEMO_PASSWORD`).
+- Testy: integracyjne akcji kont i panelu (firma A vs B, zdjęcia bez EXIF, zadania wysyłają raz, rotacja), E2E rejestracja → NIP → profil → wysłanie do akceptacji → termin jednym dotknięciem (360 px i komputer) z axe w obu motywach. Zrzuty: `docs/screens/konto`, `docs/screens/panel`.
+
 ### Faza 3 – model danych i reguły dostępu (2026-10-07)
 - Szyfrowanie pól (S) AES-256-GCM z wersją klucza w rekordzie i skróty HMAC-SHA256 (osobny klucz na cel).
 - ADR 0016: 2FA personelu (`payload-totp`, obowiązkowe), dostęp personelu tylko po kodzie TOTP, sekret TOTP zaszyfrowany, sesja 8 h.

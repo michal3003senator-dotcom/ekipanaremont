@@ -44,23 +44,24 @@ export function AboutStep({ initial, next }: { initial: AboutStepInput; next: st
       {result && !result.ok && result.message && (
         <FormNotice tone="error">{result.message}</FormNotice>
       )}
-      <Field
-        id="shortDescription"
-        label="Krótki opis"
-        required
-        hint="2–3 zdania: co robisz najlepiej i gdzie. Widać go na karcie firmy w wynikach."
-        error={errors.shortDescription?.message}
-      >
-        {(control) => (
-          <Textarea
-            {...control}
-            {...register('shortDescription')}
-            maxLength={300}
-            showCount
-            rows={4}
-          />
+      <Controller
+        control={control}
+        name="shortDescription"
+        render={({ field }) => (
+          <Field
+            id="shortDescription"
+            label="Krótki opis"
+            required
+            hint="2–3 zdania: co robisz najlepiej i gdzie. Widać go na karcie firmy w wynikach."
+            error={errors.shortDescription?.message}
+          >
+            {(controlProps) => (
+              // Pole kontrolowane – licznik znaków startuje od zapisanej treści.
+              <Textarea {...controlProps} {...field} maxLength={300} showCount rows={4} />
+            )}
+          </Field>
         )}
-      </Field>
+      />
       <div className="grid gap-6 sm:grid-cols-2">
         <Field
           id="phone"

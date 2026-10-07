@@ -1,4 +1,11 @@
-import type { Field, PayloadRequest, TextareaField, TextField } from 'payload'
+import type {
+  CollectionBeforeValidateHook,
+  CollectionSlug,
+  Field,
+  PayloadRequest,
+  TextareaField,
+  TextField,
+} from 'payload'
 
 import { fieldFor } from '@/access'
 import { encryptedFieldHooks } from '@/lib/crypto'
@@ -89,3 +96,28 @@ export const seoField: Field = {
     },
   ],
 }
+
+/**
+ * Unikalny slug bez błędu przy powtórzonej nazwie: „remonty-kowalski”, „remonty-kowalski-2”…
+ * (firmy o tej samej nazwie, wątki forum o tym samym tytule).
+ */
+export const uniqueSlug =
+  (collection: CollectionSlug): CollectionBeforeValidateHook =>
+  async ({ data, originalDoc, req }) => {
+    const base = typeof data?.slug === 'string' && data.slug ? data.slug : null
+    if (!data || !base || base === originalDoc?.slug) return data
+    for (let attempt = 1; attempt < 50; attempt += 1) {
+      const slug = attempt === 1 ? base : `${base}-${attempt}`
+      const { totalDocs } = await req.payload.count({
+        collection,
+        where: {
+          slug: { equals: slug },
+          ...(originalDoc?.id ? { id: { not_equals: originalDoc.id } } : {}),
+        },
+        overrideAccess: true,
+        req,
+      })
+      if (totalDocs === 0) return { ...data, slug }
+    }
+    return data
+  }

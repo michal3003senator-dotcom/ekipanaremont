@@ -68,11 +68,12 @@ export async function createFixtures() {
     }
   }
 
-  const [userA, userB, userC, adminUser, moderatorUser, editorUser] = await Promise.all([
+  // Administrator najpierw: pierwsze konto personelu zawsze dostaje rolę admin (hook firstStaffIsAdmin).
+  const adminUser = await staffMember('admin@ekipa.test', 'admin')
+  const [userA, userB, userC, moderatorUser, editorUser] = await Promise.all([
     account('a@firma.test', firmA.id),
     account('b@firma.test', firmB.id),
     account('c@firma.test', firmC.id),
-    staffMember('admin@ekipa.test', 'admin'),
     staffMember('moderator@ekipa.test', 'moderator'),
     staffMember('editor@ekipa.test', 'editor'),
   ])

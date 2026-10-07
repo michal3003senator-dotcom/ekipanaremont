@@ -14,7 +14,7 @@ import {
 import { community } from '@/access/community'
 import { assignAuthor } from '@/hooks/assignOwner'
 
-import { options, slugField, systemOnly } from './fields'
+import { options, slugField, systemOnly, uniqueSlug } from './fields'
 
 const member = community('forum')
 const moderationOnly = {
@@ -93,7 +93,9 @@ export const ForumThreads: CollectionConfig = {
     delete: moderation,
   },
   indexes: [{ fields: ['category', 'lastActivityAt'] }],
-  hooks: { beforeValidate: [assignAuthor('author', { polymorphic: true })] },
+  hooks: {
+    beforeValidate: [assignAuthor('author', { polymorphic: true }), uniqueSlug('forumThreads')],
+  },
   fields: [
     {
       name: 'category',

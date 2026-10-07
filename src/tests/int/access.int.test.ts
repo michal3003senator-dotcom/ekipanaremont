@@ -7,7 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { rotateEncryptedFields } from '../../lib/crypto/rotate'
 
-import { as, createFixtures, type Fixtures } from './fixtures'
+import { as, createFixtures, type Fixtures, NIP } from './fixtures'
 
 let f: Fixtures
 let payload: Payload
@@ -155,7 +155,12 @@ describe('konta firm', () => {
 
 describe('firmy', () => {
   it('gość widzi tylko aktywne profile i bez danych wewnętrznych', async () => {
-    const list = await payload.find({ collection: 'firms', ...as() })
+    // Tylko firmy z fixture – inne pliki testów dopisują własne do tej samej bazy.
+    const list = await payload.find({
+      collection: 'firms',
+      where: { nip: { in: Object.values(NIP) } },
+      ...as(),
+    })
     expect(list.docs.map((doc) => doc.name).sort()).toEqual(['Firma A', 'Firma B'])
     expect(list.docs[0]).not.toHaveProperty('subscriptionStatus')
     expect(list.docs[0]).not.toHaveProperty('registryData')
@@ -253,7 +258,15 @@ describe('realizacje i pliki', () => {
       ...as(f.users.a),
     })
     expect(doc.firm).toBe(f.firmA.id)
-    expect((await payload.find({ collection: 'projects', ...as() })).totalDocs).toBe(0)
+    expect(
+      (
+        await payload.find({
+          collection: 'projects',
+          where: { firm: { equals: f.firmA.id } },
+          ...as(),
+        })
+      ).totalDocs,
+    ).toBe(0)
     await expect(
       payload.update({
         collection: 'projects',

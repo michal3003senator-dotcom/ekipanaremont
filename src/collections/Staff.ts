@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { admin, either, fieldFor, isStaffUser, isVerifiedStaff, verifiedAdmin } from '@/access'
 import { auditHooks } from '@/hooks/audit'
+import { firstStaffIsAdmin } from '@/hooks/firstStaffIsAdmin'
 
 const EIGHT_HOURS_S = 8 * 60 * 60
 const FIFTEEN_MINUTES_MS = 15 * 60 * 1000
@@ -33,6 +34,7 @@ export const Staff: CollectionConfig = {
   },
   hooks: {
     ...auditHooks,
+    beforeChange: [firstStaffIsAdmin],
     afterLogin: [
       async ({ req, user }) => {
         await req.payload.update({

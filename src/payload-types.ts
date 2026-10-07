@@ -150,6 +150,9 @@ export interface Config {
   jobs: {
     tasks: {
       purgeExpiredLeads: TaskPurgeExpiredLeads;
+      remindAvailability: TaskRemindAvailability;
+      expireAvailability: TaskExpireAvailability;
+      remindTrialEnding: TaskRemindTrialEnding;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -1040,7 +1043,13 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'purgeExpiredLeads' | 'schedulePublish';
+        taskSlug:
+          | 'inline'
+          | 'purgeExpiredLeads'
+          | 'remindAvailability'
+          | 'expireAvailability'
+          | 'remindTrialEnding'
+          | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -1073,7 +1082,16 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'purgeExpiredLeads' | 'schedulePublish') | null;
+  taskSlug?:
+    | (
+        | 'inline'
+        | 'purgeExpiredLeads'
+        | 'remindAvailability'
+        | 'expireAvailability'
+        | 'remindTrialEnding'
+        | 'schedulePublish'
+      )
+    | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -2101,6 +2119,30 @@ export interface CollectionsWidget {
  * via the `definition` "TaskPurgeExpiredLeads".
  */
 export interface TaskPurgeExpiredLeads {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskRemindAvailability".
+ */
+export interface TaskRemindAvailability {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskExpireAvailability".
+ */
+export interface TaskExpireAvailability {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskRemindTrialEnding".
+ */
+export interface TaskRemindTrialEnding {
   input?: unknown;
   output?: unknown;
 }
