@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  HUSKY: '0'
+  NEXT_TELEMETRY_DISABLED: '1'
+  # Wartości tylko dla CI – bez sekretów. PAYLOAD_SECRET generowany w każdym przebiegu.
+  DATABASE_URL: postgres://ekipa:ekipa@localhost:5432/ekipa
+  NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: pnpm lint
+      - run: pnpm format:check
+
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Jednorazowy PAYLOAD_SECRET
+        run: echo "PAYLOAD_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+      - run: pnpm typecheck
+      - name: Pliki generowane przez Payload są aktualne
+        run: |
+          pnpm generate:types
+          pnpm generate:importmap
+          git diff --exit-code -- src/payload-types.ts 'src/app/(payload)/admin/importMap.js'
+
+  test:
+    name: test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: ekipa
+          POSTGRES_PASSWORD: ekipa
+          POSTGRES_DB: ekipa_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U ekipa -d ekipa_test"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: pnpm test
+
+  build:
+    name: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: ekipa
+          POSTGRES_PASSWORD: ekipa
+          POSTGRES_DB: ekipa
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U ekipa -d ekipa"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Jednorazowy PAYLOAD_SECRET
+        run: echo "PAYLOAD_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+      - name: Migracje na pustej bazie
+        run: pnpm payload migrate
+      - run: pnpm build
+      - name: Przeglądarka do testu dymnego
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Test dymny na zbudowanej aplikacji
+        run: pnpm test:e2e
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  secrets:
+    name: secrets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Instalacja gitleaks (wersja i suma kontrolna przypięte)
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -sSfLo gitleaks.tar.gz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum --check
+          tar -xzf gitleaks.tar.gz gitleaks
+      - name: Skan całej historii repozytorium
+        run: '"$RUNNER_TEMP/gitleaks" git --redact --no-banner --verbose .'
