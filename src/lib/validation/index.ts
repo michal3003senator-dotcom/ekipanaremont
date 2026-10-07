@@ -17,8 +17,8 @@ export const CALENDAR_MONTH = /^\d{4}-(0[1-9]|1[0-2])$/
 
 export { slugify } from './slug'
 
-/** Slugi usług nie mogą zajmować tras serwisu (strony lokalne /[usluga]/[miejscowosc], PLAN pyt. 11). */
-export const RESERVED_SLUGS = new Set([
+/** Trasy aplikacji w korzeniu adresu – nie mogą ich zająć ani usługi, ani strony z CMS (ADR 0022). */
+export const ROUTE_SLUGS: ReadonlySet<string> = new Set([
   'admin',
   'api',
   'artykuly',
@@ -26,26 +26,37 @@ export const RESERVED_SLUGS = new Set([
   'firma',
   'forum',
   'gielda',
-  'jak-sprawdzamy-opinie',
   'kalkulatory',
   'kierunki',
-  'kontakt',
   'logowanie',
   'moderacja',
   'monitoring',
-  'o-nas',
+  'opengraph-image',
   'opinia',
   'panel',
-  'polityka-prywatnosci',
-  'regulamin',
+  'potwierdz',
   'rejestracja',
   'reset-hasla',
+  'robots',
+  'sitemap',
   'styleguide',
   'szukaj',
   'termin',
-  'zasady-moderacji',
   'zglos',
 ])
+
+/** Strony z CMS podlinkowane w stopce – ich adresów nie zajmie usługa. */
+export const CMS_PAGE_SLUGS: ReadonlySet<string> = new Set([
+  'jak-sprawdzamy-opinie',
+  'kontakt',
+  'o-nas',
+  'polityka-prywatnosci',
+  'regulamin',
+  'zasady-moderacji',
+])
+
+/** Slugi usług (strony lokalne /[usluga]/[miejscowosc]): bez tras aplikacji i stron z CMS (PLAN pyt. 11). */
+export const RESERVED_SLUGS: ReadonlySet<string> = new Set([...ROUTE_SLUGS, ...CMS_PAGE_SLUGS])
 
 import { AVAILABILITY_MAX_DAYS } from './limits'
 

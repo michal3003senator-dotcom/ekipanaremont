@@ -13,6 +13,7 @@ import { type ActionResult, invalid, tooManyRequests } from '@/lib/actions'
 import { isStrongPassword } from '@/lib/auth/password'
 import { clientIpHash } from '@/lib/auth/request'
 import { emailHash } from '@/lib/crypto'
+import { currentLegalVersion } from '@/lib/legal'
 import { rateLimit } from '@/lib/rate-limit'
 import { verifyTurnstile } from '@/lib/turnstile'
 import {
@@ -67,13 +68,12 @@ export async function registerAction(input: unknown): Promise<ActionResult> {
   // Ta sama odpowiedź dla zajętego adresu – formularz nie zdradza, kto ma konto.
   if (existing.totalDocs > 0) return { ok: true, message: CHECK_INBOX }
 
-  const settings = await payload.findGlobal({ slug: 'settings', depth: 0, overrideAccess: true })
   const account = await payload.create({
     collection: 'firmAccounts',
     data: {
       email,
       password,
-      termsVersion: settings.legalVersions?.terms || '1',
+      termsVersion: await currentLegalVersion(payload, 'terms'),
       termsAcceptedAt: new Date().toISOString(),
     },
     disableVerificationEmail: true,

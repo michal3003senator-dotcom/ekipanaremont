@@ -53,17 +53,6 @@ export const Settings: GlobalConfig = {
       ],
     },
     {
-      name: 'legalVersions',
-      type: 'group',
-      label: 'Wersje dokumentów prawnych',
-      fields: [
-        { name: 'terms', type: 'text', label: 'Regulamin' },
-        { name: 'privacy', type: 'text', label: 'Polityka prywatności' },
-        { name: 'inquiryConsent', type: 'text', label: 'Zgoda w formularzu zapytania' },
-        { name: 'leadConsent', type: 'text', label: 'Zgoda w kalkulatorze' },
-      ],
-    },
-    {
       name: 'moderationReasonTemplates',
       type: 'array',
       label: 'Szablony uzasadnień',

@@ -1,11 +1,21 @@
 import type { CollectionConfig } from 'payload'
 
-import { editorial, either, where } from '@/access'
+import { anyone, editorial, either, where } from '@/access'
 import { pageBlocks } from '@/blocks'
+import { ROUTE_SLUGS } from '@/lib/validation'
 
-import { seoField, slugField } from './fields'
+import { options, seoField, slugField, uniqueSlug } from './fields'
 
-/** Strona (SPEC 3.8): regulamin, polityki, O nas, Kontakt. Wersje = archiwum dokumentów prawnych. */
+const requiredForLegal =
+  (message: string) =>
+  (value: unknown, { siblingData }: { siblingData: { legalKind?: unknown } }) =>
+    !siblingData.legalKind || Boolean(value) || message
+
+/**
+ * Strona (SPEC 3.8) pod adresem `/[slug]`: regulamin, polityki, O nas, Kontakt i inne.
+ * Dokument prawny (`legalKind`) jest jedynym źródłem wersji regulaminu i polityki (PLAN pyt. 12);
+ * opublikowane wersje tworzą publiczne archiwum.
+ */
 export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: { singular: 'Strona', plural: 'Strony' },
@@ -22,17 +32,66 @@ export const Pages: CollectionConfig = {
     delete: editorial,
   },
   versions: { drafts: true, maxPerDoc: 100 },
+  hooks: { beforeValidate: [uniqueSlug('pages')] },
   fields: [
     { name: 'title', type: 'text', label: 'Tytuł', required: true, maxLength: 120 },
-    slugField('title'),
+    slugField('title', { reserved: ROUTE_SLUGS, notIn: 'services' }),
     { name: 'content', type: 'blocks', label: 'Treść', blocks: pageBlocks },
+    {
+      name: 'legalKind',
+      type: 'select',
+      label: 'Dokument prawny',
+      unique: true,
+      options: options({ terms: 'Regulamin', privacy: 'Polityka prywatności' }),
+      admin: {
+        position: 'sidebar',
+        description: 'Wersja tego dokumentu trafia do zgód przy rejestracji i formularzach.',
+      },
+    },
     {
       name: 'legalVersion',
       type: 'text',
       label: 'Wersja dokumentu',
-      admin: { position: 'sidebar', description: 'Tylko dokumenty prawne, np. 1.2' },
+      maxLength: 20,
+      validate: requiredForLegal('Podaj wersję dokumentu, np. 1.2.'),
+      admin: { position: 'sidebar', condition: (data) => Boolean(data?.legalKind) },
     },
-    { name: 'effectiveFrom', type: 'date', label: 'Obowiązuje od', admin: { position: 'sidebar' } },
+    {
+      name: 'effectiveFrom',
+      type: 'date',
+      label: 'Obowiązuje od',
+      validate: requiredForLegal('Podaj datę, od której dokument obowiązuje.'),
+      admin: { position: 'sidebar', condition: (data) => Boolean(data?.legalKind) },
+    },
+    seoField,
+  ],
+}
+
+/** Opcjonalny wstęp strony lokalnej `/[usluga]/[miejscowosc]` (SPEC 3.14). */
+export const LocalIntros: CollectionConfig = {
+  slug: 'localIntros',
+  labels: { singular: 'Wstęp strony lokalnej', plural: 'Wstępy stron lokalnych' },
+  admin: { defaultColumns: ['service', 'locality'], group: 'Treści' },
+  access: { read: anyone, create: editorial, update: editorial, delete: editorial },
+  indexes: [{ fields: ['service', 'locality'], unique: true }],
+  fields: [
+    {
+      name: 'service',
+      type: 'relationship',
+      relationTo: 'services',
+      label: 'Usługa',
+      required: true,
+      filterOptions: { parent: { exists: false } },
+    },
+    {
+      name: 'locality',
+      type: 'relationship',
+      relationTo: 'localities',
+      label: 'Miejscowość',
+      required: true,
+      filterOptions: { type: { in: ['miejscowosc', 'dzielnica'] } },
+    },
+    { name: 'intro', type: 'richText', label: 'Wstęp' },
     seoField,
   ],
 }

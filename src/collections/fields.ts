@@ -9,7 +9,7 @@ import type {
 
 import { fieldFor } from '@/access'
 import { encryptedFieldHooks } from '@/lib/crypto'
-import { slugify, RESERVED_SLUGS } from '@/lib/validation'
+import { slugify } from '@/lib/validation'
 
 type UserCheck = (user: PayloadRequest['user']) => boolean
 type BaseField = Omit<TextField, 'type' | 'hooks' | 'access'>
@@ -48,8 +48,15 @@ export const hashField = (name: string): Field => ({
 export const options = <T extends string>(entries: Record<T, string>) =>
   (Object.entries(entries) as Array<[T, string]>).map(([value, label]) => ({ value, label }))
 
-/** Unikalny slug z polskich znaków (ł → l), wypełniany z `source`, bez zastrzeżonych tras. */
-export const slugField = (source: string, { reserved = false } = {}): Field => ({
+type SlugOptions = {
+  /** Adresy zajęte przez trasy aplikacji (ADR 0022). */
+  reserved?: ReadonlySet<string>
+  /** Druga kolekcja w tym samym miejscu adresu (strony z CMS i usługi w `/[slug]`). */
+  notIn?: CollectionSlug
+}
+
+/** Unikalny slug z polskich znaków (ł → l), wypełniany z `source`, bez zastrzeżonych adresów. */
+export const slugField = (source: string, { reserved, notIn }: SlugOptions = {}): Field => ({
   name: 'slug',
   type: 'text',
   label: 'Adres (slug)',
@@ -67,11 +74,20 @@ export const slugField = (source: string, { reserved = false } = {}): Field => (
       },
     ],
   },
-  validate: (value: unknown) => {
+  validate: async (value: unknown, { req }: { req: PayloadRequest }) => {
     if (typeof value !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
       return 'Użyj małych liter, cyfr i myślników.'
     }
-    if (reserved && RESERVED_SLUGS.has(value)) return 'Ten adres jest zarezerwowany.'
+    if (reserved?.has(value)) return 'Ten adres jest zarezerwowany.'
+    if (notIn) {
+      const { totalDocs } = await req.payload.count({
+        collection: notIn,
+        where: { slug: { equals: value } },
+        overrideAccess: true,
+        req,
+      })
+      if (totalDocs > 0) return 'Ten adres jest już zajęty w serwisie.'
+    }
     return true
   },
 })

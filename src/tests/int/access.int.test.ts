@@ -490,21 +490,112 @@ describe('leady, CMS i ustawienia', () => {
     ).rejects.toThrow()
   })
 
-  it('kalkulator przyjmuje tylko parametry zgodne ze schematem typu', async () => {
+  it('kalkulator: szkic bez parametrów, publikacja tylko z kompletem, gość widzi opublikowany', async () => {
+    const draft = await payload.create({
+      collection: 'calculators',
+      data: { title: 'Płytki', type: 'tiles', _status: 'draft' },
+      draft: true,
+      ...as(f.users.editor),
+    })
+    expect((await payload.find({ collection: 'calculators', ...as() })).totalDocs).toBe(0)
+    await expect(
+      payload.update({
+        collection: 'calculators',
+        id: draft.id,
+        data: { _status: 'published' },
+        ...as(f.users.editor),
+      }),
+    ).rejects.toThrow(/Rodzaj/)
+    await payload.update({
+      collection: 'calculators',
+      id: draft.id,
+      data: { _status: 'published', tiles: { wastePercent: 10 } },
+      ...as(f.users.editor),
+    })
+    expect((await payload.find({ collection: 'calculators', ...as() })).totalDocs).toBe(1)
     await expect(
       payload.create({
         collection: 'calculators',
-        data: { title: 'Płytki', type: 'tiles', params: { wastePercent: 'dużo' } },
+        data: { title: 'Farba', type: 'paint' },
+        draft: true,
+        ...as(f.users.a),
+      }),
+    ).rejects.toThrow()
+  })
+
+  it('kategorie i wstępy lokalne: odczyt publiczny, zapis tylko redakcja', async () => {
+    const category = await payload.create({
+      collection: 'articleCategories',
+      data: { name: 'Łazienka' },
+      ...as(f.users.editor),
+    })
+    expect(category.slug).toBe('lazienka')
+    expect((await payload.find({ collection: 'articleCategories', ...as() })).totalDocs).toBe(1)
+    await expect(
+      payload.create({ collection: 'articleCategories', data: { name: 'Spam' }, ...as(f.users.a) }),
+    ).rejects.toThrow()
+    await expect(
+      payload.create({
+        collection: 'articleCategories',
+        data: { name: 'Spam' },
+        ...as(f.users.moderator),
+      }),
+    ).rejects.toThrow()
+  })
+
+  it('strona nie zajmie adresu usługi ani trasy aplikacji, usługa – adresu strony', async () => {
+    const service = await payload.create({
+      collection: 'services',
+      data: { name: 'Cyklinowanie testowe' },
+      ...system,
+    })
+    await expect(
+      payload.create({
+        collection: 'pages',
+        data: { title: 'Strona', slug: service.slug, _status: 'published' },
         ...as(f.users.editor),
       }),
     ).rejects.toThrow()
     await expect(
       payload.create({
-        collection: 'calculators',
-        data: { title: 'Płytki', type: 'tiles', params: { wastePercent: 10 } },
+        collection: 'pages',
+        data: { title: 'Szukaj', _status: 'published' },
         ...as(f.users.editor),
       }),
-    ).resolves.toBeTruthy()
+    ).rejects.toThrow()
+    await payload.create({
+      collection: 'pages',
+      data: { title: 'Cennik usług', _status: 'published' },
+      ...as(f.users.editor),
+    })
+    await expect(
+      payload.create({ collection: 'services', data: { name: 'Cennik usług' }, ...system }),
+    ).rejects.toThrow()
+  })
+
+  it('dokument prawny wymaga wersji i daty; wersja trafia do zgód', async () => {
+    const { currentLegalVersion, consentVersion } = await import('../../lib/legal')
+    expect(await currentLegalVersion(payload, 'terms')).toBe('brak')
+    await expect(
+      payload.create({
+        collection: 'pages',
+        data: { title: 'Regulamin', legalKind: 'terms', _status: 'published' },
+        ...as(f.users.editor),
+      }),
+    ).rejects.toThrow()
+    await payload.create({
+      collection: 'pages',
+      data: {
+        title: 'Polityka prywatności',
+        legalKind: 'privacy',
+        legalVersion: '1.2',
+        effectiveFrom: new Date().toISOString(),
+        _status: 'published',
+      },
+      ...as(f.users.editor),
+    })
+    expect(await currentLegalVersion(payload, 'privacy')).toBe('1.2')
+    expect(await consentVersion(payload, 'inquiry')).toBe('zapytanie-1/pp-1.2')
   })
 
   it('ustawień nie czyta gość ani firma, zmienia tylko administrator', async () => {
@@ -794,9 +885,9 @@ describe('słowniki', () => {
       data: { name: 'Glazurnik' },
       ...as(f.users.admin),
     })
-    await expect(payload.find({ collection: 'services', ...as() })).resolves.toMatchObject({
-      totalDocs: 1,
-    })
+    await expect(
+      payload.find({ collection: 'services', where: { name: { equals: 'Glazurnik' } }, ...as() }),
+    ).resolves.toMatchObject({ totalDocs: 1 })
     await expect(
       payload.create({ collection: 'services', data: { name: 'Spam' }, ...as(f.users.editor) }),
     ).rejects.toThrow()

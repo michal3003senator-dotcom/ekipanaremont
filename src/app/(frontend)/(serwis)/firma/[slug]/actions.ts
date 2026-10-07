@@ -11,8 +11,8 @@ import { type ActionResult, invalid, tooManyRequests } from '@/lib/actions'
 import { clientIpHash } from '@/lib/auth/request'
 import { UPLOAD_IMAGE_TYPES } from '@/lib/images'
 import { INQUIRY_MAX_PHOTOS, INQUIRY_PHOTO_MAX_BYTES, TIMEFRAMES } from '@/lib/inquiry/options'
+import { consentVersion } from '@/lib/legal'
 import { rateLimit } from '@/lib/rate-limit'
-import { getSettings } from '@/lib/settings'
 import { bumpStat } from '@/lib/stats'
 import { verifyTurnstile } from '@/lib/turnstile'
 import { inquirySchema } from '@/lib/validation/forms'
@@ -176,7 +176,6 @@ export async function sendInquiryAction(formData: FormData): Promise<ActionResul
   const locality = places[0]
   if (!locality) return { ok: false, fieldErrors: { locality: 'Wybierz miejscowość z listy.' } }
 
-  const settings = await getSettings()
   const images = await storePhotos(payload, firm.id, photos)
   let inquiryId: string
   try {
@@ -193,7 +192,7 @@ export async function sendInquiryAction(formData: FormData): Promise<ActionResul
         clientEmail: input.clientEmail,
         clientPhone: input.clientPhone,
         images,
-        consentTextVersion: settings.legalVersions?.inquiryConsent || '1',
+        consentTextVersion: await consentVersion(payload, 'inquiry'),
         consentAt: new Date().toISOString(),
         status: 'new',
         source: 'direct',

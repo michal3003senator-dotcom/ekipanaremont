@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { admin, anyone } from '@/access'
 import { auditHooks } from '@/hooks/audit'
+import { RESERVED_SLUGS } from '@/lib/validation'
 
 import { seoField, slugField } from './fields'
 
@@ -14,7 +15,7 @@ export const Services: CollectionConfig = {
   hooks: auditHooks,
   fields: [
     { name: 'name', type: 'text', label: 'Nazwa', required: true },
-    slugField('name', { reserved: true }),
+    slugField('name', { reserved: RESERVED_SLUGS, notIn: 'pages' }),
     { name: 'parent', type: 'relationship', relationTo: 'services', label: 'Usługa nadrzędna' },
     { name: 'icon', type: 'text', label: 'Ikona (nazwa z lucide)' },
     { name: 'description', type: 'textarea', label: 'Opis' },

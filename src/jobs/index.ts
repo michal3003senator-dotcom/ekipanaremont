@@ -4,6 +4,7 @@ import type { JobsConfig, PayloadRequest, TaskConfig } from 'payload'
 
 import { isVerifiedStaff, nobody, staff } from '@/access'
 
+import { publishScheduled } from './content'
 import { expireAvailability, remindAvailability, remindTrialEnding } from './firms'
 import { requestReviews } from './reviews'
 
@@ -58,5 +59,6 @@ export const jobs: JobsConfig = {
     expireAvailability,
     remindTrialEnding,
     requestReviews,
+    publishScheduled,
   ],
 }

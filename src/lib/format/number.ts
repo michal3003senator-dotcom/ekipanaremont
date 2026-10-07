@@ -50,3 +50,15 @@ export function formatPhone(value: string): string {
   const local = digits.slice(-9).replace(/(\d{3})(?=\d)/g, '$1 ')
   return digits.length > 9 ? `+${digits.slice(0, -9)} ${local}` : local
 }
+
+/** „1 250,50” albo „1250.5” → 125050 groszy; puste → null; nieliczbowe → NaN (walidacja pola). */
+export function parseZlotyToGrosze(text: string): number | null {
+  const normalized = text.replace(/[\s zł]/g, '').replace(',', '.')
+  if (normalized === '') return null
+  if (!/^\d+(\.\d{1,2})?$/.test(normalized)) return Number.NaN
+  return Math.round(Number(normalized) * 100)
+}
+
+/** 125050 → „1250,50”, 125000 → „1250” – wartość pola w panelu (bez spacji tysięcy). */
+export const groszeToZlotyInput = (grosze: number) =>
+  grosze % 100 === 0 ? String(grosze / 100) : (grosze / 100).toFixed(2).replace('.', ',')

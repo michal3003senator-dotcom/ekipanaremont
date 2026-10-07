@@ -27,7 +27,7 @@ describe('walidacja', () => {
 
   it('parametry kalkulatora według typu', () => {
     expect(checkCalculatorParams('tiles', { wastePercent: 10 })).toBe(true)
-    expect(checkCalculatorParams('tiles', { wastePercent: 90 })).toMatch(/wastePercent/)
+    expect(checkCalculatorParams('tiles', { wastePercent: 90 })).toMatch(/zapas/)
     expect(checkCalculatorParams('nieznany', {})).toMatch(/rodzaj/)
   })
 })

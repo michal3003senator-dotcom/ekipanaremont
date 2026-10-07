@@ -73,7 +73,9 @@ export interface Config {
     inquiries: Inquiry;
     reviews: Review;
     articles: Article;
+    articleCategories: ArticleCategory;
     pages: Page;
+    localIntros: LocalIntro;
     calculators: Calculator;
     leads: Lead;
     forumCategories: ForumCategory;
@@ -105,7 +107,9 @@ export interface Config {
     inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    articleCategories: ArticleCategoriesSelect<false> | ArticleCategoriesSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    localIntros: LocalIntrosSelect<false> | LocalIntrosSelect<true>;
     calculators: CalculatorsSelect<false> | CalculatorsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     forumCategories: ForumCategoriesSelect<false> | ForumCategoriesSelect<true>;
@@ -154,7 +158,7 @@ export interface Config {
       expireAvailability: TaskExpireAvailability;
       remindTrialEnding: TaskRemindTrialEnding;
       requestReviews: TaskRequestReviews;
-      schedulePublish: TaskSchedulePublish;
+      publishScheduled: TaskPublishScheduled;
       inline: {
         input: unknown;
         output: unknown;
@@ -535,10 +539,21 @@ export interface Article {
           }
       )[]
     | null;
-  category?: string | null;
+  category?: (string | null) | ArticleCategory;
   tags?: string[] | null;
-  author?: (string | null) | Staff;
+  /**
+   * Uzupełnia się imieniem redaktora.
+   */
+  authorName?: string | null;
+  /**
+   * Zapisz szkic – artykuł opublikuje się sam (sprawdzamy co godzinę).
+   */
+  publishAt?: string | null;
   publishedAt?: string | null;
+  readingMinutes?: number | null;
+  /**
+   * Artykuł pojawi się na stronach lokalnych tych usług.
+   */
   relatedServices?: (string | Service)[] | null;
   seo?: {
     title?: string | null;
@@ -562,50 +577,77 @@ export interface Calculator {
    */
   slug?: string | null;
   type: 'bathroomCost' | 'tiles' | 'paint' | 'skimCoat';
-  params:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  intro?: string | null;
+  bathroomCost?: {
+    labourPerM2?: {
+      min?: number | null;
+      max?: number | null;
+    };
+    materialsPerM2?: {
+      min?: number | null;
+      max?: number | null;
+    };
+  };
+  tiles?: {
+    /**
+     * Doliczany do powierzchni, np. 10 przy układaniu prostym.
+     */
+    wastePercent?: number | null;
+  };
+  paint?: {
+    /**
+     * Dla jednej warstwy, z etykiety farby.
+     */
+    coverageM2PerLitre?: number | null;
+    /**
+     * Od 1 do 4.
+     */
+    coats?: number | null;
+    /**
+     * Na nierówności i straty.
+     */
+    wastePercent?: number | null;
+  };
+  skimCoat?: {
+    /**
+     * Z karty technicznej gładzi.
+     */
+    kgPerM2PerMm?: number | null;
+    /**
+     * Do przeliczenia na worki.
+     */
+    bagKg?: number | null;
+    labourPerM2?: {
+      min?: number | null;
+      max?: number | null;
+    };
+  };
   disclaimer?: string | null;
   linkedService?: (string | null) | Service;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "staff".
+ * via the `definition` "articleCategories".
  */
-export interface Staff {
+export interface ArticleCategory {
   id: string;
   name: string;
-  role: 'admin' | 'moderator' | 'editor';
-  lastLoginAt?: string | null;
-  totpSecret?: string | null;
-  hasTotp?: boolean | null;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  description?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+    canonical?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  resetPasswordRequestedAt?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'staff';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -689,8 +731,9 @@ export interface Page {
       )[]
     | null;
   /**
-   * Tylko dokumenty prawne, np. 1.2
+   * Wersja tego dokumentu trafia do zgód przy rejestracji i formularzach.
    */
+  legalKind?: ('terms' | 'privacy') | null;
   legalVersion?: string | null;
   effectiveFrom?: string | null;
   seo?: {
@@ -702,6 +745,38 @@ export interface Page {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "localIntros".
+ */
+export interface LocalIntro {
+  id: string;
+  service: string | Service;
+  locality: string | Locality;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+    canonical?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -822,6 +897,37 @@ export interface FirmAccount {
     | null;
   password?: string | null;
   collection: 'firmAccounts';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "staff".
+ */
+export interface Staff {
+  id: string;
+  name: string;
+  role: 'admin' | 'moderator' | 'editor';
+  lastLoginAt?: string | null;
+  totpSecret?: string | null;
+  hasTotp?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'staff';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1051,7 +1157,7 @@ export interface PayloadJob {
           | 'expireAvailability'
           | 'remindTrialEnding'
           | 'requestReviews'
-          | 'schedulePublish';
+          | 'publishScheduled';
         taskID: string;
         input?:
           | {
@@ -1092,7 +1198,7 @@ export interface PayloadJob {
         | 'expireAvailability'
         | 'remindTrialEnding'
         | 'requestReviews'
-        | 'schedulePublish'
+        | 'publishScheduled'
       )
     | null;
   queue?: string | null;
@@ -1138,8 +1244,16 @@ export interface PayloadLockedDocument {
         value: string | Article;
       } | null)
     | ({
+        relationTo: 'articleCategories';
+        value: string | ArticleCategory;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'localIntros';
+        value: string | LocalIntro;
       } | null)
     | ({
         relationTo: 'calculators';
@@ -1476,8 +1590,10 @@ export interface ArticlesSelect<T extends boolean = true> {
       };
   category?: T;
   tags?: T;
-  author?: T;
+  authorName?: T;
+  publishAt?: T;
   publishedAt?: T;
+  readingMinutes?: T;
   relatedServices?: T;
   seo?:
     | T
@@ -1490,6 +1606,25 @@ export interface ArticlesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articleCategories_select".
+ */
+export interface ArticleCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonical?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1560,6 +1695,7 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  legalKind?: T;
   legalVersion?: T;
   effectiveFrom?: T;
   seo?:
@@ -1576,17 +1712,77 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "localIntros_select".
+ */
+export interface LocalIntrosSelect<T extends boolean = true> {
+  service?: T;
+  locality?: T;
+  intro?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonical?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "calculators_select".
  */
 export interface CalculatorsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   type?: T;
-  params?: T;
+  intro?: T;
+  bathroomCost?:
+    | T
+    | {
+        labourPerM2?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+            };
+        materialsPerM2?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+            };
+      };
+  tiles?:
+    | T
+    | {
+        wastePercent?: T;
+      };
+  paint?:
+    | T
+    | {
+        coverageM2PerLitre?: T;
+        coats?: T;
+        wastePercent?: T;
+      };
+  skimCoat?:
+    | T
+    | {
+        kgPerM2PerMm?: T;
+        bagKg?: T;
+        labourPerM2?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+            };
+      };
   disclaimer?: T;
   linkedService?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2020,12 +2216,6 @@ export interface Setting {
     inquiriesMonths: number;
     leadsMonths: number;
   };
-  legalVersions?: {
-    terms?: string | null;
-    privacy?: string | null;
-    inquiryConsent?: string | null;
-    leadConsent?: string | null;
-  };
   moderationReasonTemplates?:
     | {
         label: string;
@@ -2076,14 +2266,6 @@ export interface SettingsSelect<T extends boolean = true> {
     | {
         inquiriesMonths?: T;
         leadsMonths?: T;
-      };
-  legalVersions?:
-    | T
-    | {
-        terms?: T;
-        privacy?: T;
-        inquiryConsent?: T;
-        leadConsent?: T;
       };
   moderationReasonTemplates?:
     | T
@@ -2159,27 +2341,10 @@ export interface TaskRequestReviews {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TaskSchedulePublish".
+ * via the `definition` "TaskPublishScheduled".
  */
-export interface TaskSchedulePublish {
-  input: {
-    type?: ('publish' | 'unpublish') | null;
-    locale?: string | null;
-    doc?: {
-      relationTo: 'articles';
-      value: string | Article;
-    } | null;
-    global?: string | null;
-    user?:
-      | ({
-          relationTo: 'firmAccounts';
-          value: string | FirmAccount;
-        } | null)
-      | ({
-          relationTo: 'staff';
-          value: string | Staff;
-        } | null);
-  };
+export interface TaskPublishScheduled {
+  input?: unknown;
   output?: unknown;
 }
 /**

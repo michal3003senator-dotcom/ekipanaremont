@@ -8,7 +8,7 @@ import { buildConfig, type Plugin } from 'payload'
 import { payloadTotp } from 'payload-totp'
 import sharp from 'sharp'
 
-import { Articles } from './collections/Articles'
+import { ArticleCategories, Articles } from './collections/Articles'
 import { Calculators } from './collections/Calculators'
 import { FirmAccounts } from './collections/FirmAccounts'
 import { Firms } from './collections/Firms'
@@ -19,7 +19,7 @@ import { ListingMessages, Listings } from './collections/Listings'
 import { Localities } from './collections/Localities'
 import { Media, MAX_UPLOAD_BYTES } from './collections/Media'
 import { AuditLog, FirmStatsDaily, Reports, Sanctions } from './collections/Moderation'
-import { Pages } from './collections/Pages'
+import { LocalIntros, Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
 import { Reviews } from './collections/Reviews'
 import { Services } from './collections/Services'
@@ -65,7 +65,9 @@ export default buildConfig({
     Inquiries,
     Reviews,
     Articles,
+    ArticleCategories,
     Pages,
+    LocalIntros,
     Calculators,
     Leads,
     ForumCategories,

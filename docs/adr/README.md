@@ -25,6 +25,7 @@ Każda decyzja architektoniczna ma osobny plik `NNNN-tytul.md` (zasada 6 z CLAUD
 | [0019](0019-rejestry-nip.md) | Weryfikacja NIP w rejestrach | zaakceptowana |
 | [0020](0020-jasny-motyw-i-archivo.md) | Jasny motyw domyślny, fiolet i Archivo | zaakceptowana |
 | [0021](0021-budzet-wydajnosci-stron-publicznych.md) | Budżet wydajności stron publicznych | zaakceptowana |
+| [0022](0022-tresci-trasy-i-harmonogram.md) | Treści: trasy, kalkulatory w panelu, harmonogram | zaakceptowana |
 
 ## Szablon
 
