@@ -6,13 +6,25 @@ import { cn } from '@/lib/cn'
 
 export type PanelSection = 'pulpit' | 'termin' | 'zapytania' | 'realizacje' | 'wiecej'
 
-const ITEMS: ReadonlyArray<{ key: PanelSection; href: string; label: string; icon: LucideIcon }> = [
+export const PANEL_ITEMS: ReadonlyArray<{
+  key: PanelSection
+  href: string
+  label: string
+  icon: LucideIcon
+}> = [
   { key: 'pulpit', href: '/panel', label: 'Pulpit', icon: House },
   { key: 'termin', href: '/panel/termin', label: 'Termin', icon: CalendarDays },
   { key: 'zapytania', href: '/panel/zapytania', label: 'Zapytania', icon: Inbox },
   { key: 'realizacje', href: '/panel/realizacje', label: 'Realizacje', icon: Images },
   { key: 'wiecej', href: '/panel/wiecej', label: 'Więcej', icon: Ellipsis },
 ]
+
+/** Sekcja panelu dla ścieżki: `/panel/zapytania/123` → `zapytania`; profil, opinie, ustawienia → `wiecej`. */
+export function panelSectionOf(pathname: string): PanelSection {
+  const segment = pathname.split('/')[2]
+  if (!segment) return 'pulpit'
+  return PANEL_ITEMS.some((item) => item.key === segment) ? (segment as PanelSection) : 'wiecej'
+}
 
 type Props = {
   current: PanelSection
@@ -29,7 +41,7 @@ export function PanelBottomNav({ current, newInquiries = 0, className }: Props) 
       className={cn('panel-nav border-t border-line bg-surface-1', className)}
     >
       <ul className="mx-auto grid max-w-xl grid-cols-5">
-        {ITEMS.map((item) => {
+        {PANEL_ITEMS.map((item) => {
           const active = item.key === current
           return (
             <li key={item.key}>

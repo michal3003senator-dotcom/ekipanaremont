@@ -55,3 +55,9 @@ export const STATUS_COPY: Record<Firm['status'], { label: string; detail: string
   },
   rejected: { label: 'Do poprawy', detail: 'Popraw profil według uzasadnienia i wyślij ponownie.' },
 }
+
+/** Odpowiedź na opinię można poprawiać przez 24 h od pierwszej publikacji (SPEC 3.4). */
+export const REPLY_EDIT_MS = 24 * 60 * 60 * 1000
+
+export const isReplyEditable = (firmReplyAt: string | null | undefined, now = Date.now()) =>
+  !firmReplyAt || now - new Date(firmReplyAt).getTime() < REPLY_EDIT_MS

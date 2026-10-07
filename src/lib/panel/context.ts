@@ -24,19 +24,3 @@ export async function getPanel(next = '/panel') {
     : null
   return { session, payload, firm, as: { overrideAccess: false, user: session } as const }
 }
-
-/** Liczba zdjęć we wszystkich realizacjach firmy (warunek wysłania profilu). */
-export async function countProjectPhotos(
-  panel: Awaited<ReturnType<typeof getPanel>>,
-): Promise<number> {
-  if (!panel.firm) return 0
-  const { docs } = await panel.payload.find({
-    collection: 'projects',
-    where: { firm: { equals: panel.firm.id } },
-    select: { images: true },
-    depth: 0,
-    pagination: false,
-    ...panel.as,
-  })
-  return docs.reduce((sum, doc) => sum + (doc.images?.length ?? 0), 0)
-}

@@ -13,6 +13,8 @@ const GENERATED: Record<string, () => string> = {
   DATA_HMAC_KEY: () => randomBytes(32).toString('base64'),
   CRON_SECRET: () => randomBytes(32).toString('base64url'),
   LINK_SIGNING_KEY: () => randomBytes(32).toString('base64'),
+  // Hasło konta demo z `pnpm seed demo` (tylko lokalnie).
+  SEED_DEMO_PASSWORD: () => `demo-${randomBytes(9).toString('base64url')}`,
 }
 
 if (!existsSync(TARGET)) copyFileSync('.env.example', TARGET)

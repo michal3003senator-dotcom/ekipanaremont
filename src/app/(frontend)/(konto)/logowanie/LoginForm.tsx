@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/Input'
 import { type LoginInput, loginSchema } from '@/lib/validation/forms'
 
 import { loginAction, resendVerificationAction } from '../actions'
-import { useActionForm } from '../_components/useActionForm'
+import { useActionForm } from '@/components/features/forms/useActionForm'
 
 export function LoginForm({ next, notice }: { next?: string; notice?: string }) {
   const { register, handleSubmit, setError, getValues, formState } = useForm<LoginInput>({

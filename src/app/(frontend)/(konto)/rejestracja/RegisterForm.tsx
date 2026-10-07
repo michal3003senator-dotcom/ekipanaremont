@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/Input'
 import { type RegisterInput, registerSchema } from '@/lib/validation/forms'
 
 import { registerAction, resendVerificationAction } from '../actions'
-import { useActionForm } from '../_components/useActionForm'
+import { useActionForm } from '@/components/features/forms/useActionForm'
 
 type Props = { siteKey?: string; nonce?: string }
 

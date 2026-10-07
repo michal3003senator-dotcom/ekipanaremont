@@ -1,15 +1,15 @@
-import { CircleAlert, CircleCheck } from 'lucide-react'
+import { CircleAlert, CircleCheck, Info } from 'lucide-react'
 
 import { Icon } from '@/components/ui/Icon'
 import { cn } from '@/lib/cn'
 
-/** Komunikat całego formularza: błąd (`role=alert`) albo potwierdzenie (`role=status`). */
+/** Komunikat całego formularza: błąd (`role=alert`), potwierdzenie albo informacja (`role=status`). */
 export function FormNotice({
   tone,
   children,
   className,
 }: {
-  tone: 'error' | 'success'
+  tone: 'error' | 'success' | 'info'
   children: React.ReactNode
   className?: string
 }) {
@@ -25,7 +25,7 @@ export function FormNotice({
       )}
     >
       <Icon
-        icon={tone === 'error' ? CircleAlert : CircleCheck}
+        icon={tone === 'error' ? CircleAlert : tone === 'info' ? Info : CircleCheck}
         className={cn('mt-0.5 size-5', tone === 'success' && 'text-success')}
       />
       <div className="flex flex-col gap-1">{children}</div>

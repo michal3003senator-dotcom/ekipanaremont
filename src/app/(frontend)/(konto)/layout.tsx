@@ -17,7 +17,7 @@ export default async function AccountLayout({ children }: { children: ReactNode 
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="text-small text-text-muted transition-colors duration-150 hover:text-text"
+              className="text-small text-text-muted transition-colors duration-150 hover:text-text max-sm:hidden"
             >
               Wróć do wyszukiwarki
             </Link>

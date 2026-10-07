@@ -47,8 +47,9 @@ export const RESERVED_SLUGS = new Set([
   'zglos',
 ])
 
-/** Najdalszy wolny termin od dziś (SPEC 3.5). */
-export const AVAILABILITY_MAX_DAYS = 180
+import { AVAILABILITY_MAX_DAYS } from './limits'
+
+export { AVAILABILITY_MAX_DAYS }
 
 /**
  * Wolny termin: dziś do +180 dni (Europe/Warsaw). Niezmieniona data przechodzi, żeby po jej upływie

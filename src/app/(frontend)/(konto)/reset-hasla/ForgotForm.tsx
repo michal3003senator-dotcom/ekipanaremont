@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/Input'
 import { forgotPasswordSchema } from '@/lib/validation/forms'
 
 import { forgotPasswordAction } from '../actions'
-import { useActionForm } from '../_components/useActionForm'
+import { useActionForm } from '@/components/features/forms/useActionForm'
 
 type Values = z.input<typeof forgotPasswordSchema>
 

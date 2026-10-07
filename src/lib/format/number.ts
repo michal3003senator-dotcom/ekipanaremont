@@ -38,3 +38,8 @@ export function pluralNoun(count: number, forms: PluralForms): string {
 export function formatCount(count: number, forms: PluralForms): string {
   return `${count} ${pluralNoun(count, forms)}`
 }
+
+const integer = new Intl.NumberFormat('pl-PL', { useGrouping: 'always', maximumFractionDigits: 0 })
+
+/** Liczba całkowita z odstępami tysięcy: „1 250”. */
+export const formatNumber = (value: number) => integer.format(value)

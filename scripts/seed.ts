@@ -186,12 +186,105 @@ async function seedDemo(payload: Payload) {
   return created
 }
 
+const DEMO_EMAIL = 'demo@ekipanatermin.test'
+
+/**
+ * Konto demo dla pierwszej firmy przykładowej z 2 zapytaniami i opinią – do obejrzenia panelu.
+ * Hasło z `SEED_DEMO_PASSWORD` w `.env.local` (tworzy je `pnpm env:init`); skrypt go nie wypisuje.
+ */
+async function seedDemoAccount(payload: Payload) {
+  const password = process.env.SEED_DEMO_PASSWORD
+  if (!password) return 'pominięte (brak SEED_DEMO_PASSWORD)'
+  const exists = await payload.count({
+    collection: 'firmAccounts',
+    where: { email: { equals: DEMO_EMAIL } },
+    ...system,
+  })
+  if (exists.totalDocs) return `bez zmian (${DEMO_EMAIL})`
+  const { docs } = await payload.find({
+    collection: 'firms',
+    where: { nip: { equals: DEMO_FIRMS[0].nip } },
+    limit: 1,
+    ...system,
+  })
+  const firm = docs[0]
+  if (!firm) return 'pominięte (brak firmy przykładowej)'
+  await payload.create({
+    collection: 'firmAccounts',
+    data: {
+      email: DEMO_EMAIL,
+      password,
+      firm: firm.id,
+      _verified: true,
+      termsVersion: '1',
+      termsAcceptedAt: new Date().toISOString(),
+    },
+    disableVerificationEmail: true,
+    ...system,
+  })
+  const [service, locality] = await Promise.all([
+    payload.find({
+      collection: 'services',
+      where: { slug: { equals: 'glazurnik' } },
+      limit: 1,
+      ...system,
+    }),
+    payload.find({
+      collection: 'localities',
+      where: { slug: { equals: 'lodz-widzew' } },
+      limit: 1,
+      ...system,
+    }),
+  ])
+  const inquiry = (description: string, clientName: string, status: 'new' | 'in_contact') =>
+    payload.create({
+      collection: 'inquiries',
+      data: {
+        firm: firm.id,
+        service: service.docs[0]?.id,
+        locality: locality.docs[0]?.id,
+        description,
+        budgetRange: 'from10to30k',
+        timeframe: 'listopad 2026',
+        clientName,
+        clientEmail: `${clientName.toLowerCase()}@example.com`,
+        clientPhone: '600 100 200',
+        consentTextVersion: '1',
+        consentAt: new Date().toISOString(),
+        status,
+      },
+      ...system,
+    })
+  const first = await inquiry(
+    'Łazienka 5 m² w bloku: skucie starych płytek, nowe płytki 60×60 na podłodze i ścianach, odpływ liniowy.',
+    'Anna',
+    'new',
+  )
+  await inquiry('Kuchnia: fartuch z płytek między szafkami, ok. 3 m².', 'Marek', 'in_contact')
+  await payload.create({
+    collection: 'reviews',
+    data: {
+      firm: firm.id,
+      inquiry: first.id,
+      rating: 5,
+      body: 'Terminowo, czysto i zgodnie z ustaleniami. Fugi równe, silikon bez poprawek.',
+      authorDisplayName: 'Anna, Widzew',
+      status: 'approved',
+    },
+    ...system,
+  })
+  return `utworzone (${DEMO_EMAIL})`
+}
+
 const payload = await getPayload({ config })
 const report = [
   `miejscowości: +${await seedLocalities(payload)}`,
   `usługi: +${await seedServices(payload)}`,
 ]
-if (process.argv.includes('demo')) report.push(`firmy przykładowe: +${await seedDemo(payload)}`)
+if (process.argv.includes('demo')) {
+  report.push(`firmy przykładowe: +${await seedDemo(payload)}`)
+  report.push(`konto demo: ${await seedDemoAccount(payload)}`)
+}
 process.stdout.write(`Seed gotowy (${report.join(', ')}).\n`)
 await payload.destroy()
 process.exit(0)

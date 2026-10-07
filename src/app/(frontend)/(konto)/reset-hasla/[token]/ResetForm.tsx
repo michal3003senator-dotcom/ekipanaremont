@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/Input'
 import { resetPasswordSchema } from '@/lib/validation/forms'
 
 import { resetPasswordAction } from '../../actions'
-import { useActionForm } from '../../_components/useActionForm'
+import { useActionForm } from '@/components/features/forms/useActionForm'
 
 type Values = z.input<typeof resetPasswordSchema>
 

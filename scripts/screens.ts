@@ -2,7 +2,8 @@
  * Zrzuty styleguide do pętli wizualnej (CLAUDE.md, DESIGN.md §10): każdy ekran × 390 i 1440 px × 2 motywy.
  * Wymaga działającego serwera (`pnpm dev`).
  *
- * Zmienne: BASE_URL (domyślnie http://localhost:3000), SCREENS_DIR (domyślnie docs/screens/styleguide),
+ * Zmienne: BASE_URL (domyślnie http://localhost:3000), SCREENS_SET (styleguide, konto, panel),
+ * SCREENS_DIR (domyślnie docs/screens/styleguide),
  * SCREENS_SCALE (gęstość pikseli, domyślnie 1), CHROMIUM_PATH (własna binarka Chromium).
  */
 import { mkdir } from 'node:fs/promises'
@@ -20,7 +21,7 @@ const click = (name: string) => async (page: Page) => {
   await page.waitForTimeout(400)
 }
 
-const SHOTS: Shot[] = [
+const STYLEGUIDE: Shot[] = [
   { name: 'glowna', path: '/styleguide/glowna' },
   { name: 'formularze', path: '/styleguide/formularze' },
   { name: 'nakladki-okno', path: '/styleguide/nakladki', open: click('Otwórz okno') },
@@ -35,6 +36,28 @@ const SHOTS: Shot[] = [
   { name: 'stany', path: '/styleguide/stany' },
   { name: 'profil', path: '/styleguide/przejscie/pracownia-glazury-kowal' },
 ]
+const ACCOUNT: Shot[] = [
+  { name: 'rejestracja', path: '/rejestracja' },
+  { name: 'logowanie', path: '/logowanie' },
+  { name: 'reset-hasla', path: '/reset-hasla' },
+]
+
+const PANEL: Shot[] = [
+  { name: 'pulpit', path: '/panel' },
+  { name: 'termin', path: '/panel/termin' },
+  { name: 'zapytania', path: '/panel/zapytania' },
+  { name: 'realizacje', path: '/panel/realizacje' },
+  { name: 'opinie', path: '/panel/opinie' },
+  { name: 'wiecej', path: '/panel/wiecej' },
+  { name: 'kreator-uslugi', path: '/panel/profil/nowy?krok=uslugi' },
+  { name: 'kreator-o-firmie', path: '/panel/profil/nowy?krok=o-firmie' },
+  { name: 'ustawienia', path: '/panel/ustawienia' },
+]
+
+// SCREENS_SET: styleguide (domyślnie), konto, panel. Panel wymaga konta: SCREENS_EMAIL i SCREENS_PASSWORD.
+const SETS: Record<string, Shot[]> = { styleguide: STYLEGUIDE, konto: ACCOUNT, panel: PANEL }
+const SHOTS = SETS[process.env.SCREENS_SET ?? 'styleguide'] ?? STYLEGUIDE
+
 const VIEWPORTS = [
   { width: 390, height: 844 },
   { width: 1440, height: 900 },
@@ -53,6 +76,18 @@ async function loadLazyImages(page: Page) {
   await page.waitForFunction(() => Array.from(document.images).every((image) => image.complete))
 }
 
+/** Logowanie kontem firmy przez formularz (jak użytkownik), ciasteczko zostaje w kontekście. */
+async function login(page: Page) {
+  const email = process.env.SCREENS_EMAIL ?? 'demo@ekipanatermin.test'
+  const password = process.env.SCREENS_PASSWORD ?? process.env.SEED_DEMO_PASSWORD
+  if (!password) throw new Error('Ustaw SCREENS_PASSWORD albo SEED_DEMO_PASSWORD')
+  await page.goto(`${baseUrl}/logowanie`, { waitUntil: 'networkidle' })
+  await page.getByLabel('E-mail').fill(email)
+  await page.getByLabel('Hasło').fill(password)
+  await page.getByRole('button', { name: 'Zaloguj się' }).click()
+  await page.waitForURL(`${baseUrl}/panel`)
+}
+
 await mkdir(outDir, { recursive: true })
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH })
 
@@ -68,6 +103,7 @@ try {
       if (theme === 'jasny')
         await context.addCookies([{ name: 'motyw', value: 'jasny', url: baseUrl }])
       const page = await context.newPage()
+      if (process.env.SCREENS_SET === 'panel') await login(page)
 
       for (const shot of SHOTS) {
         await page.goto(`${baseUrl}${shot.path}`, { waitUntil: 'networkidle' })
