@@ -360,10 +360,10 @@ describe('zapytania (dane zaszyfrowane)', () => {
     const doc = await payload.update({
       collection: 'inquiries',
       id: inquiryId,
-      data: { status: 'read', clientEmail: 'podmiana@example.com' },
+      data: { status: 'in_contact', clientEmail: 'podmiana@example.com' },
       ...as(f.users.a),
     })
-    expect(doc.status).toBe('read')
+    expect(doc.status).toBe('in_contact')
     expect(doc.clientEmail).toBe('Anna@Example.com')
   })
 })

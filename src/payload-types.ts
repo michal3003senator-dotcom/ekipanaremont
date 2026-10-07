@@ -386,7 +386,7 @@ export interface Inquiry {
   images?: (string | Media)[] | null;
   consentTextVersion: string;
   consentAt: string;
-  status: 'new' | 'read' | 'archived';
+  status: 'new' | 'in_contact' | 'closed' | 'spam';
   reviewTokenHash?: string | null;
   reviewTokenExpiresAt?: string | null;
   reviewRequestedAt?: string | null;

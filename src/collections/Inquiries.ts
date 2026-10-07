@@ -114,7 +114,12 @@ export const Inquiries: CollectionConfig = {
       required: true,
       defaultValue: 'new',
       index: true,
-      options: options({ new: 'Nowe', read: 'Przeczytane', archived: 'Zarchiwizowane' }),
+      options: options({
+        new: 'Nowe',
+        in_contact: 'W kontakcie',
+        closed: 'Zamknięte',
+        spam: 'Spam',
+      }),
     },
     hashField('reviewTokenHash'),
     {
