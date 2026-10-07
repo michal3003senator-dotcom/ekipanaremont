@@ -33,7 +33,8 @@ export function runScript(name: string, ...args: string[]): string {
   })
   // Logi Payload (np. „e-mail niewysłany”) mogą przyjść po wyniku – bierzemy tylko linię wyniku.
   const result = output.split('\n').findLast((line) => line.startsWith('=> '))
-  if (result === undefined) throw new Error(`Skrypt ${name} nie zwrócił wyniku.`)
+  if (result === undefined)
+    throw new Error(`Skrypt ${name} nie zwrócił wyniku. Wyjście:\n${output.slice(-2000)}`)
   return result.slice(3).trim()
 }
 

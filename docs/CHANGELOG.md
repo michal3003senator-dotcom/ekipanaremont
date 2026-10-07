@@ -4,6 +4,41 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 6 – treści (2026-10-07)
+- ADR 0022 (trasy treści, harmonogram publikacji) i ADR 0023 (podgląd na żywo w ramce tylko w trybie podglądu).
+- Artykuły `/artykuly`:
+  - bloki: tekst, nagłówek z kotwicą, zdjęcie, galeria, cytat, FAQ (z JSON-LD FAQPage), tabela przewijana na telefonie, przycisk, kalkulator, polecane firmy;
+  - kategorie (`/artykuly/kategoria/[slug]`), podpis autora, czas czytania liczony z treści, podobne artykuły, JSON-LD Article;
+  - szkice z autozapisem, wersje, publikacja planowana polem „Opublikuj automatycznie” (zadanie co godzinę, zamiast `schedulePublish`, które omijało 2FA).
+- Podgląd na żywo w panelu (artykuły, strony, kalkulatory), telefon i komputer:
+  - `/podglad` tylko dla redakcji z 2FA;
+  - `frame-ancestors 'self'` wyłącznie przy ciasteczku trybu podglądu, reszta serwisu bez zmian (`'none'`).
+- Kalkulatory `/kalkulatory`: łazienka (widełki robocizny i materiałów), płytki, farba, gładź.
+  - Wszystkie ceny i parametry ustawiasz w `/admin` (kwoty w złotych, w bazie grosze); w kodzie nie ma domyślnych cen.
+  - Kalkulator bez kompletu parametrów nie przejdzie publikacji i nie pokaże się publicznie.
+  - Pod wynikiem „Znajdź firmę z wolnym terminem” prowadzi do wyszukiwarki z usługą, a wynik trafia do opisu zapytania.
+  - „Poproszę o kontakt” zapisuje lead (Zod, Turnstile, limit 5 na godzinę, dane zaszyfrowane, zgoda z wersją polityki, retencja z ustawień).
+- Strony z CMS pod `/[slug]` (regulamin, polityka prywatności, jak sprawdzamy opinie, zasady moderacji, kontakt, o nas):
+  - dokument prawny ma wersję i datę obowiązywania, archiwum `/[slug]/wersje`;
+  - rejestracja, zapytanie i lead zapisują wersję z opublikowanego dokumentu (`settings.legalVersions` usunięte);
+  - adres strony nie może pokryć się z trasą serwisu ani usługą.
+- Menu pokazuje „Poradnik” i „Kalkulatory” tylko wtedy, gdy jest w nich treść; stopka linkuje tylko opublikowane strony.
+- Strony lokalne `/[usluga]/[miejscowosc]`:
+  - usługa główna × dzielnica Łodzi albo siedziba gminy;
+  - firmy od najbliższego terminu, opcjonalny wstęp z CMS, powiązane artykuły, JSON-LD;
+  - 404 i brak w mapie strony, gdy nie ma żadnej firmy.
+- `sitemap.xml`: strony lokalne, artykuły, kategorie, kalkulatory i strony.
+- `pnpm seed` tworzy szkice 4 kalkulatorów i 6 stron (treść regulaminu i polityki od prawnika). `pnpm seed demo` publikuje przykładowy artykuł i kalkulator łazienki z cenami testowymi.
+- Codespaces: `pnpm env:init` ustawia adres przekierowanego portu, akcje serwera przyjmują ten adres (naprawia „Invalid Server Actions request”).
+- Wydajność (Lighthouse mobile, build produkcyjny; artykuł, kalkulator, strona lokalna):
+  - wydajność 93–98, dostępność 100, dobre praktyki 100, CLS 0;
+  - SEO obniża tylko celowy `noindex` poza produkcją.
+- Testy:
+  - unit: wzory kalkulatorów, zł ↔ grosze, CSP i nagłówki podglądu, czas czytania, ścieżki;
+  - int: dostęp do treści i wersji, publikacja kalkulatora tylko z parametrami, kolizje adresów, wersje dokumentów w zgodach, lead, harmonogram, strony lokalne, archiwum wersji;
+  - E2E: redaktor loguje się z TOTP, dodaje blok kalkulatora i publikuje artykuł, a gość liczy wynik i przechodzi do wyszukiwarki; strony lokalne i mapa strony; axe stron treści w obu motywach.
+- Zrzuty: `docs/screens/tresci` (`SCREENS_SET=tresci pnpm screens`).
+
 ### Faza 5 – część publiczna (2026-10-07)
 - ADR 0020: jasny motyw domyślny z fioletowym akcentem i krój Archivo (ciemny w przełączniku); ADR 0021: budżet wydajności.
 - Wyszukiwanie:
