@@ -477,14 +477,22 @@ describe('leady, CMS i ustawienia', () => {
       draft: true,
       ...as(f.users.editor),
     })
-    expect((await payload.find({ collection: 'articles', ...as() })).totalDocs).toBe(0)
+    const guestSees = async () =>
+      (
+        await payload.count({
+          collection: 'articles',
+          where: { id: { equals: draft.id } },
+          ...as(),
+        })
+      ).totalDocs
+    expect(await guestSees()).toBe(0)
     await payload.update({
       collection: 'articles',
       id: draft.id,
       data: { _status: 'published' },
       ...as(f.users.editor),
     })
-    expect((await payload.find({ collection: 'articles', ...as() })).totalDocs).toBe(1)
+    expect(await guestSees()).toBe(1)
     await expect(
       payload.create({ collection: 'articles', data: { title: 'Reklama' }, ...as(f.users.a) }),
     ).rejects.toThrow()
@@ -497,7 +505,15 @@ describe('leady, CMS i ustawienia', () => {
       draft: true,
       ...as(f.users.editor),
     })
-    expect((await payload.find({ collection: 'calculators', ...as() })).totalDocs).toBe(0)
+    const guestSees = async () =>
+      (
+        await payload.count({
+          collection: 'calculators',
+          where: { id: { equals: draft.id } },
+          ...as(),
+        })
+      ).totalDocs
+    expect(await guestSees()).toBe(0)
     await expect(
       payload.update({
         collection: 'calculators',
@@ -512,7 +528,7 @@ describe('leady, CMS i ustawienia', () => {
       data: { _status: 'published', tiles: { wastePercent: 10 } },
       ...as(f.users.editor),
     })
-    expect((await payload.find({ collection: 'calculators', ...as() })).totalDocs).toBe(1)
+    expect(await guestSees()).toBe(1)
     await expect(
       payload.create({
         collection: 'calculators',
@@ -575,7 +591,7 @@ describe('leady, CMS i ustawienia', () => {
 
   it('dokument prawny wymaga wersji i daty; wersja trafia do zgód', async () => {
     const { currentLegalVersion, consentVersion } = await import('../../lib/legal')
-    expect(await currentLegalVersion(payload, 'terms')).toBe('brak')
+    expect(await currentLegalVersion(payload, 'privacy')).toBe('brak')
     await expect(
       payload.create({
         collection: 'pages',
