@@ -1,7 +1,7 @@
 # Zdjęcia poglądowe design labu
 
 Licencja: [Unsplash License](https://unsplash.com/license) – bezpłatne użycie, także komercyjne, bez obowiązku podpisu.
-Zgodnie z DESIGN.md §7 te zdjęcia nie mogą udawać realizacji firm: używamy ich tylko w `/design-lab`, zawsze z podpisem „zdjęcie poglądowe”, nigdy w danych startowych ani na produkcji.
+Zgodnie z DESIGN.md §7 te zdjęcia nie mogą udawać realizacji firm: używamy ich tylko w `/styleguide` (poza produkcją), zawsze z podpisem „zdjęcie poglądowe”, nigdy w danych startowych ani na produkcji.
 
 | Plik | Źródło (kadr 1600×1200, jakość 70) |
 |---|---|

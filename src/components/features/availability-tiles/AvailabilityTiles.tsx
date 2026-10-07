@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 
-import { cx } from '../../../lib/cx'
+import { cn } from '../../../lib/cn'
 import { type CalendarDate, formatWeekdayInitial } from '../../../lib/format/date'
 import {
   type Availability,
@@ -27,7 +27,7 @@ export function AvailabilityStrip({ today, availability, size = 'card', classNam
   const stagger = { '--tile-stagger': `${revealStaggerMs(availability)}ms` } as CSSProperties
 
   return (
-    <div className={cx('flex flex-col gap-1.5', className)} aria-hidden="true">
+    <div className={cn('flex flex-col gap-1.5', className)} aria-hidden="true">
       <TilesReveal
         className="tiles"
         data-size={size}
@@ -72,7 +72,7 @@ type LabelsProps = {
 export function TileLabels({ today, size, label, className }: LabelsProps) {
   const tiles = buildTiles(today, { status: 'none' })
   return (
-    <div className={cx('tiles-labels text-micro text-text-muted', className)} data-size={size}>
+    <div className={cn('tiles-labels text-micro text-text-muted', className)} data-size={size}>
       {tiles.map((tile, index) => (
         <span key={tile.date} data-week-start={tile.weekStart ? '' : undefined}>
           {label(tile.date, index)}
@@ -95,7 +95,7 @@ export function AvailabilityTiles({
   className,
 }: TilesProps) {
   return (
-    <div className={cx('flex flex-col gap-2', className)}>
+    <div className={cn('flex flex-col gap-2', className)}>
       <AvailabilityStrip today={today} availability={availability} size={size} />
       <AvailabilityCaption today={today} availability={availability} confirmedOn={confirmedOn} />
     </div>
@@ -117,7 +117,7 @@ export function AvailabilityCaption(props: CaptionProps) {
     availability.status !== 'none' && confirmedOn ? confirmedLabel(today, confirmedOn) : null
 
   return (
-    <p className={cx('text-small', className)}>
+    <p className={cn('text-small', className)}>
       <span className="sr-only">{availabilityDescription(today, availability, confirmedOn)}</span>
       <span aria-hidden="true">
         {availability.status === 'none' ? (
@@ -128,7 +128,7 @@ export function AvailabilityCaption(props: CaptionProps) {
           </time>
         )}
         {confirmed && (
-          <span className={cx('text-text-muted', stacked && 'block')}>
+          <span className={cn('text-text-muted', stacked && 'block')}>
             {stacked ? confirmed : ` · ${confirmed}`}
           </span>
         )}
