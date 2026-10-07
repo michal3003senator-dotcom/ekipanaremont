@@ -4,6 +4,15 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 2a – kierunek wizualny (2026-10-07)
+- Tokeny w Tailwind CSS 4 (`src/app/(frontend)/globals.css`): kolory obu motywów z DESIGN.md i nowe z planu fazy (`line-strong`, `on-accent`, `accent-hover`, `scrim`, jasny `success` #166534), skala tekstu, zaokrąglenia, ruch. Domyślna paleta i skala Tailwinda wyłączone.
+- Kafel terminu, wersja 1 (`src/components/features/availability-tiles/`): 4 stany, 3 rozmiary, animacja raz po wejściu w ekran (≤ 400 ms), stan końcowy bez JS i przy ograniczonym ruchu, pełne zdanie dla czytników ekranu.
+- Formaty polskie (`src/lib/format/`): daty w strefie Europe/Warsaw, „dziś”, „wczoraj”, „2 dni temu”, „1 250 zł”, odmiana rzeczowników po liczbie.
+- `/design-lab` (poza produkcją, `noindex`): warianty A „Realizacja”, B „Grafik” i C „Zdanie” na trzech zestawach krojów. Zdjęcia poglądowe z Unsplash tylko tutaj (`_photos/ZRODLA.md`).
+- Pętla wizualna: 3 rundy, zrzuty końcowe w `docs/screens/design-lab/` (`pnpm screens:design-lab`).
+- Testy: jednostkowe formatów, modelu kafla i blokady produkcji; e2e design labu (bez błędów konsoli i CSP, 404, `noindex`, animacja, ograniczony ruch).
+- Poprawka z pętli: przy motywie ustawionym na fragmencie strony własny CSS czyta `--line`, `--accent`…, a nie `--color-*`.
+
 ### Faza 1 – szkielet (2026-10-07)
 - Projekt Next.js 16.3 + Payload 3.90 (szablon blank, PostgreSQL), TypeScript 6 strict, Node 24, pnpm 10.
 - Kolekcja `staff` (logowanie personelu, jawne reguły dostępu z testami), ID jako UUID, schemat tylko migracjami (`push: false`), migracja początkowa.
