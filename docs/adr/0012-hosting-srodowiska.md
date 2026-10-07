@@ -10,7 +10,8 @@ CLAUDE.md: Vercel, region `fra1`. Plan Hobby nie pozwala na użytek komercyjny, 
 - Vercel Pro, funkcje w regionie `fra1`.
 - Środowiska: local (Docker), staging (wdrożenia podglądowe Vercel z ochroną dostępu, gałąź Neon, osobne buckety R2, `noindex`), produkcja od fazy 12.
 - Neon płatny tylko dla produkcji (baza bez usypiania).
-- Migracje w CI przed wdrożeniem, przez połączenie bezpośrednie.
+- Staging: migracje w kroku budowania Vercel (`pnpm vercel-build`) przez połączenie bezpośrednie do gałęzi Neon (`DATABASE_URL_UNPOOLED`).
+- Produkcja (faza 12): migracje w CI przed wdrożeniem, przez połączenie bezpośrednie.
 
 ## Konsekwencje
 - Poza produkcją każda odpowiedź ma nagłówek `X-Robots-Tag: noindex`.

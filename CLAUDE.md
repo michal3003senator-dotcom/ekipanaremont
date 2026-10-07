@@ -71,10 +71,11 @@ Plan faz i prompty: `docs/PROMPTY.md`. Decyzje: `docs/adr/`.
 - Moduły forum i giełdy włączane flagami w globalu `settings`. Gdy flaga jest wyłączona, trasy zwracają 404.
 
 ## Komendy
-Uzupełnij tę sekcję po utworzeniu projektu. Docelowo:
-- `docker compose up -d`, potem `pnpm dev`
-- `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`
-- `pnpm payload migrate:create`, `pnpm payload migrate`, `pnpm generate:types`
+Wymagania: Node 24 (`.nvmrc`), pnpm przez Corepack (`corepack enable`), Docker.
+- Start: `cp .env.example .env.local` (uzupełnij `PAYLOAD_SECRET`), `pnpm install`, `docker compose up -d --wait`, `pnpm dev` (najpierw uruchamia migracje). Strona: http://localhost:3000, panel: `/admin`.
+- Sprawdzenia: `pnpm lint`, `pnpm format:check`, `pnpm typecheck`, `pnpm test` (unit + int na bazie `ekipa_test`), `pnpm test:e2e` (Playwright; raz `pnpm exec playwright install chromium`).
+- Schemat: `pnpm payload migrate:create <nazwa>`, `pnpm payload migrate`, potem `pnpm generate:types` i `pnpm generate:importmap` (oba pliki commitujemy, CI sprawdza aktualność).
+- Build: `pnpm build`, `pnpm start`. Vercel: `pnpm vercel-build` (migracje + build).
 
 ## Definition of Done
 - Spełnione kryteria akceptacji z promptu fazy.
@@ -85,3 +86,13 @@ Uzupełnij tę sekcję po utworzeniu projektu. Docelowo:
 
 ## Poza zakresem (na razie)
 Bramka płatności, mailing marketingowy, reklamy, aplikacja natywna. Zostaw miejsce w modelu danych (np. `subscriptionStatus`), ale ich nie implementuj.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

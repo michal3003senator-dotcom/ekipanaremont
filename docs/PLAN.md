@@ -190,7 +190,7 @@ Skrypty importu i rotacji kluczy uruchamiam przez `payload run`, bez tsx. W korz
 
 | Obszar | Pakiety |
 |---|---|
-| rdzeń | next 16.4.0, react/react-dom 19.3.0 |
+| rdzeń | next 16.3.8 (16.4.0 po dobie karencji, razem z ESLint 10), react/react-dom 19.3.0 |
 | Payload | payload, @payloadcms/{next, db-postgres, richtext-lexical, storage-s3, ui, translations, email-nodemailer} – wszystkie 3.90.2; graphql 16.14.2 |
 | Payload, faza 6 | @payloadcms/{live-preview-react, plugin-seo} 3.90.2 |
 | obrazy | sharp 0.35.5 |
@@ -200,7 +200,7 @@ Skrypty importu i rotacji kluczy uruchamiam przez `payload run`, bez tsx. W korz
 | ochrona | @upstash/ratelimit 2.2.0, @upstash/redis 1.39.0, server-only 0.0.1, otpauth 9.5.2 (wstępnie) |
 | monitoring | @sentry/nextjs 11.4.0 |
 | później | react-day-picker 10.0.2 (2b), @date-fns/tz 1.5.0 (3), @zxcvbn-ts/core 4.2.0 i language-pl 4.1.1 (4), web-push 3.6.7 (7, opcjonalnie) |
-| dev | typescript 6.0.3 (nie 7.0.2), @types/node 24.19.1, @types/react 19.3.0, eslint 9.39.5 (nie 10), eslint-config-next 16.4.0, prettier 3.9.9, prettier-plugin-tailwindcss 0.8.1, husky 9.1.7, lint-staged 17.6.0, vitest 5.0.3, vite 8.3.3, @playwright/test 1.63.0, @axe-core/playwright 4.13.0 |
+| dev | typescript 6.0.3 (nie 7.0.2), @types/node 24.19.1, @types/react 19.3.0, eslint 9.39.5 (ESLint 10 wymaga eslint-config-next 16.4), eslint-config-next 16.3.8, prettier 3.9.9, prettier-plugin-tailwindcss 0.8.1, husky 9.1.7, lint-staged 17.6.0, vitest 5.0.3, vite 8.3.3, @playwright/test 1.63.0, @axe-core/playwright 4.13.0 |
 | środowisko | Node 24 LTS, pnpm 10.34.6 przez `packageManager` (wersje 11 i 12 dopiero po sprawdzeniu zgodności z Vercel i szablonem) |
 
 Bez nowych zależności, gdy wystarczy to, co jest w stacku: sortowanie zdjęć przez `Reorder` z Motion plus przyciski (WCAG 2.5.7), lightbox na Motion, Turnstile i Brevo bez SDK.
