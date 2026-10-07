@@ -275,6 +275,22 @@
     padding-block-end: max(var(--spacing) * 4, env(safe-area-inset-bottom));
   }
 
+  /* Pasek z główną akcją przyklejony do dołu ekranu na telefonie (DESIGN §5). */
+  .sticky-cta {
+    padding-block-end: max(var(--spacing) * 3, env(safe-area-inset-bottom));
+  }
+
+  @media (width >= 64rem) {
+    .sticky-cta {
+      padding-block-end: calc(var(--spacing) * 6);
+    }
+  }
+
+  /* Dolna nawigacja panelu firmy nad paskiem systemowym telefonu. */
+  .panel-nav {
+    padding-block-end: env(safe-area-inset-bottom);
+  }
+
   /* Kafel terminu (DESIGN §2): 14 dni od dziś, szersza fuga między tygodniami. */
   .tiles,
   .tiles-labels {
@@ -353,5 +369,25 @@
       .tile:is([data-tile='free'], [data-tile='beyond']) {
       background-color: var(--line);
     }
+  }
+}
+
+/* View Transitions (DESIGN §6): zdjęcie karty przechodzi w nagłówek profilu w 400 ms, nagłówek strony stoi. */
+::view-transition-group(.firm-photo) {
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-standard);
+}
+
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }
