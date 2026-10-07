@@ -16,6 +16,8 @@ Każda decyzja architektoniczna ma osobny plik `NNNN-tytul.md` (zasada 6 z CLAUD
 | [0010](0010-zadania.md) | Zadania cykliczne | zaakceptowana |
 | [0011](0011-jakosc-obserwowalnosc.md) | Jakość i obserwowalność | zaakceptowana |
 | [0012](0012-hosting-srodowiska.md) | Hosting i środowiska | zaakceptowana |
+| [0013](0013-kierunek-wizualny.md) | Kierunek wizualny: B „Grafik” | zaakceptowana |
+| [0014](0014-biblioteki-komponentow.md) | Biblioteki komponentów interfejsu | zaakceptowana |
 
 ## Szablon
 
