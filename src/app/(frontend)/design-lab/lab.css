@@ -1,0 +1,30 @@
+/* Zestawy krojów design labu (plan fazy 2a): nagłówki / tekst / dane. */
+[data-set='a'] {
+  --ff-display: var(--font-schibsted);
+  --ff-text: var(--font-onest);
+  --ff-data: var(--font-geist-mono);
+}
+
+[data-set='b'] {
+  --ff-display: var(--font-instrument);
+  --ff-text: var(--font-instrument);
+  --ff-data: var(--font-jetbrains);
+  --display-stretch: 75%;
+}
+
+[data-set='c'] {
+  --ff-display: var(--font-mona);
+  --ff-text: var(--font-onest);
+  --ff-data: var(--font-martian);
+  --display-stretch: 90%;
+}
+
+@media (width >= 48rem) {
+  [data-set='c'] {
+    --display-stretch: 125%;
+  }
+}
+
+[data-set] .font-display {
+  font-stretch: var(--display-stretch, normal);
+}

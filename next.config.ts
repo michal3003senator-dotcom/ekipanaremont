@@ -5,6 +5,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 import { withSentryConfig } from '@sentry/nextjs/config'
 import type { NextConfig } from 'next'
 
+import { isProductionDeployment } from './src/lib/runtime'
 import { securityHeaders } from './src/lib/security/headers'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -16,7 +17,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/:path*',
-        headers: securityHeaders({ indexable: process.env.VERCEL_ENV === 'production' }),
+        headers: securityHeaders({ indexable: isProductionDeployment() }),
       },
     ]
   },

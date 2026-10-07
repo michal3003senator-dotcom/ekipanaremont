@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { connection } from 'next/server'
 import type { ReactNode } from 'react'
 
+import './globals.css'
+
 export const metadata: Metadata = {
   title: 'Ekipa na Termin',
   description: 'Firmy remontowe z województwa łódzkiego z najbliższym wolnym terminem.',
@@ -13,7 +15,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="pl">
-      <body>{children}</body>
+      <body className="bg-bg font-sans text-text">{children}</body>
     </html>
   )
 }
