@@ -1,0 +1,285 @@
+/* Kierunek 2 „Kartka z budowy”: beton, grafik ekipy jak na tablicy, żółty sygnałowy tylko na wolnym dniu i akcji. */
+.budowa {
+  --concrete: #d8d5ce;
+  --paper: #eceae4;
+  --ink: #161513;
+  --muted: #4a4844;
+  --rule: #b9b5ac;
+  --busy: #a9a59c;
+  --signal: #ffc21a;
+  display: flow-root;
+  min-height: 100dvh;
+  background: var(--concrete);
+  color: var(--ink);
+  color-scheme: light;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.budowa-wrap {
+  margin-inline: auto;
+  max-width: 1320px;
+  padding-inline: 16px;
+}
+@media (width >= 768px) {
+  .budowa-wrap {
+    padding-inline: 40px;
+  }
+}
+.budowa-cond {
+  font-family: var(--font-barlow-condensed), sans-serif;
+  text-transform: uppercase;
+}
+.budowa :focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.budowa-header {
+  background: var(--ink);
+  color: var(--paper);
+}
+.budowa-header .budowa-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 64px;
+}
+.budowa-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.budowa-mark i {
+  width: 14px;
+  height: 14px;
+  background: var(--signal);
+}
+.budowa-nav {
+  display: none;
+  gap: 28px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #c9c6be;
+}
+@media (width >= 900px) {
+  .budowa-nav {
+    display: flex;
+  }
+}
+.budowa-nav a:hover {
+  color: var(--paper);
+}
+
+.budowa-tape {
+  height: 12px;
+  background: repeating-linear-gradient(-45deg, var(--ink) 0 14px, var(--signal) 14px 28px);
+}
+
+.budowa-hero {
+  padding-block: 48px 40px;
+}
+@media (width >= 1024px) {
+  .budowa-hero {
+    padding-block: 80px 48px;
+  }
+}
+.budowa-hero h1 {
+  font-size: clamp(3.2rem, 10vw, 9rem);
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+  max-width: 11ch;
+}
+.budowa-hero p {
+  margin-top: 24px;
+  max-width: 50ch;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.budowa-order {
+  margin-top: 36px;
+  display: grid;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+@media (width >= 640px) {
+  .budowa-order {
+    grid-template-columns: repeat(3, 1fr) auto;
+  }
+}
+.budowa-order label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--ink);
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@media (width >= 640px) {
+  .budowa-order label {
+    border-bottom: 0;
+    border-right: 2px solid var(--ink);
+  }
+}
+.budowa-order select {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 2px 0;
+  font:
+    600 18px var(--font-barlow),
+    sans-serif;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+}
+.budowa-order button {
+  min-height: 64px;
+  padding-inline: 28px;
+  background: var(--signal);
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.budowa-order button:hover {
+  background: #ffcf4a;
+}
+
+/* Tablica grafiku: wiersze ekip, kolumny dni, żółta kartka na pierwszym wolnym dniu. */
+.budowa-board {
+  margin-block: 0 80px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  overflow-x: auto;
+}
+.budowa-board table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.budowa-board th,
+.budowa-board td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0;
+}
+.budowa-board thead th {
+  height: 52px;
+  padding-inline: 6px;
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  border-bottom: 2px solid var(--ink);
+}
+.budowa-board thead th:first-child {
+  text-align: left;
+  padding-inline: 16px;
+}
+.budowa-board thead th[data-today] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.budowa-board th[data-week-start],
+.budowa-board td[data-week-start] {
+  border-left: 2px solid var(--ink);
+}
+.budowa-crew {
+  width: 260px;
+  padding: 14px 16px !important;
+  text-align: left;
+}
+.budowa-crew strong {
+  display: block;
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.budowa-crew span {
+  font-size: 14px;
+  color: var(--muted);
+}
+.budowa-cell {
+  height: 72px;
+  border-left: 1px solid var(--rule);
+}
+.budowa-cell div {
+  margin: 8px 3px;
+  height: calc(100% - 16px);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+.budowa-cell[data-tile='taken'] div {
+  background: var(--busy);
+}
+.budowa-cell:is([data-tile='free'], [data-tile='beyond']) div {
+  background: var(--signal);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.budowa-photo {
+  display: grid;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  margin-bottom: 96px;
+}
+@media (width >= 1024px) {
+  .budowa-photo {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+.budowa-photo-img {
+  position: relative;
+  aspect-ratio: 16 / 10;
+}
+.budowa-photo-img img {
+  object-fit: cover;
+}
+.budowa-photo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px;
+  border-top: 2px solid var(--ink);
+}
+@media (width >= 1024px) {
+  .budowa-photo-text {
+    border-top: 0;
+    border-left: 2px solid var(--ink);
+  }
+}
+.budowa-label {
+  align-self: flex-start;
+  padding: 4px 10px;
+  background: var(--signal);
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+.budowa-photo-text h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  line-height: 0.92;
+}

@@ -1,0 +1,376 @@
+/* Kierunek 1 „Tynk i fuga”: jasna ściana, płytki i fuga jako siatka, kolor tylko na wolnym dniu. */
+.tynk {
+  --wall: #f3f3f1;
+  --grout: #d2d1cc;
+  --laid: #e3e2de;
+  --ink: #121211;
+  --muted: #5f5e59;
+  --glaze: #0e6a55;
+  --glaze-dark: #0a5243;
+  min-height: 100dvh;
+  background: var(--wall);
+  color: var(--ink);
+  color-scheme: light;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.tynk-wrap {
+  margin-inline: auto;
+  max-width: 1320px;
+  padding-inline: 16px;
+}
+@media (width >= 768px) {
+  .tynk-wrap {
+    padding-inline: 40px;
+  }
+}
+
+.tynk-header {
+  border-bottom: 1px solid var(--grout);
+}
+.tynk-header .tynk-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 24px;
+}
+.tynk-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-stretch: 125%;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.tynk-mark i {
+  display: grid;
+  grid-template-columns: repeat(3, 8px);
+  gap: 2px;
+}
+.tynk-mark i b {
+  height: 16px;
+  border-radius: 1px;
+  background: var(--laid);
+  box-shadow: inset 0 0 0 1px var(--grout);
+}
+.tynk-mark i b:last-child {
+  background: var(--glaze);
+  box-shadow: none;
+}
+.tynk-nav {
+  display: none;
+  gap: 32px;
+  font-size: 15px;
+  color: var(--muted);
+}
+@media (width >= 900px) {
+  .tynk-nav {
+    display: flex;
+  }
+}
+.tynk-nav a:hover,
+.tynk-login:hover {
+  color: var(--ink);
+}
+.tynk-login {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.tynk-hero {
+  display: grid;
+  gap: 40px;
+  padding-block: 48px 64px;
+}
+@media (width >= 1024px) {
+  .tynk-hero {
+    grid-template-columns: 7fr 5fr;
+    gap: 64px;
+    padding-block: 88px 112px;
+    align-items: end;
+  }
+}
+.tynk-eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tynk h1 {
+  margin-top: 20px;
+  max-width: 13ch;
+  font-size: clamp(2.6rem, 6.2vw, 5.75rem);
+  font-stretch: 112%;
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.tynk h1 em {
+  font-style: normal;
+  color: var(--glaze);
+}
+.tynk-lead {
+  margin-top: 24px;
+  max-width: 44ch;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.tynk-search {
+  margin-top: 40px;
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--grout);
+  background: var(--grout);
+}
+@media (width >= 640px) {
+  .tynk-search {
+    grid-template-columns: 1fr 1fr 1fr auto;
+  }
+}
+.tynk-search label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px 10px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tynk-search select {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 2px 0;
+  font:
+    500 17px var(--font-archivo),
+    sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.tynk-search button {
+  min-height: 64px;
+  padding-inline: 28px;
+  background: var(--glaze);
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.tynk-search button:hover {
+  background: var(--glaze-dark);
+}
+.tynk :focus-visible {
+  outline: 2px solid var(--glaze);
+  outline-offset: 2px;
+}
+
+.tynk-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.tynk-photo img {
+  object-fit: cover;
+}
+.tynk-photo figcaption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  background: rgb(18 18 17 / 0.72);
+  color: #f3f3f1;
+  font-size: 13px;
+}
+
+/* Ściana terminów: płytki do dnia terminu „położone”, wolny dzień w szkliwie, dalej goły tynk. */
+.tynk-wall {
+  border-top: 1px solid var(--grout);
+  padding-block: 64px 96px;
+}
+.tynk-wall h2,
+.tynk-results h2 {
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-stretch: 112%;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.tynk-wall-note {
+  margin-top: 10px;
+  color: var(--muted);
+}
+.tynk-board {
+  margin-top: 40px;
+  display: grid;
+  gap: 24px;
+}
+.tynk-row {
+  display: grid;
+  gap: 12px;
+  align-items: center;
+}
+@media (width >= 1024px) {
+  .tynk-row {
+    grid-template-columns: 280px 1fr 120px;
+    gap: 32px;
+  }
+}
+.tynk-row-name {
+  font-weight: 600;
+  font-size: 17px;
+}
+.tynk-row-meta {
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.tynk-tiles {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  background: var(--grout);
+  border-radius: 2px;
+}
+.tynk-tiles span {
+  flex: 1 1 0;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 1px;
+  background: var(--wall);
+  font-size: 13px;
+  font-weight: 600;
+}
+.tynk-tiles span[data-week-start] {
+  margin-inline-start: 3px;
+}
+.tynk-tiles span[data-tile='taken'] {
+  background: var(--laid);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+.tynk-tiles span:is([data-tile='free'], [data-tile='beyond']) {
+  background: var(--glaze);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 -1px 0 rgb(0 0 0 / 0.25);
+}
+.tynk-tiles span[data-tile='off'] {
+  background: var(--wall);
+  opacity: 0.6;
+}
+.tynk-days span {
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  aspect-ratio: auto;
+}
+.tynk-days {
+  background: transparent;
+  padding-block: 0;
+}
+/* Na telefonie każdy wiersz czyta się osobno – bez nagłówka dni. */
+@media (width < 1024px) {
+  .tynk-row:has(.tynk-days) {
+    display: none;
+  }
+}
+.tynk-from {
+  font-size: 15px;
+  font-weight: 600;
+}
+.tynk-from small {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.tynk-results {
+  border-top: 1px solid var(--grout);
+  padding-block: 64px 112px;
+}
+.tynk-grid {
+  margin-top: 40px;
+  display: grid;
+  gap: 3px;
+  padding: 3px;
+  background: var(--grout);
+}
+@media (width >= 640px) {
+  .tynk-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (width >= 1024px) {
+  .tynk-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.tynk-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--wall);
+}
+.tynk-card-photo {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+.tynk-card-photo img {
+  object-fit: cover;
+  transition: scale 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.tynk-card:hover .tynk-card-photo img {
+  scale: 1.03;
+}
+.tynk-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+}
+.tynk-card-term {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.tynk-card-term::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 1px;
+  background: var(--glaze);
+}
+.tynk-card-term[data-none]::before {
+  background: var(--laid);
+  box-shadow: inset 0 0 0 1px var(--grout);
+}
+.tynk-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 8px;
+  background: rgb(18 18 17 / 0.72);
+  color: #f3f3f1;
+  font-size: 12px;
+}

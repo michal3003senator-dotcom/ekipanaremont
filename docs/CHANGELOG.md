@@ -4,6 +4,9 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Próby kierunku poza DESIGN.md (2026-10-07)
+- `/kierunki/tynk` („Tynk i fuga”: jasna ściana, płytki jako siatka, zielone szkliwo tylko na wolnym dniu, Archivo) i `/kierunki/budowa` („Kartka z budowy”: beton, grafik ekip jak tablica na budowie, żółty sygnałowy, Barlow). Poza produkcją, do wyboru przez właściciela.
+
 ### Faza 2b – runda „premium” (2026-10-07)
 - ADR 0015: własny fiolet (`#6B3FF5` ciemny, `#5A2FE0` jasny) i liczby w Instrument Sans z cyframi tabelarycznymi (bez JetBrains Mono).
 - Materia: jasna górna krawędź kart i paneli, kafle jak szkliwione płytki, ramka zdjęć, lżejsze nagłówki, wciśnięcie przycisków.
