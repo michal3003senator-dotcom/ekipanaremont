@@ -9,26 +9,25 @@ import type { KeyboardEvent } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 
-import { projectCaption as caption } from './caption'
-import type { Project } from './types'
+import type { GalleryItem } from './types'
 
 /** Przesunięcie (px) lub prędkość (px/s), po której przechodzimy do sąsiedniego zdjęcia. */
 const SWIPE_OFFSET = 80
 const SWIPE_VELOCITY = 500
 
 type Props = {
-  projects: readonly Project[]
+  items: readonly GalleryItem[]
   index: number
   onIndexChange: (index: number) => void
   /** Fokus po zamknięciu wraca na miniaturę ostatnio oglądanego zdjęcia. */
   onCloseFocus: () => void
 }
 
-/** Powiększenie zdjęć realizacji: przesuwanie palcem, strzałki i Esc. Ładowane dopiero po otwarciu. */
-export function GalleryViewer({ projects, index, onIndexChange, onCloseFocus }: Props) {
+/** Powiększenie zdjęć galerii: przesuwanie palcem, strzałki i Esc. Ładowane dopiero po otwarciu. */
+export function GalleryViewer({ items, index, onIndexChange, onCloseFocus }: Props) {
   const reduceMotion = useReducedMotion()
-  const total = projects.length
-  const current = projects[index]
+  const total = items.length
+  const current = items[index]
   const go = (step: number) => onIndexChange((index + step + total) % total)
 
   function onKeyDown(event: KeyboardEvent) {
@@ -84,7 +83,7 @@ export function GalleryViewer({ projects, index, onIndexChange, onCloseFocus }: 
               />
             </motion.div>
             <DialogPrimitive.Description className="px-4 py-4 text-center text-small text-text-muted md:px-6">
-              {caption(current)}
+              {current.caption}
               {current.photo.demo && ' · zdjęcie poglądowe'}
             </DialogPrimitive.Description>
           </>

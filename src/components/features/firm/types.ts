@@ -34,3 +34,6 @@ export type Project = {
   month: CalendarMonth
   photo: FirmPhotoData
 }
+
+/** Zdjęcie w galerii z podpisem (realizacje firmy, galerie w artykułach). */
+export type GalleryItem = { id: string; photo: FirmPhotoData; caption: string }

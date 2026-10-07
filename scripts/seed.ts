@@ -10,6 +10,8 @@ import { readFileSync } from 'node:fs'
 import config from '@payload-config'
 import { getPayload, type Payload } from 'payload'
 
+import { seedCalculators, seedDemoContent, seedPages } from './seed-content'
+
 import { addDays, todayInWarsaw } from '@/lib/format/date'
 
 type LocalityRow = {
@@ -280,10 +282,13 @@ const payload = await getPayload({ config })
 const report = [
   `miejscowości: +${await seedLocalities(payload)}`,
   `usługi: +${await seedServices(payload)}`,
+  `kalkulatory (szkice): +${await seedCalculators(payload)}`,
+  `strony (szkice): +${await seedPages(payload)}`,
 ]
 if (process.argv.includes('demo')) {
   report.push(`firmy przykładowe: +${await seedDemo(payload)}`)
   report.push(`konto demo: ${await seedDemoAccount(payload)}`)
+  report.push(`artykuł demo: ${await seedDemoContent(payload)}`)
 }
 process.stdout.write(`Seed gotowy (${report.join(', ')}).\n`)
 await payload.destroy()

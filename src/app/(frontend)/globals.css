@@ -307,6 +307,11 @@
     text-underline-offset: 4px;
   }
 
+  /* FAQ na <details>: bez systemowego trójkąta – ikona strzałki jest w treści. */
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
   .rich-text :is(h2, h3, h4) {
     font-family: var(--font-display);
     font-weight: 500;
