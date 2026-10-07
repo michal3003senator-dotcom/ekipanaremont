@@ -24,6 +24,7 @@ Każda decyzja architektoniczna ma osobny plik `NNNN-tytul.md` (zasada 6 z CLAUD
 | [0018](0018-uwierzytelnianie-firm.md) | Uwierzytelnianie firm: Server Actions na Local API Payload | zaakceptowana |
 | [0019](0019-rejestry-nip.md) | Weryfikacja NIP w rejestrach | zaakceptowana |
 | [0020](0020-jasny-motyw-i-archivo.md) | Jasny motyw domyślny, fiolet i Archivo | zaakceptowana |
+| [0021](0021-budzet-wydajnosci-stron-publicznych.md) | Budżet wydajności stron publicznych | zaakceptowana |
 
 ## Szablon
 

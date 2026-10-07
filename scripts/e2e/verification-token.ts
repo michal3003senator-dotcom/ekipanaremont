@@ -18,6 +18,6 @@ const { docs } = await payload.find({
   overrideAccess: true,
   limit: 1,
 })
-process.stdout.write(`${docs[0]?._verificationToken ?? ''}\n`)
+process.stdout.write(`=> ${docs[0]?._verificationToken ?? ''}\n`)
 await payload.destroy()
 process.exit(0)

@@ -11,7 +11,8 @@ import { Field } from '@/components/ui/Field'
 import { Icon } from '@/components/ui/Icon'
 import { Select } from '@/components/ui/Select'
 import { cn } from '@/lib/cn'
-import { searchHref, type SearchParams } from '@/lib/search/params'
+import { searchHref } from '@/lib/search/href'
+import type { SearchParams } from '@/lib/search/params'
 
 import { useLocalitySuggestions } from './useLocalitySuggestions'
 

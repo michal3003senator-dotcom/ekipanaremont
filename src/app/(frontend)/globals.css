@@ -228,6 +228,12 @@
     color: var(--text);
   }
 
+  /* Krój ma wagi 400–600 (ADR 0021): pogrubienie z edytora to najcięższa dostępna waga, bez syntezy. */
+  b,
+  strong {
+    font-weight: 600;
+  }
+
   body {
     font-size: var(--text-body);
     line-height: 1.55;

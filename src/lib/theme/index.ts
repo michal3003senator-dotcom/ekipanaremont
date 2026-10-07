@@ -1,16 +1,15 @@
-import { z } from 'zod'
-
 /** Ciasteczko z wyborem motywu (wartości po polsku, jak w adresach). */
 export const THEME_COOKIE = 'motyw'
 
-export const themeSchema = z.enum(['ciemny', 'jasny'])
-export type Theme = z.infer<typeof themeSchema>
+// Bez Zod: moduł trafia do przeglądarki (przełącznik motywu), schemat Zod jest w akcji serwerowej.
+export const THEMES = ['ciemny', 'jasny'] as const
+export type Theme = (typeof THEMES)[number]
+
+export const isTheme = (value: unknown): value is Theme =>
+  typeof value === 'string' && (THEMES as readonly string[]).includes(value)
 
 /** Jasny motyw jest domyślny (ADR 0020); nieznana wartość ciasteczka też daje jasny. */
-export function readTheme(value: string | undefined): Theme {
-  const result = themeSchema.safeParse(value)
-  return result.success ? result.data : 'jasny'
-}
+export const readTheme = (value: string | undefined): Theme => (isTheme(value) ? value : 'jasny')
 
 /** Wartość atrybutu `data-theme` – ciemny motyw włączają tokeny w globals.css. */
 export const themeAttribute = (theme: Theme) => (theme === 'ciemny' ? 'dark' : undefined)

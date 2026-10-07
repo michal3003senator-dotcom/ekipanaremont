@@ -135,30 +135,32 @@ export function Combobox({
         hidden={!expanded}
         className="absolute inset-x-0 top-full z-30 mt-2 max-h-72 overflow-y-auto rounded-control border border-line bg-surface-1 p-1 shadow-float"
       >
-        {results.map((option, index) => (
-          <li
-            key={option.value}
-            id={optionId(index)}
-            role="option"
-            aria-selected={index === active}
-            // mousedown zamiast click: pole nie traci fokusu przed wyborem.
-            onMouseDown={(event) => {
-              event.preventDefault()
-              choose(option)
-            }}
-            onMouseMove={() => setActive(index)}
-            className={cn(
-              'flex min-h-11 cursor-pointer flex-col justify-center rounded-badge px-3 py-2',
-              index === active && 'bg-surface-2',
-            )}
-          >
-            <span>{option.label}</span>
-            {option.description && (
-              <span className="text-small text-text-muted">{option.description}</span>
-            )}
-          </li>
-        ))}
-        {!loading && results.length === 0 && (
+        {/* Opcje tylko przy rozwiniętej liście – bez kilkudziesięciu ukrytych pozycji w HTML strony. */}
+        {expanded &&
+          results.map((option, index) => (
+            <li
+              key={option.value}
+              id={optionId(index)}
+              role="option"
+              aria-selected={index === active}
+              // mousedown zamiast click: pole nie traci fokusu przed wyborem.
+              onMouseDown={(event) => {
+                event.preventDefault()
+                choose(option)
+              }}
+              onMouseMove={() => setActive(index)}
+              className={cn(
+                'flex min-h-11 cursor-pointer flex-col justify-center rounded-badge px-3 py-2',
+                index === active && 'bg-surface-2',
+              )}
+            >
+              <span>{option.label}</span>
+              {option.description && (
+                <span className="text-small text-text-muted">{option.description}</span>
+              )}
+            </li>
+          ))}
+        {expanded && !loading && results.length === 0 && (
           <li role="presentation" className="px-3 py-3 text-small text-text-muted">
             Brak wyników dla „{query.trim()}”
           </li>

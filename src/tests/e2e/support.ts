@@ -25,13 +25,15 @@ export async function expectNoAxeViolations(page: Page) {
   expect(summary).toEqual([])
 }
 
-/** Skrypt pomocniczy E2E (`scripts/e2e`, tylko lokalna baza) – zwraca ostatnią linię wyjścia. */
+/** Skrypt pomocniczy E2E (`scripts/e2e`, tylko lokalna baza) – wynik to linia z prefiksem `=> `. */
 export function runScript(name: string, ...args: string[]): string {
   const output = execFileSync('pnpm', ['-s', 'payload', 'run', `scripts/e2e/${name}.ts`, ...args], {
     encoding: 'utf8',
   })
-  const lines = output.split('\n').map((line) => line.trim())
-  return lines.filter(Boolean).pop() ?? ''
+  // Logi Payload (np. „e-mail niewysłany”) mogą przyjść po wyniku – bierzemy tylko linię wyniku.
+  const result = output.split('\n').findLast((line) => line.startsWith('=> '))
+  if (result === undefined) throw new Error(`Skrypt ${name} nie zwrócił wyniku.`)
+  return result.slice(3).trim()
 }
 
 /** Z kluczem Turnstile (CI: klucze testowe) czekamy na token widżetu przed wysłaniem formularza. */

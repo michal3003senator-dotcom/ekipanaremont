@@ -14,6 +14,8 @@ type Props = {
   today: CalendarDate
   /** Adres profilu; domyślnie /firma/[slug]. */
   href?: string
+  /** Poziom nagłówka nazwy – zgodny z miejscem na stronie (pod h1 wyników: h2). */
+  heading?: 'h2' | 'h3'
   className?: string
 }
 
@@ -21,7 +23,13 @@ type Props = {
  * Karta firmy na liście (ADR 0013): od 768 px pozioma, a paski kafli kolejnych kart stoją
  * w jednej kolumnie. Cała karta jest linkiem; zdjęcie przechodzi w nagłówek profilu.
  */
-export function FirmCard({ firm, today, href = `/firma/${firm.slug}`, className }: Props) {
+export function FirmCard({
+  firm,
+  today,
+  href = `/firma/${firm.slug}`,
+  heading: Heading = 'h3',
+  className,
+}: Props) {
   return (
     <Link
       href={href}
@@ -38,7 +46,7 @@ export function FirmCard({ firm, today, href = `/firma/${firm.slug}`, className 
         className="aspect-4/3 md:col-span-3"
       />
       <div className="flex flex-col gap-1 p-4 md:col-span-5 md:p-6">
-        <h3 className="font-display text-h3 font-medium">{firm.name}</h3>
+        <Heading className="font-display text-h3 font-medium">{firm.name}</Heading>
         <p className="text-small text-text-muted">{firm.services}</p>
         <p className="text-small text-text-muted">{firmArea(firm)}</p>
         <FirmFacts firm={firm} className="mt-auto pt-3" />

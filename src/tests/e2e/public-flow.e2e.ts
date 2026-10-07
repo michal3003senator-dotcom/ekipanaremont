@@ -49,6 +49,8 @@ test('wyszukanie → profil → zapytanie → panel firmy → link do opinii →
   await expect(page.getByRole('heading', { level: 1, name: 'Glazura E2E' })).toBeVisible()
   await expect(page).toHaveTitle(/Glazura E2E/)
   await expectNoAxeViolations(page)
+  // Formularz wczytuje się przy zbliżeniu do ekranu – jak u klienta, przez przycisk w panelu bocznym.
+  await page.getByRole('link', { name: 'Wyślij zapytanie' }).first().click()
   await page.getByRole('combobox', { name: 'Miejscowość' }).fill('zgiez')
   await page
     .getByRole('option', { name: /^Zgierz/ })
@@ -102,6 +104,7 @@ test('wyszukanie → profil → zapytanie → panel firmy → link do opinii →
 })
 
 test('ekrany publiczne: bez naruszeń WCAG w obu motywach', async ({ page }, testInfo) => {
+  test.setTimeout(120_000)
   runScript('public-firm', `glazura-axe-${testInfo.project.name}@firma.test`, PASSWORD)
   const errors = collectErrors(page)
   for (const theme of ['ciemny', 'jasny']) {

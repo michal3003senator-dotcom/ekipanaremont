@@ -11,7 +11,8 @@ import { EmptyState } from '@/components/ui/States'
 import { formatCount } from '@/lib/format/number'
 import { PAGE_SIZE, searchFirms } from '@/lib/search/firms'
 import { allServices, resolveSearch, serviceOptions } from '@/lib/search/options'
-import { parseSearchParams, searchHref } from '@/lib/search/params'
+import { searchHref } from '@/lib/search/href'
+import { parseSearchParams } from '@/lib/search/params'
 import { publicContext } from '@/lib/search/context'
 import { loadFirmSummaries } from '@/lib/search/summary'
 
@@ -120,7 +121,7 @@ export default async function SearchPage({ searchParams }: Props) {
             <ol className="results flex flex-col gap-4">
               {firms.map((firm, index) => (
                 <li key={firm.slug} style={{ '--i': index } as React.CSSProperties}>
-                  <FirmCard firm={firm} today={today} />
+                  <FirmCard firm={firm} today={today} heading="h2" />
                 </li>
               ))}
             </ol>

@@ -12,7 +12,9 @@ test.describe('strona i panel', () => {
     expect(response?.status()).toBe(200)
     await expect(page).toHaveTitle(/Ekipa na Termin/)
     await expect(page.locator('html')).toHaveAttribute('lang', 'pl')
-    await expect(page.getByRole('heading', { level: 1, name: 'Ekipa na Termin' })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Fachowiec z wolnym terminem/ }),
+    ).toBeVisible()
     await page.waitForLoadState('networkidle')
     expect(errors).toEqual([])
   })

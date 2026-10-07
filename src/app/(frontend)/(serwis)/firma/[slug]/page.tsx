@@ -18,11 +18,11 @@ import { formatInstantDate } from '@/lib/format/date'
 import { formatCount } from '@/lib/format/number'
 import { searchFirms } from '@/lib/search/firms'
 import { publicContext } from '@/lib/search/context'
-import { searchHref } from '@/lib/search/params'
+import { searchHref } from '@/lib/search/href'
 import { loadFirmSummaries } from '@/lib/search/summary'
 import { serializeJsonLd } from '@/lib/seo/json-ld'
 
-import { InquiryForm } from './InquiryForm'
+import { LazyInquiryForm } from './LazyInquiryForm'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -264,7 +264,7 @@ export default async function FirmProfilePage({ params }: Props) {
               <p className="max-w-prose text-body text-text-muted">
                 Bez rejestracji i opłat. {summary.name} odpowie telefonicznie albo e-mailem.
               </p>
-              <InquiryForm
+              <LazyInquiryForm
                 firmSlug={summary.slug}
                 firmName={summary.name}
                 services={profile.serviceOptions}

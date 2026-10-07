@@ -7,6 +7,8 @@ import { OG_SIZE, ogImage } from '@/lib/seo/og'
 export const alt = 'Ekipa na Termin – firmy remontowe z wolnym terminem'
 export const size = OG_SIZE
 export const contentType = 'image/png'
+// Kafle pokazują dzisiejszy najbliższy termin – odświeżane co godzinę, nie zamrożone w buildzie.
+export const revalidate = 3600
 
 /** Kafle pokazują prawdziwy najbliższy termin z serwisu (bez zmyślonych danych). */
 export default async function Image() {

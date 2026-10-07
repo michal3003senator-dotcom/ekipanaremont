@@ -9,7 +9,8 @@ import { CheckboxField } from '@/components/ui/Checkbox'
 import { Icon } from '@/components/ui/Icon'
 import { Select } from '@/components/ui/Select'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/Sheet'
-import { searchHref, type SearchParams } from '@/lib/search/params'
+import { searchHref } from '@/lib/search/href'
+import type { SearchParams } from '@/lib/search/params'
 
 type Props = {
   params: SearchParams

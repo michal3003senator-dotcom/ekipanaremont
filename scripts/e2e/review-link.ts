@@ -26,6 +26,6 @@ const { docs } = await payload.find({
 const inquiry = docs[0]
 if (!inquiry) throw new Error('Brak zapytania dla tego adresu.')
 const token = await requestReviewFor(payload, inquiry)
-process.stdout.write(`/opinia/${token}\n`)
+process.stdout.write(`=> /opinia/${token}\n`)
 await payload.destroy()
 process.exit(0)

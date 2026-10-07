@@ -35,7 +35,7 @@ Jasny motyw domyślny (ADR 0020), ciemny w przełączniku. Neutralne kolory ciep
 - Każda para tekst–tło sprawdzona testem kontrastu (min. 4,5:1, duży tekst 3:1).
 
 ## 4. Typografia
-- Trzy role w jednym kroju (ADR 0020): **display** – Archivo poszerzony (108%), oszczędnie; **tekst** – Archivo; **dane** – Archivo z cyframi tabelarycznymi (daty, ceny, liczby, NIP).
+- Trzy role w jednym kroju (ADR 0020): **display** – Archivo poszerzony (108%), oszczędnie; **tekst** – Archivo; **dane** – Archivo z cyframi tabelarycznymi (daty, ceny, liczby, NIP). Wagi 400–600, własny podzbiór z polskimi literami (ADR 0021).
 - Polskie znaki sprawdzone zdaniem „Zażółć gęślą jaźń. Wolny od 14 października, 1 250 zł”.
 - Bez Inter, Roboto, Arial, Bricolage Grotesque i IBM Plex Sans.
 - Skala (desktop / telefon): 64/40, 44/32, 32/26, 24/21, 18/17, 16/16, 14/14, 12/12. Nagłówki z ujemnym światłem (−0,02 em), wersaliki z dodatnim (+0,06 em). Interlinia tekstu 1,55, nagłówków 1,05–1,15.

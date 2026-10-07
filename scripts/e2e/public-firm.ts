@@ -89,6 +89,6 @@ else
     ...system,
   })
 
-process.stdout.write(`${firm.slug}\n`)
+process.stdout.write(`=> ${firm.slug}\n`)
 await payload.destroy()
 process.exit(0)

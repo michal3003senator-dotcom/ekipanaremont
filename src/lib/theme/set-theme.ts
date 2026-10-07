@@ -1,8 +1,11 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { z } from 'zod'
 
-import { THEME_COOKIE, themeSchema } from '.'
+import { THEME_COOKIE, THEMES } from '.'
+
+const themeSchema = z.enum(THEMES)
 
 const ONE_YEAR_S = 60 * 60 * 24 * 365
 

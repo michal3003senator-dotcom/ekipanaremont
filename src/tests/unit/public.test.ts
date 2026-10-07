@@ -7,7 +7,8 @@ import {
   reviewLinkExpiry,
   reviewTokenHash,
 } from '../../lib/reviews/token'
-import { parseSearchParams, searchHref } from '../../lib/search/params'
+import { searchHref } from '../../lib/search/href'
+import { parseSearchParams } from '../../lib/search/params'
 import { serializeJsonLd } from '../../lib/seo/json-ld'
 import { inquirySchema, reviewSchema } from '../../lib/validation/forms'
 
