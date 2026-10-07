@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process'
+import { createHmac } from 'node:crypto'
 
 import AxeBuilder from '@axe-core/playwright'
 import { expect, type Page } from '@playwright/test'
@@ -53,4 +54,19 @@ export async function waitForTurnstile(page: Page) {
 export async function pickLocality(page: Page, label: string, query: string, option = /^Łódź/) {
   await page.getByRole('combobox', { name: label }).fill(query)
   await page.getByRole('option', { name: option }).first().click()
+}
+
+/** Kod TOTP (RFC 6238: SHA-1, 6 cyfr, 30 s) z sekretu base32 – logowanie redaktora w E2E. */
+export function totpCode(secret: string, now = Date.now()): string {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+  const bits = [...secret.replace(/=+$/, '')]
+    .map((char) => alphabet.indexOf(char).toString(2).padStart(5, '0'))
+    .join('')
+  const key = Buffer.from(bits.match(/.{8}/g)!.map((byte) => parseInt(byte, 2)))
+  const counter = Buffer.alloc(8)
+  counter.writeBigUInt64BE(BigInt(Math.floor(now / 30_000)))
+  const hmac = createHmac('sha1', key).update(counter).digest()
+  const offset = hmac[hmac.length - 1]! & 0xf
+  const code = (hmac.readUInt32BE(offset) & 0x7fffffff) % 1_000_000
+  return String(code).padStart(6, '0')
 }

@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone, editorial, either, isStaffUser, where } from '@/access'
-import { articleBlocks } from '@/blocks'
+import { articleBlocks, BLOCK_LABELS } from '@/blocks'
 import { blocksText, readingMinutes } from '@/lib/content/text'
 
 import { seoField, slugField, systemOnly, uniqueSlug } from './fields'
@@ -46,7 +46,13 @@ export const Articles: CollectionConfig = {
     slugField('title'),
     { name: 'excerpt', type: 'textarea', label: 'Zajawka', maxLength: 300 },
     { name: 'cover', type: 'upload', relationTo: 'media', label: 'Zdjęcie główne' },
-    { name: 'content', type: 'blocks', label: 'Treść', blocks: articleBlocks },
+    {
+      name: 'content',
+      type: 'blocks',
+      label: 'Treść',
+      labels: BLOCK_LABELS,
+      blocks: articleBlocks,
+    },
     {
       name: 'category',
       type: 'relationship',

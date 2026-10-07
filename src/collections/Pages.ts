@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone, editorial, either, where } from '@/access'
-import { pageBlocks } from '@/blocks'
+import { BLOCK_LABELS, pageBlocks } from '@/blocks'
 import { ROUTE_SLUGS } from '@/lib/validation'
 
 import { options, seoField, slugField, uniqueSlug } from './fields'
@@ -37,7 +37,7 @@ export const Pages: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', label: 'Tytuł', required: true, maxLength: 120 },
     slugField('title', { reserved: ROUTE_SLUGS, notIn: 'services' }),
-    { name: 'content', type: 'blocks', label: 'Treść', blocks: pageBlocks },
+    { name: 'content', type: 'blocks', label: 'Treść', labels: BLOCK_LABELS, blocks: pageBlocks },
     {
       name: 'legalKind',
       type: 'select',

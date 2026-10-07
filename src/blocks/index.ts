@@ -129,6 +129,9 @@ const recommendedFirms: Block = {
   ],
 }
 
+/** Przycisk w panelu: „Dodaj blok” zamiast nazwy pola. */
+export const BLOCK_LABELS = { singular: 'blok', plural: 'Bloki' }
+
 /** Bloki treści artykułów (SPEC 3.8). */
 export const articleBlocks: Block[] = [
   text,
