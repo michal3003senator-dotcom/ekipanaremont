@@ -23,12 +23,13 @@ export function HeroA({ today }: { today: CalendarDate }) {
   return (
     <section className="mx-auto max-w-page px-4 pb-14 pt-10 md:px-6 md:pb-24 md:pt-16">
       <div className="grid gap-x-6 gap-y-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-12">
           <h1 className="font-display text-display font-semibold">
-            Ekipy remontowe z wolnym terminem
+            Ekipy remontowe z&nbsp;wolnym terminem
           </h1>
           <p className="mt-4 max-w-prose text-lead text-text-muted">
-            Firmy same wpisują i potwierdzają termin. Niepotwierdzony znika po 14 dniach.
+            Firmy same wpisują i&nbsp;potwierdzają termin. Niepotwierdzony znika
+            po&nbsp;14&nbsp;dniach.
           </p>
         </div>
 
@@ -54,7 +55,7 @@ export function HeroA({ today }: { today: CalendarDate }) {
               alt={firm.photoAlt}
               sizes="(min-width: 1240px) 810px, (min-width: 1024px) 66vw, 100vw"
               eager
-              className="aspect-4/3"
+              className="aspect-4/3 lg:aspect-video"
             />
             <div className="border-t border-line p-4 md:p-6">
               <AvailabilityStrip today={today} availability={availability} size="hero" />

@@ -10,7 +10,7 @@ import {
 } from '@/components/features/availability-tiles/model'
 import { cx } from '@/lib/cx'
 import type { CalendarDate } from '@/lib/format/date'
-import { formatCount, formatRating } from '@/lib/format/number'
+import { formatCount, formatRating, pluralNoun } from '@/lib/format/number'
 
 import type { DemoFirm } from '../_data'
 import { Photo } from './Photo'
@@ -23,12 +23,15 @@ const cardClass =
 const area = (firm: DemoFirm) =>
   `${firm.locality} + ${formatCount(firm.areaExtra, { one: 'miejscowość', few: 'miejscowości', many: 'miejscowości' })}`
 
-/** Ocena, liczba opinii i rejestr – w kroju danych, żeby liczby dało się porównać w kolumnie. */
+/** Ocena, liczba opinii i rejestr; liczby w kroju danych, żeby dało się je porównać w kolumnie. */
 export function FirmFacts({ firm, className }: { firm: DemoFirm; className?: string }) {
   return (
-    <p className={cx('font-data text-micro tabular-nums text-text-muted', className)}>
-      <span className="text-text">{formatRating(firm.rating)}</span> ·{' '}
-      {formatCount(firm.reviews, { one: 'opinia', few: 'opinie', many: 'opinii' })} · W rejestrze{' '}
+    <p className={cx('text-small text-text-muted', className)}>
+      <span className="font-data font-medium tabular-nums text-text">
+        {formatRating(firm.rating)}
+      </span>{' '}
+      · <span className="font-data tabular-nums">{firm.reviews}</span>{' '}
+      {pluralNoun(firm.reviews, { one: 'opinia', few: 'opinie', many: 'opinii' })} · W rejestrze{' '}
       {firm.registry}
     </p>
   )
@@ -70,22 +73,20 @@ export function FirmCardB({ firm, today }: CardProps) {
       <Photo
         photo={firm.photo}
         alt={firm.photoAlt}
-        sizes="(min-width: 768px) 33vw, 100vw"
-        className="aspect-4/3 md:col-span-4 md:aspect-auto md:h-full"
+        sizes="(min-width: 768px) 25vw, 100vw"
+        className="aspect-4/3 md:col-span-3"
       />
-      <div className="flex flex-col gap-5 p-4 md:col-span-8 md:p-6">
-        <div className="flex flex-col gap-1">
-          <h3 className="font-display text-h3 font-semibold">{firm.name}</h3>
-          <p className="text-small text-text-muted">
-            {firm.services} · {area(firm)}
-          </p>
-          <FirmFacts firm={firm} className="pt-1" />
-        </div>
+      <div className="flex flex-col gap-1 p-4 md:col-span-5 md:p-6">
+        <h3 className="font-display text-h3 font-semibold">{firm.name}</h3>
+        <p className="text-small text-text-muted">{firm.services}</p>
+        <p className="text-small text-text-muted">{area(firm)}</p>
+        <FirmFacts firm={firm} className="mt-auto pt-3" />
+      </div>
+      <div className="flex flex-col justify-center border-t border-line p-4 md:col-span-4 md:border-s md:border-t-0 md:p-6">
         <AvailabilityTiles
           today={today}
           availability={availability}
           confirmedOn={firm.confirmedOn}
-          className="max-w-md md:mt-auto"
         />
       </div>
     </a>

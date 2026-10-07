@@ -91,6 +91,10 @@
   --container-page: 77.5rem;
 }
 
+/*
+ * `inline`: klasy Tailwinda odwołują się wprost do --bg, --line…, więc motyw ustawiony na dowolnym
+ * przodku działa. Własny CSS niżej też używa tych zmiennych, nie --color-* (te liczą się na :root).
+ */
 @theme inline {
   --color-bg: var(--bg);
   --color-surface-1: var(--surface-1);
@@ -132,8 +136,8 @@
 
 @layer base {
   html {
-    background-color: var(--color-bg);
-    color: var(--color-text);
+    background-color: var(--bg);
+    color: var(--text);
   }
 
   body {
@@ -151,13 +155,13 @@
 
   /* Fokus tylko przy klawiaturze: 2 px akcentu z odstępem 2 px (DESIGN §8). */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
   ::selection {
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
+    background-color: var(--accent);
+    color: var(--on-accent);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -219,16 +223,16 @@
   }
 
   .tile[data-tile='taken'] {
-    background-color: var(--color-line);
+    background-color: var(--line);
   }
 
   .tile[data-tile='open'] {
-    box-shadow: inset 0 0 0 1px var(--color-line);
+    box-shadow: inset 0 0 0 1px var(--line);
   }
 
   .tile:is([data-tile='free'], [data-tile='beyond']) {
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
+    background-color: var(--accent);
+    color: var(--on-accent);
     /* Fiolet zapala się chwilę po pojawieniu się kafla. */
     transition-delay:
       calc(var(--step, 0) * var(--tile-stagger, 0ms)),
@@ -237,8 +241,8 @@
   }
 
   .tile[data-tile='off'] {
-    background-color: var(--color-surface-2);
-    box-shadow: inset 0 0 0 1px var(--color-line);
+    background-color: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--line);
   }
 
   /* Animacja raz, po wejściu w ekran (TilesReveal). Bez JS i przy ograniczeniu ruchu: stan końcowy. */
@@ -250,7 +254,7 @@
 
     .tiles:not([data-played], [data-state='none'])
       .tile:is([data-tile='free'], [data-tile='beyond']) {
-      background-color: var(--color-line);
+      background-color: var(--line);
     }
   }
 }

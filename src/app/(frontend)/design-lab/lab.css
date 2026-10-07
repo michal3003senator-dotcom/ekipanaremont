@@ -28,3 +28,16 @@
 [data-set] .font-display {
   font-stretch: var(--display-stretch, normal);
 }
+
+/* Pole wyboru wpisane w zdanie (wariant C): odstęp i strzałka skalują się z krojem. */
+.sentence-select {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.15em;
+}
+
+.sentence-select > svg {
+  align-self: center;
+  inline-size: 0.45em;
+  block-size: 0.45em;
+}

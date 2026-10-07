@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 
 import { cx } from '../../../lib/cx'
-import { type CalendarDate, formatShortDate, formatWeekdayInitial } from '../../../lib/format/date'
+import { type CalendarDate, formatWeekdayInitial } from '../../../lib/format/date'
 import {
   type Availability,
   availabilityDescription,
@@ -44,7 +44,7 @@ export function AvailabilityStrip({ today, availability, size = 'card', classNam
           >
             {tile.kind === 'beyond' && <ArrowIcon />}
             {size === 'hero' && tile.kind === 'free' && (
-              <span className="font-data text-small font-medium tabular-nums">
+              <span className="font-data text-small font-medium tabular-nums max-md:hidden">
                 {Number(tile.date.slice(8))}
               </span>
             )}
@@ -55,15 +55,7 @@ export function AvailabilityStrip({ today, availability, size = 'card', classNam
         <TileLabels today={today} size={size} label={(date) => formatWeekdayInitial(date)} />
       )}
       {size === 'hero' && (
-        <TileLabels
-          today={today}
-          size={size}
-          label={(date, index) => {
-            if (index === 0) return 'dziś'
-            if (availability.status === 'none' || availability.status === 'later') return null
-            return date === availability.date ? formatShortDate(date) : null
-          }}
-        />
+        <TileLabels today={today} size={size} label={(_, index) => (index === 0 ? 'dziś' : null)} />
       )}
     </div>
   )
@@ -114,10 +106,13 @@ type CaptionProps = {
   today: CalendarDate
   availability: Availability
   confirmedOn?: CalendarDate
+  /** Potwierdzenie w osobnej linii, bez kropki – do wąskich kolumn. */
+  stacked?: boolean
   className?: string
 }
 
-export function AvailabilityCaption({ today, availability, confirmedOn, className }: CaptionProps) {
+export function AvailabilityCaption(props: CaptionProps) {
+  const { today, availability, confirmedOn, stacked, className } = props
   const confirmed =
     availability.status !== 'none' && confirmedOn ? confirmedLabel(today, confirmedOn) : null
 
@@ -132,7 +127,11 @@ export function AvailabilityCaption({ today, availability, confirmedOn, classNam
             {availabilityLabel(availability)}
           </time>
         )}
-        {confirmed && <span className="text-text-muted"> · {confirmed}</span>}
+        {confirmed && (
+          <span className={cx('text-text-muted', stacked && 'block')}>
+            {stacked ? confirmed : ` · ${confirmed}`}
+          </span>
+        )}
       </span>
     </p>
   )

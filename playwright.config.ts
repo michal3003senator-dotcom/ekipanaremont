@@ -8,7 +8,12 @@ export default defineConfig({
   testMatch: '**/*.e2e.ts',
   forbidOnly: isCI,
   reporter: isCI ? [['github'], ['html', { open: 'never' }]] : 'list',
-  use: { baseURL, trace: 'retain-on-failure' },
+  use: {
+    baseURL,
+    trace: 'retain-on-failure',
+    // Środowiska z własną binarką Chromium (np. kontener bez pobranych przeglądarek Playwright).
+    launchOptions: { executablePath: process.env.CHROMIUM_PATH },
+  },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     {

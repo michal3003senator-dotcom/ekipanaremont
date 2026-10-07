@@ -28,9 +28,13 @@ export const formatRating = (value: number) => rating.format(value)
 
 type PluralForms = { one: string; few: string; many: string }
 
-/** Liczba z rzeczownikiem w poprawnej formie: „1 opinia”, „2 opinie”, „5 opinii”. */
-export function formatCount(count: number, forms: PluralForms): string {
+/** Rzeczownik w formie pasującej do liczby: „opinia”, „opinie”, „opinii”. */
+export function pluralNoun(count: number, forms: PluralForms): string {
   const category = plural.select(count)
-  const noun = category === 'one' ? forms.one : category === 'few' ? forms.few : forms.many
-  return `${count} ${noun}`
+  return category === 'one' ? forms.one : category === 'few' ? forms.few : forms.many
+}
+
+/** Liczba z rzeczownikiem: „1 opinia”, „2 opinie”, „5 opinii”. */
+export function formatCount(count: number, forms: PluralForms): string {
+  return `${count} ${pluralNoun(count, forms)}`
 }

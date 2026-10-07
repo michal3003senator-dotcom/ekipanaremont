@@ -73,7 +73,7 @@ export function buildTiles(today: CalendarDate, availability: Availability): Til
 
 /** Odstęp między zapalaniem kolejnych kafli, tak by cały pasek zmieścił się w ok. 400 ms. */
 export function revealStaggerMs(availability: Availability): number {
-  return Math.round(REVEAL_SPREAD_MS / Math.max(lastRevealIndex(availability), 1))
+  return Math.floor(REVEAL_SPREAD_MS / Math.max(lastRevealIndex(availability), 1))
 }
 
 /** „od dziś”, „od jutra”, „od 14 paź”; null, gdy nie ma terminu. */

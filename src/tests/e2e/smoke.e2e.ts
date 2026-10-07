@@ -1,14 +1,6 @@
-import { type Page, expect, test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
-/** Zbiera błędy z konsoli – w tym naruszenia CSP – i nieobsłużone wyjątki strony. */
-function collectErrors(page: Page): string[] {
-  const errors: string[] = []
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text())
-  })
-  page.on('pageerror', (error) => errors.push(error.message))
-  return errors
-}
+import { collectErrors } from './support'
 
 const nonceOf = (csp: string | undefined) => csp?.match(/'nonce-([^']+)'/)?.[1]
 

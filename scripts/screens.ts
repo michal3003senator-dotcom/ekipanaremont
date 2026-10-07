@@ -7,7 +7,7 @@
  */
 import { mkdir } from 'node:fs/promises'
 
-import { chromium } from '@playwright/test'
+import { chromium, type Page } from '@playwright/test'
 
 const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000'
 const outDir = process.env.SCREENS_DIR ?? 'docs/screens/design-lab'
@@ -21,6 +21,18 @@ const themes = [
   { name: 'ciemny', query: '' },
   { name: 'jasny', query: '?motyw=jasny' },
 ]
+
+/** Przewija stronę, żeby wczytać leniwe zdjęcia, i czeka na ich pobranie. */
+async function loadLazyImages(page: Page) {
+  await page.evaluate(async () => {
+    for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight) {
+      window.scrollTo(0, y)
+      await new Promise((resolve) => setTimeout(resolve, 100))
+    }
+    window.scrollTo(0, 0)
+  })
+  await page.waitForFunction(() => Array.from(document.images).every((image) => image.complete))
+}
 
 await mkdir(outDir, { recursive: true })
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH })
@@ -41,6 +53,9 @@ try {
           waitUntil: 'networkidle',
         })
         await page.evaluate(() => document.fonts.ready)
+        await loadLazyImages(page)
+        // Wskaźnik trybu deweloperskiego Next nie należy do projektu.
+        await page.evaluate(() => document.querySelector('nextjs-portal')?.remove())
         const path = `${outDir}/${variant}-${viewport.width}-${theme.name}.jpg`
         await page.screenshot({ path, fullPage: true, type: 'jpeg', quality: 70 })
         process.stdout.write(`${path}\n`)

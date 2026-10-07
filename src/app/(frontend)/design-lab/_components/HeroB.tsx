@@ -121,6 +121,7 @@ export function HeroB({ today }: { today: CalendarDate }) {
                   today={today}
                   availability={availability}
                   confirmedOn={firm.confirmedOn}
+                  stacked
                   className="lg:col-span-2"
                 />
               </li>

@@ -32,9 +32,9 @@ function InlineSelect<T extends string>({
 }: InlineSelectProps<T>) {
   const current = options.find((option) => option.key === value)?.label ?? ''
   return (
-    <span className="relative inline-flex items-baseline gap-[0.15em] border-b-2 border-line-strong transition-colors duration-150 hover:border-text-muted has-focus-visible:rounded-badge has-focus-visible:outline-2 has-focus-visible:outline-offset-4 has-focus-visible:outline-accent">
+    <span className="sentence-select relative border-b-2 border-line-strong transition-colors duration-150 hover:border-text-muted has-focus-visible:rounded-badge has-focus-visible:outline-2 has-focus-visible:outline-offset-4 has-focus-visible:outline-accent">
       <span aria-hidden="true">{current}</span>
-      <ChevronIcon className="size-[0.5em] self-center text-text-muted" />
+      <ChevronIcon className="text-text-muted" />
       <select
         aria-label={label}
         name={name}
