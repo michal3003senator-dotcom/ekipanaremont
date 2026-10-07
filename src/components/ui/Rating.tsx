@@ -8,11 +8,13 @@ import { Icon } from './Icon'
 type Props = {
   value: number
   count?: number
+  /** Bez liczby obok gwiazdek – gdy średnia stoi już obok dużym krojem. */
+  starsOnly?: boolean
   className?: string
 }
 
 /** Ocena: gwiazdki (dekoracja) i liczby w kroju danych, np. „4,9 · 37 opinii”. */
-export function Rating({ value, count, className }: Props) {
+export function Rating({ value, count, starsOnly = false, className }: Props) {
   const label =
     `Ocena ${formatRating(value)} na 5` +
     (count === undefined
@@ -34,10 +36,12 @@ export function Rating({ value, count, className }: Props) {
           />
         ))}
       </span>
-      <span aria-hidden="true" className="font-data">
-        <span className="font-medium">{formatRating(value)}</span>
-        {count !== undefined && <span className="text-text-muted"> · {count}</span>}
-      </span>
+      {!starsOnly && (
+        <span aria-hidden="true" className="font-data">
+          <span className="font-medium">{formatRating(value)}</span>
+          {count !== undefined && <span className="text-text-muted"> · {count}</span>}
+        </span>
+      )}
     </p>
   )
 }

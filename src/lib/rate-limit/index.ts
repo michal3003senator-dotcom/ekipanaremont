@@ -15,6 +15,7 @@ export const LIMITS = {
   inquiry: { points: 5, windowSeconds: 60 * 60 },
   review: { points: 10, windowSeconds: 60 * 60 },
   phone: { points: 60, windowSeconds: 60 * 60 },
+  view: { points: 300, windowSeconds: 60 * 60 },
 } as const
 
 export type LimitName = keyof typeof LIMITS

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { FirmProfileHeader } from '@/components/features/firm/FirmProfileHeader'
+import { ProfileActions } from '@/components/features/firm/ProfileActions'
 import { ProjectGallery } from '@/components/features/firm/ProjectGallery'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 
@@ -22,7 +23,11 @@ export default async function TransitionProfilePage({ params }: Props) {
           { label: firm.name },
         ]}
       />
-      <FirmProfileHeader firm={firm} today={DEMO_TODAY} />
+      <FirmProfileHeader
+        firm={firm}
+        today={DEMO_TODAY}
+        actions={<ProfileActions slug={firm.slug} hasPhone />}
+      />
       <section aria-labelledby="realizacje" className="border-t border-line pt-8">
         <h2 id="realizacje" className="font-display text-h2 font-medium">
           Realizacje <span className="font-data text-h3 text-text-muted">{PROJECTS.length}</span>

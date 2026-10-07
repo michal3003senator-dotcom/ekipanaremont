@@ -43,3 +43,10 @@ const integer = new Intl.NumberFormat('pl-PL', { useGrouping: 'always', maximumF
 
 /** Liczba całkowita z odstępami tysięcy: „1 250”. */
 export const formatNumber = (value: number) => integer.format(value)
+
+/** Numer telefonu w polskim zapisie: „600 100 200”, z kierunkowym „+48 600 100 200”. */
+export function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, '')
+  const local = digits.slice(-9).replace(/(\d{3})(?=\d)/g, '$1 ')
+  return digits.length > 9 ? `+${digits.slice(0, -9)} ${local}` : local
+}

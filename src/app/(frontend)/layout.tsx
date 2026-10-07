@@ -9,6 +9,8 @@ import { fontVariables } from './fonts'
 import './globals.css'
 
 export const metadata: Metadata = {
+  // Pełne adresy w og:image, kanonicznych i JSON-LD.
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000'),
   title: 'Ekipa na Termin',
   description: 'Firmy remontowe z województwa łódzkiego z najbliższym wolnym terminem.',
 }

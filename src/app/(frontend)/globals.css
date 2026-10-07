@@ -278,6 +278,34 @@
 }
 
 @layer components {
+  /* Treść z edytora Lexical (opis firmy, artykuły): odstępy i listy bez klas w danych. */
+  .rich-text > * + * {
+    margin-block-start: calc(var(--spacing) * 4);
+  }
+
+  .rich-text :is(ul, ol) {
+    padding-inline-start: calc(var(--spacing) * 5);
+  }
+
+  .rich-text ul {
+    list-style: disc;
+  }
+
+  .rich-text ol {
+    list-style: decimal;
+  }
+
+  .rich-text a {
+    color: var(--color-accent-soft);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .rich-text :is(h2, h3, h4) {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+
   /* Role krojów (ADR 0013, DESIGN §4). */
   .font-display {
     /* Archivo lekko poszerzony w nagłówkach (ADR 0020). */
