@@ -45,7 +45,10 @@ export default async function CmsPage({ params }: Props) {
             {archive.length > 0 && (
               <>
                 {' · '}
-                <Link href={`/${page.slug}/wersje`} className="underline underline-offset-4">
+                <Link
+                  href={`/${page.slug}/wersje`}
+                  className="whitespace-nowrap underline underline-offset-4"
+                >
                   Poprzednie wersje
                 </Link>
               </>

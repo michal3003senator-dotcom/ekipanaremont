@@ -61,7 +61,16 @@ export const Articles: CollectionConfig = {
       index: true,
       admin: { position: 'sidebar' },
     },
-    { name: 'tags', type: 'text', hasMany: true, label: 'Tagi', admin: { position: 'sidebar' } },
+    {
+      name: 'tags',
+      type: 'text',
+      hasMany: true,
+      label: 'Tagi',
+      admin: {
+        position: 'sidebar',
+        description: 'Słowa kluczowe dla wyszukiwarek, bez wyświetlania.',
+      },
+    },
     {
       name: 'authorName',
       type: 'text',

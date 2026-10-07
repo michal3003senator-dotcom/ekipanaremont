@@ -40,7 +40,7 @@ export async function RecommendedFirmsBlock({ service, locality, limit }: Props)
             {},
             { usluga: serviceSlug ?? undefined, gdzie: localitySlug ?? undefined },
           )}
-          className="text-small text-accent-soft underline underline-offset-4"
+          className="shrink-0 text-small text-accent-soft underline underline-offset-4"
         >
           Wszystkie firmy
         </Link>

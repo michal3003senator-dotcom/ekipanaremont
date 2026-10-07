@@ -2,7 +2,8 @@
  * Zrzuty styleguide do pętli wizualnej (CLAUDE.md, DESIGN.md §10): każdy ekran × 390 i 1440 px × 2 motywy.
  * Wymaga działającego serwera (`pnpm dev`).
  *
- * Zmienne: BASE_URL (domyślnie http://localhost:3000), SCREENS_SET (styleguide, konto, panel, publiczne),
+ * Zmienne: BASE_URL (domyślnie http://localhost:3000), SCREENS_SET (styleguide, konto, panel, publiczne,
+ * tresci),
  * SCREENS_DIR (domyślnie docs/screens/styleguide),
  * SCREENS_SCALE (gęstość pikseli, domyślnie 1), CHROMIUM_PATH (własna binarka Chromium).
  */
@@ -14,7 +15,8 @@ const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000'
 const outDir = process.env.SCREENS_DIR ?? 'docs/screens/styleguide'
 const scale = Number(process.env.SCREENS_SCALE ?? 1)
 
-type Shot = { name: string; path: string; open?: (page: Page) => Promise<void> }
+/** `full`: cała strona także po `open` (domyślnie tylko nakładki – sam ekran). */
+type Shot = { name: string; path: string; open?: (page: Page) => Promise<void>; full?: boolean }
 
 const click = (name: string) => async (page: Page) => {
   await page.getByRole('button', { name }).click()
@@ -73,12 +75,36 @@ const PANEL: Shot[] = [
   { name: 'ustawienia', path: '/panel/ustawienia' },
 ]
 
-// SCREENS_SET: styleguide (domyślnie), konto, panel, publiczne. Panel wymaga konta: SCREENS_EMAIL i SCREENS_PASSWORD.
+/** Wynik kalkulatora łazienki – ekran z przyciskiem przejścia do firm. */
+const fillBathroomArea = async (page: Page) => {
+  await page.getByLabel('Powierzchnia podłogi').fill('6')
+  await page.waitForTimeout(300)
+}
+
+// Treści z `pnpm seed demo` (artykuł, kalkulator łazienki); regulamin musi być opublikowany w panelu.
+const CONTENT: Shot[] = [
+  { name: 'artykuly', path: '/artykuly' },
+  { name: 'kategoria', path: '/artykuly/kategoria/lazienka' },
+  { name: 'artykul', path: '/artykuly/remont-lazienki-od-czego-zaczac' },
+  { name: 'kalkulatory', path: '/kalkulatory' },
+  {
+    name: 'kalkulator-wynik',
+    path: '/kalkulatory/kalkulator-kosztu-remontu-lazienki',
+    open: fillBathroomArea,
+    full: true,
+  },
+  { name: 'lokalna', path: '/glazurnik/lodz' },
+  { name: 'regulamin', path: '/regulamin' },
+  { name: 'regulamin-wersje', path: '/regulamin/wersje' },
+]
+
+// SCREENS_SET: styleguide (domyślnie), konto, panel, publiczne, tresci. Panel wymaga konta: SCREENS_EMAIL i SCREENS_PASSWORD.
 const SETS: Record<string, Shot[]> = {
   styleguide: STYLEGUIDE,
   konto: ACCOUNT,
   panel: PANEL,
   publiczne: PUBLIC,
+  tresci: CONTENT,
 }
 const SHOTS = SETS[process.env.SCREENS_SET ?? 'styleguide'] ?? STYLEGUIDE
 
@@ -138,7 +164,12 @@ try {
         await page.evaluate(() => document.querySelector('nextjs-portal')?.remove())
         if (shot.open) await shot.open(page)
         const path = `${outDir}/${shot.name}-${viewport.width}-${theme}.jpg`
-        await page.screenshot({ path, fullPage: !shot.open, type: 'jpeg', quality: 60 })
+        await page.screenshot({
+          path,
+          fullPage: shot.full ?? !shot.open,
+          type: 'jpeg',
+          quality: 60,
+        })
       }
       await context.close()
     }

@@ -540,6 +540,9 @@ export interface Article {
       )[]
     | null;
   category?: (string | null) | ArticleCategory;
+  /**
+   * Słowa kluczowe dla wyszukiwarek, bez wyświetlania.
+   */
   tags?: string[] | null;
   /**
    * Uzupełnia się imieniem redaktora.

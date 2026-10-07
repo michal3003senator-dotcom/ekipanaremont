@@ -152,7 +152,7 @@ export default async function LocalServicePage({ params, searchParams }: Props) 
           <h2 className="font-display text-h3 font-medium">Wolne terminy</h2>
           <Link
             href={searchLink}
-            className="text-small text-accent-soft underline underline-offset-4"
+            className="shrink-0 text-small text-accent-soft underline underline-offset-4"
           >
             Więcej filtrów
           </Link>

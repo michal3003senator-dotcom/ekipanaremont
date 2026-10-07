@@ -54,6 +54,8 @@ function jsonLd(article: Article, url: string) {
       '@type': 'Article',
       headline: article.title,
       description: article.excerpt ?? undefined,
+      // Tagi tylko dla wyszukiwarek – nieklikalne „pigułki” w treści nic nie dawały (DESIGN §10.6).
+      keywords: article.tags?.length ? article.tags.join(', ') : undefined,
       image: typeof image?.src === 'string' ? image.src : undefined,
       datePublished: article.publishedAt ?? undefined,
       dateModified: article.updatedAt,
@@ -147,18 +149,6 @@ export default async function ArticlePage({ params }: Props) {
             <CalculatorBlock calculator={calculator} reader={reader} />
           )}
         />
-        {article.tags && article.tags.length > 0 && (
-          <ul aria-label="Tagi" className="mt-10 flex flex-wrap gap-2">
-            {article.tags.map((tag) => (
-              <li
-                key={tag}
-                className="rounded-badge bg-surface-2 px-3 py-1 text-small text-text-muted"
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
       {related.length > 0 && (
         <section aria-labelledby="czytaj-dalej" className="border-t border-line pt-10">
