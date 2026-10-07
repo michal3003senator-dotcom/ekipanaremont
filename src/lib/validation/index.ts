@@ -15,16 +15,7 @@ export const normalizeNip = (value: string) => value.replace(/[\s-]/g, '')
 export const CALENDAR_DATE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
 export const CALENDAR_MONTH = /^\d{4}-(0[1-9]|1[0-2])$/
 
-/** Adres z polskiej nazwy: „Łódź-Widzew” → „lodz-widzew”. */
-export function slugify(text: string): string {
-  return text
-    .toLocaleLowerCase('pl-PL')
-    .replace(/ł/g, 'l')
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-}
+export { slugify } from './slug'
 
 /** Slugi usług nie mogą zajmować tras serwisu (strony lokalne /[usluga]/[miejscowosc], PLAN pyt. 11). */
 export const RESERVED_SLUGS = new Set([

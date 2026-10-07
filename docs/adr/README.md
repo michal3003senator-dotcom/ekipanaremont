@@ -20,6 +20,7 @@ Każda decyzja architektoniczna ma osobny plik `NNNN-tytul.md` (zasada 6 z CLAUD
 | [0014](0014-biblioteki-komponentow.md) | Biblioteki komponentów interfejsu | zaakceptowana |
 | [0015](0015-akcent-i-liczby.md) | Własny fiolet i liczby w kroju tekstu | zaakceptowana |
 | [0016](0016-2fa-personelu.md) | 2FA personelu: payload-totp i własna reguła dostępu | zaakceptowana |
+| [0017](0017-slownik-miejscowosci.md) | Słownik miejscowości z TERYT i PRNG w repozytorium | zaakceptowana |
 
 ## Szablon
 

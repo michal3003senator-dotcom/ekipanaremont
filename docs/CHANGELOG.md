@@ -12,7 +12,11 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 - Migracje schematu i indeks `pg_trgm` do wyszukiwania miejscowości bez polskich znaków.
 - Zadania cykliczne: endpoint Payload Jobs tylko z `CRON_SECRET` albo dla administratora; pierwsze zadanie – usuwanie leadów po retencji.
 - `pnpm env:init`: tworzy `.env.local` i sam wpisuje losowe sekrety (bez kopiowania). `DATA_ENCRYPTION_KEY` i `DATA_HMAC_KEY` są teraz wymagane.
-- Testy: 40 testów dostępu na bazie (gość, firma A i B, firma zawieszona, moderator, redaktor, administrator z kodem i bez), w tym szyfrowanie w bazie i odszyfrowanie tylko dla uprawnionych.
+- ADR 0017: słownik miejscowości łódzkiego z TERYT i PRNG w `data/teryt-lodzkie.json` (24 powiaty, 177 gmin, 4547 miast i wsi, 5 dzielnic Łodzi, współrzędne), `pnpm teryt:build`, `pnpm seed` (idempotentny), `pnpm seed demo` (6 firm przykładowych, tylko lokalnie).
+- Propozycja słownika usług (`data/services.json`, 15 usług z podusługami) – do akceptacji.
+- Rotacja klucza szyfrowania: `pnpm rotate-key` przepisuje wartości starszej wersji kluczem bieżącym.
+- Vercel Cron: kolejki `daily` i `hourly` uruchamiane z `CRON_SECRET`.
+- Testy: 41 testów dostępu na bazie (gość, firma A i B, firma zawieszona, moderator, redaktor, administrator z kodem i bez), w tym szyfrowanie w bazie, odszyfrowanie tylko dla uprawnionych i rotacja klucza.
 
 ### Próby kierunku poza DESIGN.md (2026-10-07)
 - Próby „Tynk i fuga” i „Kartka z budowy”; druga odrzucona. Na bazie pierwszej `/kierunki/jasny`: jasna strona prowadząca prosto do wyszukania (jedno pole, skróty „Często szukane”, 3 kroki, wyniki od najbliższego terminu), palety do wyboru: granat, czerń z pomarańczowym, fiolet.

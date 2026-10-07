@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Remont mieszkania",
+    "slug": "remont-mieszkania",
+    "icon": "house",
+    "children": ["Remont pod klucz", "Odświeżenie mieszkania", "Wykończenie stanu deweloperskiego"]
+  },
+  {
+    "name": "Remont łazienki",
+    "slug": "remont-lazienki",
+    "icon": "bath",
+    "children": ["Łazienka pod klucz", "Wymiana wanny na prysznic", "Zabudowa stelaża WC"]
+  },
+  {
+    "name": "Glazurnik",
+    "slug": "glazurnik",
+    "icon": "grid-3x3",
+    "children": ["Układanie płytek", "Gres wielkoformatowy", "Mozaika", "Fugowanie"]
+  },
+  {
+    "name": "Malarz",
+    "slug": "malarz",
+    "icon": "paint-roller",
+    "children": ["Malowanie ścian i sufitów", "Gładzie gipsowe", "Tapetowanie"]
+  },
+  {
+    "name": "Tynkarz",
+    "slug": "tynkarz",
+    "icon": "layers",
+    "children": ["Tynki gipsowe", "Tynki cementowo-wapienne", "Tynki maszynowe"]
+  },
+  {
+    "name": "Sucha zabudowa",
+    "slug": "sucha-zabudowa",
+    "icon": "panel-top",
+    "children": ["Ścianki działowe", "Sufity podwieszane", "Zabudowa poddasza"]
+  },
+  {
+    "name": "Posadzki i wylewki",
+    "slug": "posadzki",
+    "icon": "square",
+    "children": ["Wylewki", "Posadzki żywiczne", "Mikrocement"]
+  },
+  {
+    "name": "Podłogi",
+    "slug": "podlogi",
+    "icon": "rows-3",
+    "children": ["Panele", "Parkiet", "Cyklinowanie", "Winyl"]
+  },
+  {
+    "name": "Hydraulik",
+    "slug": "hydraulik",
+    "icon": "droplet",
+    "children": ["Instalacja wodno-kanalizacyjna", "Biały montaż", "Ogrzewanie podłogowe"]
+  },
+  {
+    "name": "Elektryk",
+    "slug": "elektryk",
+    "icon": "zap",
+    "children": ["Instalacja elektryczna", "Pomiary elektryczne", "Oświetlenie"]
+  },
+  {
+    "name": "Stolarz",
+    "slug": "stolarz",
+    "icon": "hammer",
+    "children": ["Zabudowy meblowe", "Kuchnie na wymiar", "Schody"]
+  },
+  {
+    "name": "Okna i drzwi",
+    "slug": "okna-i-drzwi",
+    "icon": "door-open",
+    "children": ["Montaż okien", "Montaż drzwi", "Parapety"]
+  },
+  {
+    "name": "Ocieplenia i elewacje",
+    "slug": "elewacje",
+    "icon": "building",
+    "children": ["Docieplenie styropianem", "Docieplenie wełną", "Tynk elewacyjny"]
+  },
+  {
+    "name": "Dekarz",
+    "slug": "dekarz",
+    "icon": "home",
+    "children": ["Pokrycia dachowe", "Rynny", "Ocieplenie dachu"]
+  },
+  {
+    "name": "Murarz",
+    "slug": "murarz",
+    "icon": "brick-wall",
+    "children": ["Ściany i przemurowania", "Kominy", "Fundamenty"]
+  }
+]

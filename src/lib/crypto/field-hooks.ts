@@ -2,6 +2,7 @@ import type { FieldHook } from 'payload'
 
 import { decryptField, encryptField, isEncrypted } from './fields'
 import { getKeyring } from './keyring'
+import { registerEncryptedField } from './registry'
 
 /**
  * Hooki pola (S): szyfrowanie przed zapisem, odszyfrowanie po odczycie (ADR 0007).
@@ -11,6 +12,9 @@ export function encryptedFieldHooks(aad: string): {
   beforeChange: FieldHook[]
   afterRead: FieldHook[]
 } {
+  const [collection, field] = aad.split('.')
+  if (collection && field) registerEncryptedField(collection, field)
+
   const encrypt: FieldHook = ({ value }) =>
     typeof value === 'string' && value !== '' && !isEncrypted(value)
       ? encryptField(value, aad, getKeyring())

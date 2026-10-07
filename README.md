@@ -13,10 +13,17 @@ pnpm install
 pnpm env:init                   # tworzy .env.local i sam wpisuje sekrety
 docker compose up -d --wait     # PostgreSQL 17 + baza testowa
 pnpm dev                        # migracje, potem serwer deweloperski
+pnpm seed demo                  # w drugim terminalu: miejscowości, usługi, firmy przykładowe
 ```
 
 - Strona: http://localhost:3000
 - Panel: http://localhost:3000/admin – przy pierwszym wejściu tworzysz konto personelu.
+
+## Dane
+
+- `pnpm seed` – miejscowości łódzkiego i usługi (idempotentnie, także na stagingu i produkcji).
+- `pnpm teryt:build <TERC.csv> <SIMC.csv> <PRNG.xml>` – odświeżenie `data/teryt-lodzkie.json` po aktualizacji TERYT (źródła w ADR 0017).
+- `pnpm rotate-key` – rotacja klucza szyfrowania (kroki w `scripts/rotate-key.ts`).
 
 ## Sprawdzenia
 

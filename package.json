@@ -27,7 +27,10 @@
     "generate:types": "pnpm payload generate:types",
     "generate:importmap": "pnpm payload generate:importmap",
     "prepare": "husky",
-    "env:init": "node scripts/env-init.ts"
+    "env:init": "node scripts/env-init.ts",
+    "seed": "pnpm payload run scripts/seed.ts",
+    "teryt:build": "node scripts/teryt/build.ts",
+    "rotate-key": "pnpm payload run scripts/rotate-key.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",

@@ -1,7 +1,11 @@
+import { randomBytes } from 'node:crypto'
+
 import { sql } from '@payloadcms/db-postgres'
 import type { Payload } from 'payload'
 import sharp from 'sharp'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
+import { rotateEncryptedFields } from '../../lib/crypto/rotate'
 
 import { as, createFixtures, type Fixtures } from './fixtures'
 
@@ -796,5 +800,44 @@ describe('słowniki', () => {
     await expect(
       payload.create({ collection: 'services', data: { name: 'Forum' }, ...system }),
     ).rejects.toThrow()
+  })
+})
+
+describe('rotacja klucza', () => {
+  it('przepisuje wartości nowym kluczem, a stare nadal da się odczytać', async () => {
+    const before = { ...process.env }
+    const lead = await payload.create({
+      collection: 'leads',
+      data: {
+        email: 'rotacja@example.com',
+        consentTextVersion: '1',
+        consentAt: new Date().toISOString(),
+        status: 'new',
+      },
+      ...system,
+    })
+    Object.assign(process.env, {
+      DATA_ENCRYPTION_KEY: randomBytes(32).toString('base64'),
+      DATA_ENCRYPTION_KEY_VERSION: '2',
+      DATA_ENCRYPTION_KEYS_PREVIOUS: `1:${before.DATA_ENCRYPTION_KEY}`,
+    })
+    try {
+      expect(await rotateEncryptedFields(payload)).toBeGreaterThan(0)
+      expect(await rawColumn('leads', 'email', lead.id)).toMatch(/^enc:v2:/)
+      expect(await rawColumn('staff', 'totp_secret', f.users.editor.id)).toMatch(/^enc:v2:/)
+      expect((await payload.findByID({ collection: 'leads', id: lead.id, ...system })).email).toBe(
+        'rotacja@example.com',
+      )
+      expect(await rotateEncryptedFields(payload)).toBe(0)
+    } finally {
+      for (const key of [
+        'DATA_ENCRYPTION_KEY',
+        'DATA_ENCRYPTION_KEY_VERSION',
+        'DATA_ENCRYPTION_KEYS_PREVIOUS',
+      ]) {
+        if (before[key] === undefined) delete process.env[key]
+        else process.env[key] = before[key]
+      }
+    }
   })
 })
