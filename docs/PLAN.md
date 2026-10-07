@@ -252,3 +252,11 @@ Trafiają do `.env.example` w fazie 1. Sekrety generujesz przez `openssl rand -b
 | `GUS_BIR_API_KEY` | weryfikacja w GUS REGON (BIR1) | wniosek do GUS | 4 |
 | `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | domena w statystykach | Plausible → Site settings | 5 |
 | `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | web push (opcjonalnie) | `npx web-push generate-vapid-keys` | 7 |
+
+## Do wrócenia: kierunek wizualny
+Właściciel ocenił kierunek B jako niewystarczająco premium. Najbliżej oczekiwań jest `/kierunki/jasny` (jasna strona prowadząca prosto do wyszukania). Paleta do wyboru: granat, czerń z pomarańczowym, fiolet.
+
+Inspiracje wskazane przez właściciela (2026-10-07):
+- https://en.99designs.de/profiles/3456734/designs/2146339
+- https://webflow.com/made-in-webflow/website/orbitaix
+
