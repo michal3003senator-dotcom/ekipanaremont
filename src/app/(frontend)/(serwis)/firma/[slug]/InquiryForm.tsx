@@ -9,6 +9,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormNotice } from '@/components/features/auth/FormNotice'
 import { Turnstile } from '@/components/features/auth/Turnstile'
 import { useActionForm } from '@/components/features/forms/useActionForm'
+import { INQUIRY_DRAFT_KEY } from '@/components/features/calculators/draft'
 import { useLocalitySuggestions } from '@/components/features/search/useLocalitySuggestions'
 import { Button } from '@/components/ui/Button'
 import { CheckboxField } from '@/components/ui/Checkbox'
@@ -66,6 +67,18 @@ export function InquiryForm({ firmSlug, firmName, services, siteKey, nonce }: Pr
     (token: string | undefined) => setValue('turnstileToken', token),
     [setValue],
   )
+
+  // Wynik z kalkulatora (ta sama karta przeglądarki) jako początek opisu prac.
+  useEffect(() => {
+    try {
+      const draft = sessionStorage.getItem(INQUIRY_DRAFT_KEY)
+      if (!draft) return
+      setValue('description', `${draft} `, { shouldDirty: true })
+      sessionStorage.removeItem(INQUIRY_DRAFT_KEY)
+    } catch {
+      // Bez sessionStorage opis zostaje pusty.
+    }
+  }, [setValue])
 
   const urls = useRef<string[]>([])
   useEffect(() => () => urls.current.forEach((url) => URL.revokeObjectURL(url)), [])

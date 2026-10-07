@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { CalculatorBlock } from '@/components/features/calculators/CalculatorBlock'
 import { ArticleCard } from '@/components/features/content/ArticleCard'
 import { RenderBlocks } from '@/components/features/content/blocks/RenderBlocks'
 import { PreviewBar } from '@/components/features/content/PreviewBar'
@@ -140,7 +141,12 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       )}
       <div className="mx-auto w-full max-w-3xl">
-        <RenderBlocks blocks={article.content} />
+        <RenderBlocks
+          blocks={article.content}
+          renderCalculator={(calculator) => (
+            <CalculatorBlock calculator={calculator} reader={reader} />
+          )}
+        />
         {article.tags && article.tags.length > 0 && (
           <ul aria-label="Tagi" className="mt-10 flex flex-wrap gap-2">
             {article.tags.map((tag) => (

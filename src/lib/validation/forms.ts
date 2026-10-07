@@ -189,3 +189,16 @@ export const reviewSchema = z.object({
 })
 
 export type ReviewInput = z.input<typeof reviewSchema>
+
+/** Prośba o kontakt z kalkulatora (SPEC 3.8: lead z osobną zgodą). Wynik serwer liczy sam. */
+export const leadSchema = z.object({
+  calculatorId: id,
+  inputs: z.record(z.string().max(20), z.number().min(0).max(10_000).nullable().optional()),
+  name: z.string().trim().min(2, 'Podaj imię.').max(80, 'Najwyżej 80 znaków.'),
+  email,
+  phone: optional(z.string().trim().regex(PHONE_PL, 'Podaj numer z 9 cyframi, np. 600 100 200.')),
+  consent: z.literal(true, 'Zgoda jest potrzebna, żebyśmy mogli się odezwać.'),
+  turnstileToken: z.string().max(4096).optional(),
+})
+
+export type LeadInput = z.input<typeof leadSchema>
