@@ -1,6 +1,7 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { ShieldCheck } from 'lucide-react'
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
@@ -20,6 +21,8 @@ import { publicContext } from '@/lib/search/context'
 import { searchHref } from '@/lib/search/params'
 import { loadFirmSummaries } from '@/lib/search/summary'
 import { serializeJsonLd } from '@/lib/seo/json-ld'
+
+import { InquiryForm } from './InquiryForm'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -137,6 +140,7 @@ export default async function FirmProfilePage({ params }: Props) {
   const { payload, today, expiryDays, profile } = await profileFor(params)
   if (!profile) notFound()
   const { summary } = profile
+  const nonce = (await headers()).get('x-nonce') ?? undefined
 
   const similar = profile.mainServiceIds.length
     ? await searchFirms(payload, {
@@ -253,6 +257,21 @@ export default async function FirmProfilePage({ params }: Props) {
                 .
               </span>
             </p>
+          </Section>
+
+          <Section id="zapytanie" title="Wyślij zapytanie">
+            <div className="flex flex-col gap-6">
+              <p className="max-w-prose text-body text-text-muted">
+                Bez rejestracji i opłat. {summary.name} odpowie telefonicznie albo e-mailem.
+              </p>
+              <InquiryForm
+                firmSlug={summary.slug}
+                firmName={summary.name}
+                services={profile.serviceOptions}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                nonce={nonce}
+              />
+            </div>
           </Section>
 
           {similar.length > 0 && (

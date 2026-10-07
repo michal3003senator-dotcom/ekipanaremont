@@ -338,6 +338,25 @@
     padding-block-end: max(var(--spacing) * 3, env(safe-area-inset-bottom));
   }
 
+  @media (width < 64rem) {
+    .sticky-cta[data-covered] {
+      visibility: hidden;
+      transform: translateY(100%);
+    }
+  }
+
+  @media (width < 64rem) and (prefers-reduced-motion: no-preference) {
+    .sticky-cta {
+      transition:
+        transform var(--duration-enter) var(--ease-standard),
+        visibility 0s linear var(--duration-enter);
+    }
+
+    .sticky-cta:not([data-covered]) {
+      transition-delay: 0s;
+    }
+  }
+
   @media (width >= 64rem) {
     .sticky-cta {
       padding-block-end: calc(var(--spacing) * 6);

@@ -143,6 +143,7 @@ async function loadProfile(
     baseLocality: base ? { id: base.id, name: base.name, slug: base.slug ?? null } : null,
     serviceArea: docs<Locality>(firm.serviceArea).map((locality) => locality.name),
     services: groupServices(services),
+    serviceOptions: services.map((service) => ({ value: service.id, label: service.name })),
     mainServiceIds: services.filter((service) => !service.parent).map((service) => service.id),
     gallery,
     reviews: reviews.docs.map(

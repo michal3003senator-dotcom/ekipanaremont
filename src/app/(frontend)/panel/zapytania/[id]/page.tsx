@@ -3,18 +3,12 @@ import { notFound, redirect } from 'next/navigation'
 
 import { formatInstantDate } from '@/lib/format/date'
 import { getPanel } from '@/lib/panel/context'
+import { BUDGET_RANGES } from '@/lib/inquiry/options'
 
 import { PanelHeading, PanelSection } from '../../_components/PanelSection'
 import { InquiryActions } from './InquiryActions'
 
-const BUDGET: Record<string, string> = {
-  to10k: 'do 10 000 zł',
-  from10to30k: '10 000–30 000 zł',
-  from30to60k: '30 000–60 000 zł',
-  from60to100k: '60 000–100 000 zł',
-  over100k: 'powyżej 100 000 zł',
-  unknown: 'Klient nie wie',
-}
+const BUDGET: Record<string, string> = { ...BUDGET_RANGES, unknown: 'Klient nie wie' }
 
 const nameOf = (value: unknown) =>
   value && typeof value === 'object' && 'name' in value ? String(value.name) : null

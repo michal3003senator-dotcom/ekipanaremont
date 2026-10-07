@@ -5,6 +5,7 @@ import { z } from 'zod'
 
 import { idOf } from '@/access'
 import { type ActionResult, invalid } from '@/lib/actions'
+import { UPLOAD_IMAGE_TYPES } from '@/lib/images'
 import { actionContext } from '@/lib/panel/guard'
 import { MAX_PROJECT_PHOTOS } from '@/lib/panel/profile'
 import { rateLimit } from '@/lib/rate-limit'
@@ -12,7 +13,6 @@ import { projectSchema, reorderSchema } from '@/lib/validation/forms'
 
 const id = z.uuid()
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024
-const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
 
 const refresh = () => revalidatePath('/panel', 'layout')
 
@@ -91,7 +91,7 @@ export async function uploadProjectPhotoAction(
   const file = formData.get('file')
   if (!projectId.success || !(file instanceof File))
     return { ok: false, message: 'Nieprawidłowe zdjęcie.' }
-  if (file.size === 0 || file.size > MAX_UPLOAD_BYTES || !IMAGE_TYPES.has(file.type)) {
+  if (file.size === 0 || file.size > MAX_UPLOAD_BYTES || !UPLOAD_IMAGE_TYPES.has(file.type)) {
     return { ok: false, message: 'Dodaj zdjęcie JPG, PNG, WebP lub AVIF do 5 MB.' }
   }
 

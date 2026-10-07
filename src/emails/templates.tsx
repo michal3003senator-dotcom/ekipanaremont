@@ -124,3 +124,42 @@ export function trialEnding(panelUrl: string, days: number, endsAt: string): Ema
     ),
   }
 }
+
+/** Do firmy: bez danych klienta w treści – szczegóły tylko po zalogowaniu (SPEC 3.6). */
+export function newInquiry(inquiryUrl: string, subject: string): EmailTemplate {
+  return {
+    subject: `Nowe zapytanie: ${subject}`,
+    body: (
+      <EmailLayout preview={`Klient pyta o: ${subject}.`} heading="Nowe zapytanie">
+        <Paragraph>
+          Klient wysłał zapytanie z Twojego profilu: {subject}. Opis, zdjęcia i dane kontaktowe
+          zobaczysz w panelu.
+        </Paragraph>
+        <Action href={inquiryUrl}>Otwieram zapytanie</Action>
+        <Note>Klienci częściej wybierają firmy, które odpowiadają tego samego dnia.</Note>
+      </EmailLayout>
+    ),
+  }
+}
+
+/** Do klienta: potwierdzenie wysłania, bez powtarzania treści zapytania. */
+export function inquiryConfirmation(firmName: string, profileUrl: string): EmailTemplate {
+  return {
+    subject: `Zapytanie wysłane do: ${firmName}`,
+    body: (
+      <EmailLayout
+        preview="Firma dostała Twoje zapytanie i odpowie telefonicznie albo e-mailem."
+        heading="Zapytanie wysłane"
+      >
+        <Paragraph>
+          Przekazaliśmy zapytanie firmie {firmName}. Firma odpowie telefonicznie albo e-mailem.
+        </Paragraph>
+        <Action href={profileUrl}>Wracam do profilu firmy</Action>
+        <Note>
+          Za kilka dni poprosimy Cię o opinię o współpracy. Ekipa na Termin pośredniczy w kontakcie
+          i nie odpowiada za prace ani rozliczenia między Tobą a firmą.
+        </Note>
+      </EmailLayout>
+    ),
+  }
+}

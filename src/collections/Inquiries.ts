@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { admin, either, fieldFor, isFirmUser, ownFirm, nobody, verifiedAdmin } from '@/access'
 import { emailHash } from '@/lib/crypto'
+import { BUDGET_RANGES } from '@/lib/inquiry/options'
 
 import { encrypted, hashField, options, systemOnly } from './fields'
 
@@ -63,14 +64,7 @@ export const Inquiries: CollectionConfig = {
       name: 'budgetRange',
       type: 'select',
       label: 'Budżet',
-      options: options({
-        to10k: 'do 10 000 zł',
-        from10to30k: '10 000–30 000 zł',
-        from30to60k: '30 000–60 000 zł',
-        from60to100k: '60 000–100 000 zł',
-        over100k: 'powyżej 100 000 zł',
-        unknown: 'Nie wiem',
-      }),
+      options: options(BUDGET_RANGES),
       access: adminWrites,
     },
     { name: 'timeframe', type: 'text', label: 'Planowany termin', access: adminWrites },

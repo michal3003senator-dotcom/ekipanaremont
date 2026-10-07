@@ -3,7 +3,7 @@
 import { Search } from 'lucide-react'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import { Combobox, type ComboboxOption } from '@/components/ui/Combobox'
@@ -13,7 +13,7 @@ import { Select } from '@/components/ui/Select'
 import { cn } from '@/lib/cn'
 import { searchHref, type SearchParams } from '@/lib/search/params'
 
-import { suggestLocalitiesAction } from '../../../app/(frontend)/(serwis)/actions'
+import { useLocalitySuggestions } from './useLocalitySuggestions'
 
 const TERMS = [
   { value: '', label: 'Obojętnie' },
@@ -50,22 +50,7 @@ export function SearchForm({
   const [chosenService, setService] = useState(service)
   const [chosenLocality, setLocality] = useState(locality)
   const [when, setWhen] = useState(term)
-  const [places, setPlaces] = useState<ComboboxOption[]>(locality ? [locality] : [])
-  const [loading, setLoading] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
-  useEffect(() => () => clearTimeout(timer.current), [])
-
-  const searchPlaces = (query: string) => {
-    clearTimeout(timer.current)
-    if (query.trim().length < 2) return setPlaces([])
-    setLoading(true)
-    timer.current = setTimeout(() => {
-      void suggestLocalitiesAction(query).then((found) => {
-        setPlaces(found)
-        setLoading(false)
-      })
-    }, 200)
-  }
+  const { places, loading, search: searchPlaces } = useLocalitySuggestions(locality)
 
   const hero = variant === 'hero'
   return (

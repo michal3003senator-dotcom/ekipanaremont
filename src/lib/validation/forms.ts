@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { PASSWORD_MIN_LENGTH } from '@/lib/auth/password-rules'
+import { BUDGET_RANGES, type BudgetRange, TIMEFRAMES, type Timeframe } from '@/lib/inquiry/options'
 
 import { CALENDAR_DATE, CALENDAR_MONTH, HTTPS_URL, isValidNip, PHONE_PL } from '.'
 
@@ -133,3 +134,36 @@ export type RegisterInput = z.input<typeof registerSchema>
 export type LoginInput = z.input<typeof loginSchema>
 export type AboutStepInput = z.input<typeof aboutStepSchema>
 export type ProjectInput = z.input<typeof projectSchema>
+
+const slug = z
+  .string()
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Nieprawidłowy adres.')
+  .max(140)
+const optional = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((value) => (value === '' || value === null ? undefined : value), schema.optional())
+
+/** Zapytanie do firmy (SPEC 3.6). Zdjęcia idą osobno w FormData i są sprawdzane w akcji. */
+export const inquirySchema = z.object({
+  firm: slug,
+  service: optional(id),
+  locality: z.string().min(1, 'Wybierz miejscowość z listy.').pipe(slug),
+  description: z
+    .string()
+    .trim()
+    .min(20, 'Opisz prace w co najmniej 20 znakach: co, gdzie, jaki metraż.')
+    .max(2000, 'Najwyżej 2000 znaków.'),
+  budgetRange: z.enum(
+    Object.keys(BUDGET_RANGES) as [BudgetRange, ...BudgetRange[]],
+    'Wybierz budżet.',
+  ),
+  timeframe: z.enum(Object.keys(TIMEFRAMES) as [Timeframe, ...Timeframe[]], 'Wybierz termin.'),
+  clientName: z.string().trim().min(2, 'Podaj imię.').max(80, 'Najwyżej 80 znaków.'),
+  clientEmail: email,
+  clientPhone: optional(
+    z.string().trim().regex(PHONE_PL, 'Podaj numer z 9 cyframi, np. 600 100 200.'),
+  ),
+  consent: z.literal(true, 'Zgoda jest potrzebna, żeby przekazać zapytanie firmie.'),
+  turnstileToken: z.string().max(4096).optional(),
+})
+
+export type InquiryInput = z.input<typeof inquirySchema>

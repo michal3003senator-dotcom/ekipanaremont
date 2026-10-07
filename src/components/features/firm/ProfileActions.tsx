@@ -1,7 +1,7 @@
 'use client'
 
 import { Phone } from 'lucide-react'
-import { useState, useTransition } from 'react'
+import { useEffect, useRef, useState, useTransition } from 'react'
 import { revealPhoneAction } from '@/app/(frontend)/(serwis)/firma/[slug]/actions'
 import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
@@ -14,6 +14,19 @@ type Props = { slug: string; hasPhone: boolean }
 export function ProfileActions({ slug, hasPhone }: Props) {
   const [phone, setPhone] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+  const root = useRef<HTMLDivElement>(null)
+
+  // Na telefonie pasek z akcjami chowa się, gdy formularz zapytania jest już na ekranie.
+  useEffect(() => {
+    const bar = root.current?.closest('aside')
+    const form = document.getElementById('zapytanie')?.closest('section')
+    if (!bar || !form) return
+    const observer = new IntersectionObserver(([entry]) =>
+      bar.toggleAttribute('data-covered', entry?.isIntersecting ?? false),
+    )
+    observer.observe(form)
+    return () => observer.disconnect()
+  }, [])
 
   const reveal = () =>
     startTransition(async () => {
@@ -54,11 +67,11 @@ export function ProfileActions({ slug, hasPhone }: Props) {
   )
 
   return (
-    <>
+    <div ref={root} className="contents">
       <Button asChild variant="primary" className="max-lg:flex-1 lg:w-full">
         <a href="#zapytanie">Wyślij zapytanie</a>
       </Button>
       {hasPhone && phoneButton}
-    </>
+    </div>
   )
 }

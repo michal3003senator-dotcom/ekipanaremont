@@ -1,3 +1,11 @@
+/** Formaty zdjęć przyjmowane z przeglądarki (treść i tak sprawdza sharp w Payload). */
+export const UPLOAD_IMAGE_TYPES: ReadonlySet<string> = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/avif',
+])
+
 /** Najdłuższy bok zdjęcia wysyłanego z przeglądarki (Payload i tak koduje do 2400 px). */
 export const UPLOAD_MAX_SIDE = 2400
 
@@ -15,10 +23,10 @@ export function fitWithin(width: number, height: number, max = UPLOAD_MAX_SIDE) 
  * Orientacja z EXIF jest uwzględniana, metadane nie przechodzą (canvas ich nie kopiuje).
  * Gdy przeglądarka nie odczyta formatu, wysyłamy oryginał – serwer i tak go sprawdzi.
  */
-export async function compressImage(file: File): Promise<File> {
+export async function compressImage(file: File, maxSide = UPLOAD_MAX_SIDE): Promise<File> {
   try {
     const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
-    const { width, height } = fitWithin(bitmap.width, bitmap.height)
+    const { width, height } = fitWithin(bitmap.width, bitmap.height, maxSide)
     const canvas = document.createElement('canvas')
     canvas.width = width
     canvas.height = height
