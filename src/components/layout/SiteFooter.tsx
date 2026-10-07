@@ -1,9 +1,10 @@
 import Link from 'next/link'
 
-import { LEGAL_NAV } from './nav'
+import { footerNav } from './navigation'
 import { Wordmark } from './Wordmark'
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const links = await footerNav()
   return (
     <footer className="border-t border-line">
       <div className="mx-auto grid max-w-page gap-8 px-4 py-14 md:grid-cols-12 md:px-6">
@@ -14,20 +15,22 @@ export function SiteFooter() {
             z firmami; nie jesteśmy stroną umów na prace.
           </p>
         </div>
-        <nav aria-label="Informacje" className="md:col-span-6">
-          <ul className="grid gap-x-6 gap-y-1 text-small sm:grid-cols-2">
-            {LEGAL_NAV.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="flex min-h-11 items-center text-text-muted transition-colors duration-150 hover:text-text"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {links.length > 0 && (
+          <nav aria-label="Informacje" className="md:col-span-6">
+            <ul className="grid gap-x-6 gap-y-1 text-small sm:grid-cols-2">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="flex min-h-11 items-center text-text-muted transition-colors duration-150 hover:text-text"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
         <p className="font-data text-micro text-text-muted md:col-span-12">
           © 2026 Ekipa na Termin
         </p>

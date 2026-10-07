@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/Button'
 import type { Theme } from '@/lib/theme'
 
 import { MobileMenu } from './MobileMenu'
-import { SITE_NAV } from './nav'
+import { siteNav } from './navigation'
 import { Wordmark } from './Wordmark'
 
 /** Przyklejony nagłówek z rozmytym tłem – jedyne miejsce ze „szkłem” (DESIGN §2). */
-export function SiteHeader({ theme }: { theme: Theme }) {
+export async function SiteHeader({ theme }: { theme: Theme }) {
+  const links = await siteNav()
   return (
     <header
       style={{ viewTransitionName: 'site-header' }}
@@ -19,7 +20,7 @@ export function SiteHeader({ theme }: { theme: Theme }) {
         <Wordmark />
         <nav aria-label="Menu główne" className="hidden md:block">
           <ul className="flex items-center gap-6 text-small">
-            {SITE_NAV.map((link) => (
+            {links.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -36,7 +37,7 @@ export function SiteHeader({ theme }: { theme: Theme }) {
             <Link href="/logowanie">Zaloguj się</Link>
           </Button>
           <ThemeSwitch initialTheme={theme} className="max-md:hidden" />
-          <MobileMenu links={SITE_NAV} theme={theme} />
+          <MobileMenu links={links} theme={theme} />
         </div>
       </div>
     </header>
