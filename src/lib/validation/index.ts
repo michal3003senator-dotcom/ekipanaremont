@@ -1,0 +1,85 @@
+import { addDays, todayInWarsaw } from '@/lib/format/date'
+
+/** NIP: 10 cyfr z poprawną sumą kontrolną (wagi 6,5,7,2,3,4,5,6,7). Myślniki i spacje są pomijane. */
+export function isValidNip(value: string): boolean {
+  const digits = value.replace(/[\s-]/g, '')
+  if (!/^\d{10}$/.test(digits)) return false
+  const weights = [6, 5, 7, 2, 3, 4, 5, 6, 7]
+  const sum = weights.reduce((total, weight, index) => total + weight * Number(digits[index]), 0)
+  return sum % 11 === Number(digits[9])
+}
+
+export const normalizeNip = (value: string) => value.replace(/[\s-]/g, '')
+
+/** Data kalendarzowa `YYYY-MM-DD` (termin) i miesiąc `YYYY-MM` (realizacja). */
+export const CALENDAR_DATE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
+export const CALENDAR_MONTH = /^\d{4}-(0[1-9]|1[0-2])$/
+
+/** Adres z polskiej nazwy: „Łódź-Widzew” → „lodz-widzew”. */
+export function slugify(text: string): string {
+  return text
+    .toLocaleLowerCase('pl-PL')
+    .replace(/ł/g, 'l')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/** Slugi usług nie mogą zajmować tras serwisu (strony lokalne /[usluga]/[miejscowosc], PLAN pyt. 11). */
+export const RESERVED_SLUGS = new Set([
+  'admin',
+  'api',
+  'artykuly',
+  'design-lab',
+  'firma',
+  'forum',
+  'gielda',
+  'jak-sprawdzamy-opinie',
+  'kalkulatory',
+  'kierunki',
+  'kontakt',
+  'logowanie',
+  'moderacja',
+  'monitoring',
+  'o-nas',
+  'opinia',
+  'panel',
+  'polityka-prywatnosci',
+  'regulamin',
+  'rejestracja',
+  'reset-hasla',
+  'styleguide',
+  'szukaj',
+  'termin',
+  'zasady-moderacji',
+  'zglos',
+])
+
+/** Najdalszy wolny termin od dziś (SPEC 3.5). */
+export const AVAILABILITY_MAX_DAYS = 180
+
+/**
+ * Wolny termin: dziś do +180 dni (Europe/Warsaw). Niezmieniona data przechodzi, żeby po jej upływie
+ * dało się zapisać resztę profilu (termin wygasa wtedy sam, SPEC 3.5).
+ */
+export function checkAvailabilityDate(
+  value: unknown,
+  previous: unknown,
+  now = new Date(),
+): true | string {
+  if (value === null || value === undefined || value === '' || value === previous) return true
+  if (typeof value !== 'string' || !CALENDAR_DATE.test(value))
+    return 'Podaj datę w formacie RRRR-MM-DD.'
+  const today = todayInWarsaw(now)
+  if (value < today) return 'Termin nie może być w przeszłości.'
+  if (value > addDays(today, AVAILABILITY_MAX_DAYS))
+    return 'Termin może być najwyżej 180 dni od dziś.'
+  return true
+}
+
+/** Telefon w Polsce: 9 cyfr, opcjonalnie +48, spacje i myślniki dozwolone. */
+export const PHONE_PL = /^(?:\+48[\s-]?)?(?:\d[\s-]?){8}\d$/
+
+/** Adres strony firmy: tylko https. */
+export const HTTPS_URL = /^https:\/\/[^\s/$.?#][^\s]*$/i

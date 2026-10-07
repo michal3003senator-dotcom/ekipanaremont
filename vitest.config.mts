@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto'
+import { fileURLToPath } from 'node:url'
 
 import { defineConfig } from 'vitest/config'
 
@@ -7,12 +8,17 @@ Object.assign(process.env, {
   DATABASE_URL: process.env.TEST_DATABASE_URL ?? 'postgres://ekipa:ekipa@127.0.0.1:5432/ekipa_test',
   NEXT_PUBLIC_SERVER_URL: 'http://localhost:3000',
   PAYLOAD_SECRET: randomBytes(32).toString('hex'),
+  DATA_ENCRYPTION_KEY: randomBytes(32).toString('base64'),
+  DATA_HMAC_KEY: randomBytes(32).toString('base64'),
 })
 
 export default defineConfig({
+  // Ten sam alias co w tsconfig.json (`@/` → `src/`).
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   test: {
     projects: [
       {
+        extends: true,
         test: {
           name: 'unit',
           environment: 'node',
@@ -20,6 +26,7 @@ export default defineConfig({
         },
       },
       {
+        extends: true,
         test: {
           name: 'int',
           environment: 'node',

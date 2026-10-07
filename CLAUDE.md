@@ -72,7 +72,7 @@ Plan faz i prompty: `docs/PROMPTY.md`. Decyzje: `docs/adr/`.
 
 ## Komendy
 Wymagania: Node 24 (`.nvmrc`), pnpm przez Corepack (`corepack enable`), Docker.
-- Start: `cp .env.example .env.local` (uzupełnij `PAYLOAD_SECRET`), `pnpm install`, `docker compose up -d --wait`, `pnpm dev` (najpierw uruchamia migracje). Strona: http://localhost:3000, panel: `/admin`.
+- Start: `pnpm install`, `pnpm env:init` (tworzy `.env.local` z sekretami), `docker compose up -d --wait`, `pnpm dev` (najpierw uruchamia migracje). Strona: http://localhost:3000, panel: `/admin`.
 - Sprawdzenia: `pnpm lint`, `pnpm format:check`, `pnpm typecheck`, `pnpm test` (unit + int na bazie `ekipa_test`), `pnpm test:e2e` (Playwright; raz `pnpm exec playwright install chromium`).
 - Zrzuty styleguide (pętla wizualna): `pnpm screens` przy działającym `pnpm dev` (zapis w `docs/screens/styleguide/`; bez przeglądarki Playwright: `CHROMIUM_PATH=<ścieżka do chromium>`).
 - Schemat: `pnpm payload migrate:create <nazwa>`, `pnpm payload migrate`, potem `pnpm generate:types` i `pnpm generate:importmap` (oba pliki commitujemy, CI sprawdza aktualność).

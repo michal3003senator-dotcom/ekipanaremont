@@ -26,7 +26,8 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "generate:types": "pnpm payload generate:types",
     "generate:importmap": "pnpm payload generate:importmap",
-    "prepare": "husky"
+    "prepare": "husky",
+    "env:init": "node scripts/env-init.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",
@@ -43,10 +44,12 @@
     "motion": "14.0.0",
     "next": "16.3.8",
     "payload": "3.90.2",
+    "payload-totp": "3.0.6",
     "radix-ui": "1.7.0",
     "react": "19.3.0",
     "react-day-picker": "10.0.2",
     "react-dom": "19.3.0",
+    "sharp": "0.35.5",
     "tailwind-merge": "3.7.0",
     "zod": "4.6.5"
   },

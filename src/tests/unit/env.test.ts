@@ -6,6 +6,8 @@ const valid = {
   DATABASE_URL: 'postgres://user:pass@localhost:5432/db',
   PAYLOAD_SECRET: 'a'.repeat(32),
   NEXT_PUBLIC_SERVER_URL: 'https://ekipanatermin.pl',
+  DATA_ENCRYPTION_KEY: Buffer.alloc(32, 1).toString('base64'),
+  DATA_HMAC_KEY: Buffer.alloc(32, 2).toString('base64'),
 }
 
 describe('parseEnv', () => {
@@ -37,5 +39,13 @@ describe('parseEnv', () => {
     expect(
       parseEnv({ ...valid, NEXT_PUBLIC_SENTRY_DSN: '' }).NEXT_PUBLIC_SENTRY_DSN,
     ).toBeUndefined()
+  })
+
+  it('wymaga kluczy szyfrowania o długości 32 bajtów i nie ujawnia ich wartości', () => {
+    const { DATA_ENCRYPTION_KEY: _, ...withoutKey } = valid
+    expect(() => parseEnv(withoutKey)).toThrow(/DATA_ENCRYPTION_KEY/)
+    const short = Buffer.alloc(16, 3).toString('base64')
+    expect(() => parseEnv({ ...valid, DATA_HMAC_KEY: short })).toThrow(/DATA_HMAC_KEY/)
+    expect(() => parseEnv({ ...valid, DATA_HMAC_KEY: short })).not.toThrow(short)
   })
 })

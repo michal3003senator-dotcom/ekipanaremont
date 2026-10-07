@@ -4,6 +4,16 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 3 – model danych i reguły dostępu (2026-10-07)
+- Szyfrowanie pól (S) AES-256-GCM z wersją klucza w rekordzie i skróty HMAC-SHA256 (osobny klucz na cel).
+- ADR 0016: 2FA personelu (`payload-totp`, obowiązkowe), dostęp personelu tylko po kodzie TOTP, sekret TOTP zaszyfrowany, sesja 8 h.
+- Kolekcje według SPEC 4: firmy, konta firm, realizacje, pliki (WebP przez sharp, bez EXIF, limit 10 MB, odrzucanie plików niebędących obrazami), zapytania i leady z zaszyfrowanymi danymi kontaktowymi, opinie (średnia ocen w firmie), artykuły i strony z blokami, szkicami i wersjami, kalkulatory z parametrami walidowanymi schematem typu, global `settings` (flagi forum i giełdy, dni, retencja, wersje dokumentów), forum, giełda, wiadomości, zgłoszenia DSA, sankcje, statystyki dzienne, dziennik zmian (tylko dopisywanie, bez wartości pól).
+- Forum i giełda tylko dla firm zweryfikowanych i aktywnych (flaga modułu, e-mail, NIP, profil, abonament, brak blokady). Nowe wpisy forum czekają na moderację.
+- Migracje schematu i indeks `pg_trgm` do wyszukiwania miejscowości bez polskich znaków.
+- Zadania cykliczne: endpoint Payload Jobs tylko z `CRON_SECRET` albo dla administratora; pierwsze zadanie – usuwanie leadów po retencji.
+- `pnpm env:init`: tworzy `.env.local` i sam wpisuje losowe sekrety (bez kopiowania). `DATA_ENCRYPTION_KEY` i `DATA_HMAC_KEY` są teraz wymagane.
+- Testy: 40 testów dostępu na bazie (gość, firma A i B, firma zawieszona, moderator, redaktor, administrator z kodem i bez), w tym szyfrowanie w bazie i odszyfrowanie tylko dla uprawnionych.
+
 ### Próby kierunku poza DESIGN.md (2026-10-07)
 - Próby „Tynk i fuga” i „Kartka z budowy”; druga odrzucona. Na bazie pierwszej `/kierunki/jasny`: jasna strona prowadząca prosto do wyszukania (jedno pole, skróty „Często szukane”, 3 kroki, wyniki od najbliższego terminu), palety do wyboru: granat, czerń z pomarańczowym, fiolet.
 

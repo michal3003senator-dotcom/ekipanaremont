@@ -15,7 +15,7 @@ concurrency:
 env:
   HUSKY: '0'
   NEXT_TELEMETRY_DISABLED: '1'
-  # Wartości tylko dla CI – bez sekretów. PAYLOAD_SECRET generowany w każdym przebiegu.
+  # Wartości tylko dla CI – bez sekretów. Sekrety generowane w każdym przebiegu.
   DATABASE_URL: postgres://ekipa:ekipa@localhost:5432/ekipa
   NEXT_PUBLIC_SERVER_URL: http://localhost:3000
 
@@ -41,11 +41,13 @@ jobs:
         with:
           persist-credentials: false
       - uses: ./.github/actions/setup
-      - name: Jednorazowy PAYLOAD_SECRET
+      - name: Jednorazowe sekrety
         run: |
-          secret="$(openssl rand -hex 32)"
-          echo "::add-mask::$secret"
-          echo "PAYLOAD_SECRET=$secret" >> "$GITHUB_ENV"
+          for name in PAYLOAD_SECRET DATA_ENCRYPTION_KEY DATA_HMAC_KEY; do
+            secret="$(openssl rand -base64 32)"
+            echo "::add-mask::$secret"
+            echo "$name=$secret" >> "$GITHUB_ENV"
+          done
       - run: pnpm typecheck
       - name: Pliki generowane przez Payload są aktualne
         run: |
@@ -95,11 +97,13 @@ jobs:
         with:
           persist-credentials: false
       - uses: ./.github/actions/setup
-      - name: Jednorazowy PAYLOAD_SECRET
+      - name: Jednorazowe sekrety
         run: |
-          secret="$(openssl rand -hex 32)"
-          echo "::add-mask::$secret"
-          echo "PAYLOAD_SECRET=$secret" >> "$GITHUB_ENV"
+          for name in PAYLOAD_SECRET DATA_ENCRYPTION_KEY DATA_HMAC_KEY; do
+            secret="$(openssl rand -base64 32)"
+            echo "::add-mask::$secret"
+            echo "$name=$secret" >> "$GITHUB_ENV"
+          done
       - name: Migracje na pustej bazie
         run: pnpm payload migrate
       - run: pnpm build

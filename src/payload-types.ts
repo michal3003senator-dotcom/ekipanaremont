@@ -63,20 +63,69 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
+    firmAccounts: FirmAccountAuthOperations;
     staff: StaffAuthOperations;
   };
   blocks: {};
   collections: {
+    firms: Firm;
+    projects: Project;
+    inquiries: Inquiry;
+    reviews: Review;
+    articles: Article;
+    pages: Page;
+    calculators: Calculator;
+    leads: Lead;
+    forumCategories: ForumCategory;
+    forumThreads: ForumThread;
+    forumPosts: ForumPost;
+    forumReactions: ForumReaction;
+    listings: Listing;
+    listingMessages: ListingMessage;
+    reports: Report;
+    sanctions: Sanction;
+    services: Service;
+    localities: Locality;
+    media: Media;
+    firmStatsDaily: FirmStatsDaily;
+    firmAccounts: FirmAccount;
     staff: Staff;
+    auditLog: AuditLog;
+    'totp-attempts': TotpAttempt;
     'payload-kv': PayloadKv;
+    'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
+    firms: FirmsSelect<false> | FirmsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    calculators: CalculatorsSelect<false> | CalculatorsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    forumCategories: ForumCategoriesSelect<false> | ForumCategoriesSelect<true>;
+    forumThreads: ForumThreadsSelect<false> | ForumThreadsSelect<true>;
+    forumPosts: ForumPostsSelect<false> | ForumPostsSelect<true>;
+    forumReactions: ForumReactionsSelect<false> | ForumReactionsSelect<true>;
+    listings: ListingsSelect<false> | ListingsSelect<true>;
+    listingMessages: ListingMessagesSelect<false> | ListingMessagesSelect<true>;
+    reports: ReportsSelect<false> | ReportsSelect<true>;
+    sanctions: SanctionsSelect<false> | SanctionsSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    localities: LocalitiesSelect<false> | LocalitiesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    firmStatsDaily: FirmStatsDailySelect<false> | FirmStatsDailySelect<true>;
+    firmAccounts: FirmAccountsSelect<false> | FirmAccountsSelect<true>;
     staff: StaffSelect<false> | StaffSelect<true>;
+    auditLog: AuditLogSelect<false> | AuditLogSelect<true>;
+    'totp-attempts': TotpAttemptsSelect<false> | TotpAttemptsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -85,16 +134,47 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    settings: Setting;
+    'payload-jobs-stats': PayloadJobsStat;
+  };
+  globalsSelect: {
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+    'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
   };
-  user: Staff;
+  user: FirmAccount | Staff;
   jobs: {
-    tasks: unknown;
+    tasks: {
+      purgeExpiredLeads: TaskPurgeExpiredLeads;
+      schedulePublish: TaskSchedulePublish;
+      inline: {
+        input: unknown;
+        output: unknown;
+      };
+    };
     workflows: unknown;
+  };
+}
+export interface FirmAccountAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
   };
 }
 export interface StaffAuthOperations {
@@ -117,11 +197,386 @@ export interface StaffAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "firms".
+ */
+export interface Firm {
+  id: string;
+  name: string;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  nip: string;
+  registrySource?: ('ceidg' | 'krs' | 'vat') | null;
+  registryData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  registryVerifiedAt?: string | null;
+  shortDescription?: string | null;
+  about?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  logo?: (string | null) | Media;
+  cover?: (string | null) | Media;
+  services?: (string | Service)[] | null;
+  serviceArea?: (string | Locality)[] | null;
+  baseLocality?: (string | null) | Locality;
+  phone?: string | null;
+  website?: string | null;
+  vatInvoice?: boolean | null;
+  warrantyMonths?: number | null;
+  yearsExperience?: number | null;
+  teamSize?: number | null;
+  availability?: {
+    date?: string | null;
+    confirmedAt?: string | null;
+  };
+  status: 'draft' | 'pending_review' | 'active' | 'suspended' | 'rejected';
+  moderationReason?: string | null;
+  trialStartsAt?: string | null;
+  trialEndsAt?: string | null;
+  subscriptionStatus: 'trial' | 'active' | 'past_due' | 'canceled';
+  ratingAvg?: number | null;
+  ratingCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  purpose: 'project' | 'logo' | 'cover' | 'forum' | 'listing' | 'article' | 'inquiry';
+  firm?: (string | null) | Firm;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumb?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    large?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: string;
+  name: string;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  parent?: (string | null) | Service;
+  icon?: string | null;
+  description?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+    canonical?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "localities".
+ */
+export interface Locality {
+  id: string;
+  terytId: string;
+  name: string;
+  nameSearch?: string | null;
+  type: 'wojewodztwo' | 'powiat' | 'gmina' | 'miejscowosc' | 'dzielnica';
+  parent?: (string | null) | Locality;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: string;
+  firm: string | Firm;
+  title: string;
+  service?: (string | null) | Service;
+  locality?: (string | null) | Locality;
+  completedMonth?: string | null;
+  images?: (string | Media)[] | null;
+  description?: string | null;
+  order?: number | null;
+  status: 'draft' | 'published' | 'hidden';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries".
+ */
+export interface Inquiry {
+  id: string;
+  firm: string | Firm;
+  service?: (string | null) | Service;
+  locality?: (string | null) | Locality;
+  description: string;
+  budgetRange?: ('to10k' | 'from10to30k' | 'from30to60k' | 'from60to100k' | 'over100k' | 'unknown') | null;
+  timeframe?: string | null;
+  clientName: string;
+  clientEmail: string;
+  clientEmailHash?: string | null;
+  clientPhone?: string | null;
+  images?: (string | Media)[] | null;
+  consentTextVersion: string;
+  consentAt: string;
+  status: 'new' | 'read' | 'archived';
+  reviewTokenHash?: string | null;
+  reviewTokenExpiresAt?: string | null;
+  reviewRequestedAt?: string | null;
+  source?: ('direct' | 'calculator') | null;
+  ipHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: string;
+  firm: string | Firm;
+  inquiry: string | Inquiry;
+  rating: number;
+  title?: string | null;
+  body: string;
+  authorDisplayName: string;
+  firmReply?: string | null;
+  firmReplyAt?: string | null;
+  status: 'pending' | 'approved' | 'rejected';
+  moderationReason?: string | null;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: string;
+  title: string;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  excerpt?: string | null;
+  cover?: (string | null) | Media;
+  content?:
+    | (
+        | {
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            text: string;
+            level?: ('h2' | 'h3') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heading';
+          }
+        | {
+            image: string | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'image';
+          }
+        | {
+            images: (string | Media)[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            text: string;
+            author?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            items?:
+              | {
+                  question: string;
+                  answer: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            caption: string;
+            header: string[];
+            rows?:
+              | {
+                  cells: string[];
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'table';
+          }
+        | {
+            label: string;
+            href: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            calculator: string | Calculator;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'calculator';
+          }
+        | {
+            service?: (string | null) | Service;
+            locality?: (string | null) | Locality;
+            limit?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'recommendedFirms';
+          }
+      )[]
+    | null;
+  category?: string | null;
+  tags?: string[] | null;
+  author?: (string | null) | Staff;
+  publishedAt?: string | null;
+  relatedServices?: (string | Service)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+    canonical?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "calculators".
+ */
+export interface Calculator {
+  id: string;
+  title: string;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  type: 'bathroomCost' | 'tiles' | 'paint' | 'skimCoat';
+  params:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  disclaimer?: string | null;
+  linkedService?: (string | null) | Service;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "staff".
  */
 export interface Staff {
   id: string;
   name: string;
+  role: 'admin' | 'moderator' | 'editor';
+  lastLoginAt?: string | null;
+  totpSecret?: string | null;
+  hasTotp?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -144,6 +599,377 @@ export interface Staff {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: string;
+  title: string;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  content?:
+    | (
+        | {
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            text: string;
+            level?: ('h2' | 'h3') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heading';
+          }
+        | {
+            image: string | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'image';
+          }
+        | {
+            items?:
+              | {
+                  question: string;
+                  answer: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            caption: string;
+            header: string[];
+            rows?:
+              | {
+                  cells: string[];
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'table';
+          }
+        | {
+            label: string;
+            href: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+      )[]
+    | null;
+  /**
+   * Tylko dokumenty prawne, np. 1.2
+   */
+  legalVersion?: string | null;
+  effectiveFrom?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+    canonical?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: string;
+  calculator?: (string | null) | Calculator;
+  inputs?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  result?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  name?: string | null;
+  email: string;
+  emailHash?: string | null;
+  phone?: string | null;
+  consentTextVersion: string;
+  consentAt: string;
+  status: 'new' | 'contacted' | 'closed';
+  retentionUntil?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumCategories".
+ */
+export interface ForumCategory {
+  id: string;
+  name: string;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  description?: string | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumThreads".
+ */
+export interface ForumThread {
+  id: string;
+  category: string | ForumCategory;
+  author:
+    | {
+        relationTo: 'firmAccounts';
+        value: string | FirmAccount;
+      }
+    | {
+        relationTo: 'staff';
+        value: string | Staff;
+      };
+  title: string;
+  /**
+   * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
+   */
+  slug?: string | null;
+  body: string;
+  pinned?: boolean | null;
+  locked?: boolean | null;
+  status: 'pending' | 'visible' | 'hidden' | 'deleted';
+  replyCount?: number | null;
+  lastActivityAt?: string | null;
+  followers?: (string | FirmAccount)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "firmAccounts".
+ */
+export interface FirmAccount {
+  id: string;
+  firm?: (string | null) | Firm;
+  termsVersion?: string | null;
+  termsAcceptedAt?: string | null;
+  notificationPrefs?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'firmAccounts';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumPosts".
+ */
+export interface ForumPost {
+  id: string;
+  thread: string | ForumThread;
+  author:
+    | {
+        relationTo: 'firmAccounts';
+        value: string | FirmAccount;
+      }
+    | {
+        relationTo: 'staff';
+        value: string | Staff;
+      };
+  body: string;
+  images?: (string | Media)[] | null;
+  status: 'pending' | 'visible' | 'hidden' | 'deleted';
+  editedAt?: string | null;
+  helpfulCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumReactions".
+ */
+export interface ForumReaction {
+  id: string;
+  post: string | ForumPost;
+  account: string | FirmAccount;
+  type: 'helpful';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "listings".
+ */
+export interface Listing {
+  id: string;
+  firm: string | Firm;
+  type: 'sell' | 'swap';
+  category: 'power_tools' | 'machines' | 'scaffolding' | 'hand_tools' | 'surplus_materials' | 'other';
+  title: string;
+  description: string;
+  condition?: ('new' | 'used' | 'damaged') | null;
+  priceGrosze?: number | null;
+  negotiable?: boolean | null;
+  swapFor?: string | null;
+  vatInvoice?: boolean | null;
+  locality?: (string | null) | Locality;
+  images?: (string | Media)[] | null;
+  serialNumber?: string | null;
+  status: 'draft' | 'pending' | 'active' | 'reserved' | 'sold' | 'expired' | 'hidden';
+  expiresAt?: string | null;
+  viewCount?: number | null;
+  theftReportCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "listingMessages".
+ */
+export interface ListingMessage {
+  id: string;
+  listing: string | Listing;
+  fromFirm: string | Firm;
+  body: string;
+  deliveredAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports".
+ */
+export interface Report {
+  id: string;
+  targetType: 'firms' | 'reviews' | 'forumThreads' | 'forumPosts' | 'listings' | 'articles';
+  targetId: string;
+  reason: 'illegal' | 'fake' | 'offensive' | 'spam' | 'theft' | 'other';
+  description?: string | null;
+  reporterName?: string | null;
+  reporterEmail?: string | null;
+  reporterAccount?: (string | null) | FirmAccount;
+  goodFaithConfirmed?: boolean | null;
+  status: 'new' | 'in_review' | 'resolved' | 'rejected';
+  decision?: ('none' | 'hidden' | 'removed' | 'warned' | 'banned') | null;
+  statementOfReasons?: string | null;
+  decidedBy?: (string | null) | Staff;
+  decidedAt?: string | null;
+  appealOf?: (string | null) | Report;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sanctions".
+ */
+export interface Sanction {
+  id: string;
+  account: string | FirmAccount;
+  scope: 'forum' | 'marketplace' | 'account';
+  type: 'warning' | 'ban';
+  until?: string | null;
+  reason: string;
+  createdBy?: (string | null) | Staff;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "firmStatsDaily".
+ */
+export interface FirmStatsDaily {
+  id: string;
+  firm: string | Firm;
+  date: string;
+  views?: number | null;
+  phoneReveals?: number | null;
+  inquiries?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "auditLog".
+ */
+export interface AuditLog {
+  id: string;
+  actor?: string | null;
+  actorType: 'staff' | 'firm' | 'system';
+  action: 'create' | 'update' | 'delete';
+  targetCollection: string;
+  docId: string;
+  changedFields?: string[] | null;
+  ipHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "totp-attempts".
+ */
+export interface TotpAttempt {
+  id: string;
+  attempts: number;
+  lockUntil?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -161,19 +987,214 @@ export interface PayloadKv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs".
+ */
+export interface PayloadJob {
+  id: string;
+  /**
+   * Input data provided to the job
+   */
+  input?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  taskStatus?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  completedAt?: string | null;
+  totalTried?: number | null;
+  /**
+   * If hasError is true this job will not be retried
+   */
+  hasError?: boolean | null;
+  /**
+   * If hasError is true, this is the error that caused it
+   */
+  error?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Task execution log
+   */
+  log?:
+    | {
+        executedAt: string;
+        completedAt: string;
+        taskSlug: 'inline' | 'purgeExpiredLeads' | 'schedulePublish';
+        taskID: string;
+        input?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        output?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        state: 'failed' | 'succeeded';
+        error?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  taskSlug?: ('inline' | 'purgeExpiredLeads' | 'schedulePublish') | null;
+  queue?: string | null;
+  waitUntil?: string | null;
+  processing?: boolean | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
-  document?: {
-    relationTo: 'staff';
-    value: string | Staff;
-  } | null;
+  document?:
+    | ({
+        relationTo: 'firms';
+        value: string | Firm;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'inquiries';
+        value: string | Inquiry;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: string | Review;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: string | Article;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'calculators';
+        value: string | Calculator;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: string | Lead;
+      } | null)
+    | ({
+        relationTo: 'forumCategories';
+        value: string | ForumCategory;
+      } | null)
+    | ({
+        relationTo: 'forumThreads';
+        value: string | ForumThread;
+      } | null)
+    | ({
+        relationTo: 'forumPosts';
+        value: string | ForumPost;
+      } | null)
+    | ({
+        relationTo: 'forumReactions';
+        value: string | ForumReaction;
+      } | null)
+    | ({
+        relationTo: 'listings';
+        value: string | Listing;
+      } | null)
+    | ({
+        relationTo: 'listingMessages';
+        value: string | ListingMessage;
+      } | null)
+    | ({
+        relationTo: 'reports';
+        value: string | Report;
+      } | null)
+    | ({
+        relationTo: 'sanctions';
+        value: string | Sanction;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: string | Service;
+      } | null)
+    | ({
+        relationTo: 'localities';
+        value: string | Locality;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'firmStatsDaily';
+        value: string | FirmStatsDaily;
+      } | null)
+    | ({
+        relationTo: 'firmAccounts';
+        value: string | FirmAccount;
+      } | null)
+    | ({
+        relationTo: 'staff';
+        value: string | Staff;
+      } | null)
+    | ({
+        relationTo: 'auditLog';
+        value: string | AuditLog;
+      } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'staff';
-    value: string | Staff;
-  };
+  user:
+    | {
+        relationTo: 'firmAccounts';
+        value: string | FirmAccount;
+      }
+    | {
+        relationTo: 'staff';
+        value: string | Staff;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -183,10 +1204,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'staff';
-    value: string | Staff;
-  };
+  user:
+    | {
+        relationTo: 'firmAccounts';
+        value: string | FirmAccount;
+      }
+    | {
+        relationTo: 'staff';
+        value: string | Staff;
+      };
   key?: string | null;
   value?:
     | {
@@ -213,10 +1239,615 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "firms_select".
+ */
+export interface FirmsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  nip?: T;
+  registrySource?: T;
+  registryData?: T;
+  registryVerifiedAt?: T;
+  shortDescription?: T;
+  about?: T;
+  logo?: T;
+  cover?: T;
+  services?: T;
+  serviceArea?: T;
+  baseLocality?: T;
+  phone?: T;
+  website?: T;
+  vatInvoice?: T;
+  warrantyMonths?: T;
+  yearsExperience?: T;
+  teamSize?: T;
+  availability?:
+    | T
+    | {
+        date?: T;
+        confirmedAt?: T;
+      };
+  status?: T;
+  moderationReason?: T;
+  trialStartsAt?: T;
+  trialEndsAt?: T;
+  subscriptionStatus?: T;
+  ratingAvg?: T;
+  ratingCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  firm?: T;
+  title?: T;
+  service?: T;
+  locality?: T;
+  completedMonth?: T;
+  images?: T;
+  description?: T;
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries_select".
+ */
+export interface InquiriesSelect<T extends boolean = true> {
+  firm?: T;
+  service?: T;
+  locality?: T;
+  description?: T;
+  budgetRange?: T;
+  timeframe?: T;
+  clientName?: T;
+  clientEmail?: T;
+  clientEmailHash?: T;
+  clientPhone?: T;
+  images?: T;
+  consentTextVersion?: T;
+  consentAt?: T;
+  status?: T;
+  reviewTokenHash?: T;
+  reviewTokenExpiresAt?: T;
+  reviewRequestedAt?: T;
+  source?: T;
+  ipHash?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  firm?: T;
+  inquiry?: T;
+  rating?: T;
+  title?: T;
+  body?: T;
+  authorDisplayName?: T;
+  firmReply?: T;
+  firmReplyAt?: T;
+  status?: T;
+  moderationReason?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  cover?: T;
+  content?:
+    | T
+    | {
+        text?:
+          | T
+          | {
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        heading?:
+          | T
+          | {
+              text?: T;
+              level?: T;
+              id?: T;
+              blockName?: T;
+            };
+        image?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              images?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              text?: T;
+              author?: T;
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        table?:
+          | T
+          | {
+              caption?: T;
+              header?: T;
+              rows?:
+                | T
+                | {
+                    cells?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+              blockName?: T;
+            };
+        calculator?:
+          | T
+          | {
+              calculator?: T;
+              id?: T;
+              blockName?: T;
+            };
+        recommendedFirms?:
+          | T
+          | {
+              service?: T;
+              locality?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  category?: T;
+  tags?: T;
+  author?: T;
+  publishedAt?: T;
+  relatedServices?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonical?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  content?:
+    | T
+    | {
+        text?:
+          | T
+          | {
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        heading?:
+          | T
+          | {
+              text?: T;
+              level?: T;
+              id?: T;
+              blockName?: T;
+            };
+        image?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        table?:
+          | T
+          | {
+              caption?: T;
+              header?: T;
+              rows?:
+                | T
+                | {
+                    cells?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  legalVersion?: T;
+  effectiveFrom?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonical?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "calculators_select".
+ */
+export interface CalculatorsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  type?: T;
+  params?: T;
+  disclaimer?: T;
+  linkedService?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  calculator?: T;
+  inputs?: T;
+  result?: T;
+  name?: T;
+  email?: T;
+  emailHash?: T;
+  phone?: T;
+  consentTextVersion?: T;
+  consentAt?: T;
+  status?: T;
+  retentionUntil?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumCategories_select".
+ */
+export interface ForumCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumThreads_select".
+ */
+export interface ForumThreadsSelect<T extends boolean = true> {
+  category?: T;
+  author?: T;
+  title?: T;
+  slug?: T;
+  body?: T;
+  pinned?: T;
+  locked?: T;
+  status?: T;
+  replyCount?: T;
+  lastActivityAt?: T;
+  followers?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumPosts_select".
+ */
+export interface ForumPostsSelect<T extends boolean = true> {
+  thread?: T;
+  author?: T;
+  body?: T;
+  images?: T;
+  status?: T;
+  editedAt?: T;
+  helpfulCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forumReactions_select".
+ */
+export interface ForumReactionsSelect<T extends boolean = true> {
+  post?: T;
+  account?: T;
+  type?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "listings_select".
+ */
+export interface ListingsSelect<T extends boolean = true> {
+  firm?: T;
+  type?: T;
+  category?: T;
+  title?: T;
+  description?: T;
+  condition?: T;
+  priceGrosze?: T;
+  negotiable?: T;
+  swapFor?: T;
+  vatInvoice?: T;
+  locality?: T;
+  images?: T;
+  serialNumber?: T;
+  status?: T;
+  expiresAt?: T;
+  viewCount?: T;
+  theftReportCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "listingMessages_select".
+ */
+export interface ListingMessagesSelect<T extends boolean = true> {
+  listing?: T;
+  fromFirm?: T;
+  body?: T;
+  deliveredAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports_select".
+ */
+export interface ReportsSelect<T extends boolean = true> {
+  targetType?: T;
+  targetId?: T;
+  reason?: T;
+  description?: T;
+  reporterName?: T;
+  reporterEmail?: T;
+  reporterAccount?: T;
+  goodFaithConfirmed?: T;
+  status?: T;
+  decision?: T;
+  statementOfReasons?: T;
+  decidedBy?: T;
+  decidedAt?: T;
+  appealOf?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sanctions_select".
+ */
+export interface SanctionsSelect<T extends boolean = true> {
+  account?: T;
+  scope?: T;
+  type?: T;
+  until?: T;
+  reason?: T;
+  createdBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  parent?: T;
+  icon?: T;
+  description?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonical?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "localities_select".
+ */
+export interface LocalitiesSelect<T extends boolean = true> {
+  terytId?: T;
+  name?: T;
+  nameSearch?: T;
+  type?: T;
+  parent?: T;
+  slug?: T;
+  lat?: T;
+  lng?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  purpose?: T;
+  firm?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumb?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        large?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "firmStatsDaily_select".
+ */
+export interface FirmStatsDailySelect<T extends boolean = true> {
+  firm?: T;
+  date?: T;
+  views?: T;
+  phoneReveals?: T;
+  inquiries?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "firmAccounts_select".
+ */
+export interface FirmAccountsSelect<T extends boolean = true> {
+  firm?: T;
+  termsVersion?: T;
+  termsAcceptedAt?: T;
+  notificationPrefs?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  resetPasswordRequestedAt?: T;
+  _verified?: T;
+  _verificationToken?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "staff_select".
  */
 export interface StaffSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
+  lastLoginAt?: T;
+  totpSecret?: T;
+  hasTotp?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -237,11 +1868,67 @@ export interface StaffSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "auditLog_select".
+ */
+export interface AuditLogSelect<T extends boolean = true> {
+  actor?: T;
+  actorType?: T;
+  action?: T;
+  targetCollection?: T;
+  docId?: T;
+  changedFields?: T;
+  ipHash?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "totp-attempts_select".
+ */
+export interface TotpAttemptsSelect<T extends boolean = true> {
+  id?: T;
+  attempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs_select".
+ */
+export interface PayloadJobsSelect<T extends boolean = true> {
+  input?: T;
+  taskStatus?: T;
+  completedAt?: T;
+  totalTried?: T;
+  hasError?: T;
+  error?: T;
+  log?:
+    | T
+    | {
+        executedAt?: T;
+        completedAt?: T;
+        taskSlug?: T;
+        taskID?: T;
+        input?: T;
+        output?: T;
+        state?: T;
+        error?: T;
+        id?: T;
+      };
+  taskSlug?: T;
+  queue?: T;
+  waitUntil?: T;
+  processing?: T;
+  meta?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -277,6 +1964,112 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: string;
+  featureFlags?: {
+    forum?: boolean | null;
+    marketplace?: boolean | null;
+    calculators?: boolean | null;
+  };
+  reviewDelayDays: number;
+  availabilityReminderDays: number;
+  availabilityExpiryDays: number;
+  listingExpiryDays: number;
+  retention: {
+    inquiriesMonths: number;
+    leadsMonths: number;
+  };
+  legalVersions?: {
+    terms?: string | null;
+    privacy?: string | null;
+    inquiryConsent?: string | null;
+    leadConsent?: string | null;
+  };
+  moderationReasonTemplates?:
+    | {
+        label: string;
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  holdWords?: string[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats".
+ */
+export interface PayloadJobsStat {
+  id: string;
+  stats?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  featureFlags?:
+    | T
+    | {
+        forum?: T;
+        marketplace?: T;
+        calculators?: T;
+      };
+  reviewDelayDays?: T;
+  availabilityReminderDays?: T;
+  availabilityExpiryDays?: T;
+  listingExpiryDays?: T;
+  retention?:
+    | T
+    | {
+        inquiriesMonths?: T;
+        leadsMonths?: T;
+      };
+  legalVersions?:
+    | T
+    | {
+        terms?: T;
+        privacy?: T;
+        inquiryConsent?: T;
+        leadConsent?: T;
+      };
+  moderationReasonTemplates?:
+    | T
+    | {
+        label?: T;
+        text?: T;
+        id?: T;
+      };
+  holdWords?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats_select".
+ */
+export interface PayloadJobsStatsSelect<T extends boolean = true> {
+  stats?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -284,6 +2077,39 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskPurgeExpiredLeads".
+ */
+export interface TaskPurgeExpiredLeads {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskSchedulePublish".
+ */
+export interface TaskSchedulePublish {
+  input: {
+    type?: ('publish' | 'unpublish') | null;
+    locale?: string | null;
+    doc?: {
+      relationTo: 'articles';
+      value: string | Article;
+    } | null;
+    global?: string | null;
+    user?:
+      | ({
+          relationTo: 'firmAccounts';
+          value: string | FirmAccount;
+        } | null)
+      | ({
+          relationTo: 'staff';
+          value: string | Staff;
+        } | null);
+  };
+  output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
