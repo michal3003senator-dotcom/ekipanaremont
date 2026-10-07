@@ -16,7 +16,7 @@ export function Section({
 }) {
   return (
     <section className="border-t border-line py-10 md:py-14">
-      <h2 className="font-display text-h2 font-semibold">{title}</h2>
+      <h2 className="font-display text-h2 font-medium">{title}</h2>
       {description && <p className="mt-2 max-w-prose text-small text-text-muted">{description}</p>}
       <div className={cn('mt-6 grid gap-6', className)}>{children}</div>
     </section>

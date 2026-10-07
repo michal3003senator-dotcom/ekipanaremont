@@ -8,7 +8,7 @@ export function Wordmark({ className }: { className?: string }) {
     <Link
       href="/"
       className={cn(
-        'flex items-center gap-2.5 font-display text-lead font-semibold tracking-tight',
+        'flex items-center gap-2.5 font-display text-lead font-medium tracking-tight',
         className,
       )}
     >

@@ -9,7 +9,7 @@ import { Section, State } from '../_components/Section'
 export default function StatesPage() {
   return (
     <>
-      <h1 className="pt-10 font-display text-h1 font-semibold md:pt-16">Stany</h1>
+      <h1 className="pt-10 font-display text-h1 font-medium md:pt-16">Stany</h1>
 
       <Section
         title="Pusty stan"

@@ -53,7 +53,7 @@ export function SheetContent({
             if (info.offset.y > CLOSE_OFFSET || info.velocity.y > CLOSE_VELOCITY) onDismiss()
           }}
           className={cn(
-            'sheet-panel fixed inset-x-0 bottom-0 z-40 mx-auto flex w-full max-w-xl flex-col gap-4 overflow-y-auto rounded-t-card border border-b-0 border-line bg-surface-1 px-4 pt-3 shadow-float state-open:animate-sheet-in state-closed:animate-sheet-out md:px-6',
+            'sheet-panel fixed inset-x-0 bottom-0 z-40 mx-auto flex w-full max-w-xl flex-col gap-4 overflow-y-auto rounded-t-card border border-b-0 border-line bg-surface-1 px-4 pt-3 shadow-float inset-shadow-edge state-open:animate-sheet-in state-closed:animate-sheet-out md:px-6',
             className,
           )}
         >
@@ -62,7 +62,7 @@ export function SheetContent({
             aria-hidden="true"
           />
           <div className="flex items-start justify-between gap-4">
-            <DialogPrimitive.Title className="font-display text-h3 font-semibold">
+            <DialogPrimitive.Title className="font-display text-h3 font-medium">
               {title}
             </DialogPrimitive.Title>
             <DialogPrimitive.Close asChild>

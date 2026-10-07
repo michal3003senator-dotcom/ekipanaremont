@@ -25,7 +25,12 @@ const dayLabel = (date: CalendarDate, index: number) =>
 /** Grafik (ADR 0013): firmy na wspólnej osi 14 dni – kto może zacząć najwcześniej. */
 export function FirmBoard({ firms, today, className }: Props) {
   return (
-    <div className={cn('overflow-hidden rounded-card border border-line bg-surface-1', className)}>
+    <div
+      className={cn(
+        'overflow-hidden rounded-card border border-line bg-surface-1 inset-shadow-edge',
+        className,
+      )}
+    >
       <div
         aria-hidden="true"
         className="hidden border-b border-line px-6 py-3 text-micro uppercase tracking-caps text-text-muted lg:grid lg:grid-cols-12 lg:gap-x-6"

@@ -26,7 +26,7 @@ export function FirmCard({ firm, today, href = `/firma/${firm.slug}`, className 
     <Link
       href={href}
       className={cn(
-        'group grid overflow-hidden rounded-card border border-line bg-surface-1 transition-colors duration-400 ease-standard hover:border-line-strong md:grid-cols-12',
+        'group grid overflow-hidden rounded-card border border-line bg-surface-1 inset-shadow-edge transition-colors duration-400 ease-standard hover:border-line-strong md:grid-cols-12',
         className,
       )}
     >
@@ -37,7 +37,7 @@ export function FirmCard({ firm, today, href = `/firma/${firm.slug}`, className 
         className="aspect-4/3 md:col-span-3"
       />
       <div className="flex flex-col gap-1 p-4 md:col-span-5 md:p-6">
-        <h3 className="font-display text-h3 font-semibold">{firm.name}</h3>
+        <h3 className="font-display text-h3 font-medium">{firm.name}</h3>
         <p className="text-small text-text-muted">{firm.services}</p>
         <p className="text-small text-text-muted">{firmArea(firm)}</p>
         <FirmFacts firm={firm} className="mt-auto pt-3" />

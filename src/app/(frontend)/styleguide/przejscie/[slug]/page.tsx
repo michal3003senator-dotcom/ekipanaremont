@@ -24,7 +24,7 @@ export default async function TransitionProfilePage({ params }: Props) {
       />
       <FirmProfileHeader firm={firm} today={DEMO_TODAY} />
       <section aria-labelledby="realizacje" className="border-t border-line pt-8">
-        <h2 id="realizacje" className="font-display text-h2 font-semibold">
+        <h2 id="realizacje" className="font-display text-h2 font-medium">
           Realizacje <span className="font-data text-h3 text-text-muted">{PROJECTS.length}</span>
         </h2>
         <div className="mt-6">

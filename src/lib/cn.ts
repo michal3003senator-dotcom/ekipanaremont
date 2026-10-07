@@ -27,6 +27,7 @@ const twMerge = extendTailwindMerge({
       font: ['sans', 'display', 'data'],
       radius: ['card', 'control', 'badge', 'tile', 'tile-lg'],
       shadow: ['float'],
+      'inset-shadow': ['edge', 'glaze'],
       tracking: ['tight', 'caps'],
       ease: ['standard'],
       container: ['page'],

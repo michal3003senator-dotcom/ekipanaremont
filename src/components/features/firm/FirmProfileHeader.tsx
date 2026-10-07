@@ -36,7 +36,7 @@ export function FirmProfileHeader({ firm, today }: Props) {
   return (
     <div className="grid gap-x-6 gap-y-6 lg:grid-cols-12">
       <div className="lg:col-span-8">
-        <div className="overflow-hidden rounded-card border border-line bg-surface-1">
+        <div className="overflow-hidden rounded-card border border-line bg-surface-1 inset-shadow-edge">
           <FirmPhoto
             photo={firm.photo}
             sizes="(min-width: 1240px) 810px, (min-width: 1024px) 66vw, 100vw"
@@ -51,12 +51,12 @@ export function FirmProfileHeader({ firm, today }: Props) {
         <div className="mt-6 flex items-start gap-4">
           <div
             aria-hidden="true"
-            className="flex size-14 shrink-0 items-center justify-center rounded-control border border-line bg-surface-2 font-display text-h3 font-semibold"
+            className="flex size-14 shrink-0 items-center justify-center rounded-control border border-line bg-surface-2 font-display text-h3 font-medium"
           >
             {initials}
           </div>
           <div className="flex flex-col gap-1">
-            <h1 className="font-display text-h1 font-semibold">{firm.name}</h1>
+            <h1 className="font-display text-h1 font-medium">{firm.name}</h1>
             <p className="text-body text-text-muted">
               {firm.services} · {firmArea(firm)}
             </p>
@@ -67,7 +67,7 @@ export function FirmProfileHeader({ firm, today }: Props) {
 
       <aside
         aria-label="Termin i kontakt"
-        className="sticky-cta fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface-1 px-4 pt-3 lg:static lg:col-span-4 lg:self-start lg:rounded-card lg:border lg:p-6"
+        className="sticky-cta fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface-1 px-4 pt-3 lg:static lg:col-span-4 lg:self-start lg:rounded-card lg:border lg:p-6 lg:inset-shadow-edge"
       >
         <p className="sr-only">{availabilityDescription(today, availability, firm.confirmedOn)}</p>
         <div
@@ -77,7 +77,7 @@ export function FirmProfileHeader({ firm, today }: Props) {
           <p className="hidden text-micro uppercase tracking-caps text-text-muted lg:block">
             Najbliższy wolny termin
           </p>
-          <p className="font-display text-h3 font-semibold">{availabilityLabel(availability)}</p>
+          <p className="font-display text-h3 font-medium">{availabilityLabel(availability)}</p>
           {confirmed && <p className="text-small text-text-muted">{confirmed}</p>}
         </div>
         <div className="mt-3 flex gap-3 lg:mt-6 lg:flex-col">

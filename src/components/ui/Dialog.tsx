@@ -46,13 +46,13 @@ export function DialogContent({
       <Overlay />
       <DialogPrimitive.Content
         className={cn(
-          'dialog-panel fixed start-1/2 top-1/2 z-40 flex -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-card border border-line bg-surface-1 p-6 shadow-float state-open:animate-pop-in state-closed:animate-pop-out',
+          'dialog-panel fixed start-1/2 top-1/2 z-40 flex -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-card border border-line bg-surface-1 p-6 shadow-float inset-shadow-edge state-open:animate-pop-in state-closed:animate-pop-out',
           className,
         )}
         {...props}
       >
         <div className="flex items-start justify-between gap-4">
-          <DialogPrimitive.Title className="font-display text-h3 font-semibold">
+          <DialogPrimitive.Title className="font-display text-h3 font-medium">
             {title}
           </DialogPrimitive.Title>
           <DialogPrimitive.Close asChild>

@@ -8,7 +8,7 @@ import { Section, State } from '../_components/Section'
 export default function LayoutsPage() {
   return (
     <>
-      <h1 className="pt-10 font-display text-h1 font-semibold md:pt-16">Układy</h1>
+      <h1 className="pt-10 font-display text-h1 font-medium md:pt-16">Układy</h1>
       <p className="mt-3 max-w-prose text-small text-text-muted">
         Nagłówek i stopka są na górze i na dole tej strony. Na telefonie menu otwiera się w dolnym
         panelu.

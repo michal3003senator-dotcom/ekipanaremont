@@ -8,13 +8,14 @@ import { cn } from '@/lib/cn'
 import { Icon } from './Icon'
 
 export const buttonVariants = cva(
-  'inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap rounded-control font-semibold transition-colors duration-150 ease-standard disabled:cursor-not-allowed disabled:opacity-50 aria-busy:cursor-progress',
+  'inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap rounded-control font-semibold transition duration-150 ease-standard active:scale-98 disabled:cursor-not-allowed disabled:opacity-50 aria-busy:cursor-progress',
   {
     variants: {
       variant: {
         // Najwyżej jeden przycisk primary na ekranie (DESIGN §3).
-        primary: 'bg-accent text-on-accent hover:bg-accent-hover',
-        secondary: 'border border-line-strong bg-surface-2 text-text hover:border-text-muted',
+        primary: 'bg-accent text-on-accent inset-shadow-glaze hover:bg-accent-hover',
+        secondary:
+          'border border-line-strong bg-surface-2 text-text inset-shadow-edge hover:border-text-muted',
         ghost: 'text-text hover:bg-surface-2',
         danger: 'border border-danger text-danger hover:bg-surface-2',
       },

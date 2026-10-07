@@ -60,7 +60,7 @@ export function Toaster() {
             onOpenChange={(open) => {
               if (!open) dismiss(item.id)
             }}
-            className="flex w-full items-start gap-3 rounded-card border border-line bg-surface-1 p-4 shadow-float state-open:animate-toast-in state-closed:animate-fade-out"
+            className="flex w-full items-start gap-3 rounded-card border border-line bg-surface-1 p-4 shadow-float inset-shadow-edge state-open:animate-toast-in state-closed:animate-fade-out"
           >
             {toneIcon && (
               <Icon

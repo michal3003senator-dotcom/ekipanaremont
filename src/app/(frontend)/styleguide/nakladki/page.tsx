@@ -4,7 +4,7 @@ import { Section, State } from '../_components/Section'
 export default function OverlaysPage() {
   return (
     <>
-      <h1 className="pt-10 font-display text-h1 font-semibold md:pt-16">Nakładki</h1>
+      <h1 className="pt-10 font-display text-h1 font-medium md:pt-16">Nakładki</h1>
       <Section
         title="Okno, panel, powiadomienie"
         description="Fokus zostaje w nakładce, Esc zamyka i wraca do przycisku. Dolny panel zamyka też przesunięcie w dół."

@@ -26,7 +26,7 @@ const BUDGETS = [
 export default function FormsPage() {
   return (
     <>
-      <h1 className="pt-10 font-display text-h1 font-semibold md:pt-16">Formularze</h1>
+      <h1 className="pt-10 font-display text-h1 font-medium md:pt-16">Formularze</h1>
 
       <Section
         title="Przycisk"

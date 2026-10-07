@@ -27,6 +27,12 @@
   --fs-h3: 1.3125rem;
   --fs-lead: 1.0625rem;
 
+  /* Materia (DESIGN §1: precyzja, nie ozdobniki): światło górnej krawędzi powierzchni, szkliwo kafla, ramka zdjęcia. */
+  --edge: rgb(255 255 255 / 0.05);
+  --glaze: rgb(255 255 255 / 0.07);
+  --glaze-shade: rgb(0 0 0 / 0.22);
+  --photo-edge: rgb(255 255 255 / 0.07);
+
   --duration-state: 150ms;
   --duration-enter: 250ms;
   --duration-page: 400ms;
@@ -52,6 +58,10 @@
   --on-accent: #ffffff;
   --success: #166534;
   --danger: #b91c1c;
+  --edge: rgb(255 255 255 / 0);
+  --glaze: rgb(255 255 255 / 0.75);
+  --glaze-shade: rgb(22 18 29 / 0.08);
+  --photo-edge: rgb(22 18 29 / 0.08);
 }
 
 @media (width >= 48rem) {
@@ -91,6 +101,11 @@
   --radius-badge: 8px;
   --radius-tile: 3px;
   --radius-tile-lg: 6px;
+
+  /* Światło górnej krawędzi (łączy się z shadow-*): powierzchnie i główny przycisk. */
+  --inset-shadow-*: initial;
+  --inset-shadow-edge: inset 0 1px 0 var(--edge);
+  --inset-shadow-glaze: inset 0 1px 0 rgb(255 255 255 / 0.2);
 
   --shadow-float: 0 16px 40px -16px rgb(11 9 16 / 0.55), 0 2px 8px -2px rgb(11 9 16 / 0.3);
 
@@ -248,6 +263,18 @@
   }
 }
 
+/* Cienka ramka na zdjęciu oddziela je od ciemnej powierzchni. */
+@utility photo-frame {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px var(--photo-edge);
+    pointer-events: none;
+  }
+}
+
 @layer components {
   /* Role krojów (ADR 0013, DESIGN §4). */
   .font-display {
@@ -337,6 +364,9 @@
 
   .tile[data-tile='taken'] {
     background-color: var(--line);
+    box-shadow:
+      inset 0 1px 0 var(--glaze),
+      inset 0 -1px 0 var(--glaze-shade);
   }
 
   .tile[data-tile='open'] {
@@ -346,6 +376,9 @@
   .tile:is([data-tile='free'], [data-tile='beyond']) {
     background-color: var(--accent);
     color: var(--on-accent);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.3),
+      inset 0 -1px 0 rgb(0 0 0 / 0.2);
     /* Fiolet zapala się chwilę po pojawieniu się kafla. */
     transition-delay:
       calc(var(--step, 0) * var(--tile-stagger, 0ms)),

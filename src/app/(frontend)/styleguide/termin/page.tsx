@@ -32,7 +32,7 @@ const SIZES: Array<{ size: TileSize; label: string }> = [
 export default function AvailabilityPage() {
   return (
     <>
-      <h1 className="pt-10 font-display text-h1 font-semibold md:pt-16">Termin i firmy</h1>
+      <h1 className="pt-10 font-display text-h1 font-medium md:pt-16">Termin i firmy</h1>
 
       <Section
         title="Kafel terminu"
@@ -44,7 +44,7 @@ export default function AvailabilityPage() {
               {STATES.map((state) => (
                 <div
                   key={state.title}
-                  className="rounded-card border border-line bg-surface-1 p-4 md:p-6"
+                  className="rounded-card border border-line bg-surface-1 p-4 inset-shadow-edge md:p-6"
                 >
                   <p className="mb-4 text-small text-text-muted">{state.title}</p>
                   <AvailabilityTiles

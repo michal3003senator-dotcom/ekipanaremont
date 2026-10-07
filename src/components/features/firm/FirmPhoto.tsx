@@ -17,7 +17,7 @@ type Props = {
 /** Zdjęcie realizacji: stałe proporcje, rozmyty podgląd, powiększenie o 3% przy najechaniu na kartę. */
 export function FirmPhoto({ photo, sizes, transitionName, eager, className }: Props) {
   const image = (
-    <div className={cn('relative overflow-hidden bg-surface-2', className)}>
+    <div className={cn('photo-frame relative overflow-hidden bg-surface-2', className)}>
       <Image
         src={photo.src}
         alt={photo.alt}
