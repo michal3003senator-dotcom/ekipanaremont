@@ -1,0 +1,9 @@
+# Conventional Commits: typ(zakres)!: opis
+first_line=$(head -n 1 "$1")
+case "$first_line" in Merge* | Revert* | fixup!* | squash!*) exit 0 ;; esac
+pattern='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9._/-]+\))?!?: .+'
+if ! printf '%s' "$first_line" | grep -Eq "$pattern"; then
+  echo 'Wiadomość commita musi mieć format Conventional Commits: typ(zakres): opis' >&2
+  echo 'Przykład: feat(panel): potwierdzenie terminu jednym dotknięciem' >&2
+  exit 1
+fi

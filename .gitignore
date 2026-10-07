@@ -1,0 +1,32 @@
+# zależności
+/node_modules
+
+# Next.js i build
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# testy
+/coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# środowisko – sekrety tylko lokalnie
+.env
+.env*.local
+.env.*
+!.env.example
+
+# lokalne pliki uploadu Payload
+/media
+
+# narzędzia
+.vercel
+.DS_Store
+*.pem
+npm-debug.log*
+pnpm-debug.log*
