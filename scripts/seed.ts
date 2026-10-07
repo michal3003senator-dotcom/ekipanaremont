@@ -10,6 +10,7 @@ import { readFileSync } from 'node:fs'
 import config from '@payload-config'
 import { getPayload, type Payload } from 'payload'
 
+import { seedDemoWorld } from './demo/seed'
 import { seedCalculators, seedDemoContent, seedPages } from './seed-content'
 
 import { addDays, todayInWarsaw } from '@/lib/format/date'

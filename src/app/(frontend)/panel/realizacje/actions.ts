@@ -10,6 +10,7 @@ import { actionContext } from '@/lib/panel/guard'
 import { MAX_PROJECT_PHOTOS } from '@/lib/panel/profile'
 import { rateLimit } from '@/lib/rate-limit'
 import { projectSchema, reorderSchema } from '@/lib/validation/forms'
+import { mediaSrc } from '@/lib/images'
 
 const id = z.uuid()
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024
@@ -130,7 +131,10 @@ export async function uploadProjectPhotoAction(
       ...ctx.as,
     })
     refresh()
-    return { ok: true, data: { id: media.id, url: media.sizes?.thumb?.url ?? media.url ?? null } }
+    return {
+      ok: true,
+      data: { id: media.id, url: mediaSrc(media.sizes?.thumb?.url ?? media.url) ?? null },
+    }
   } catch {
     return { ok: false, message: 'To nie wygląda na zdjęcie. Spróbuj innego pliku.' }
   }

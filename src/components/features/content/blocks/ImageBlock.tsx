@@ -1,12 +1,13 @@
 import Image from 'next/image'
 
 import type { Media } from '@/payload-types'
+import { mediaSrc } from '@/lib/images'
 
 /** Zdjęcie w treści: stałe proporcje z pliku, podpis pod spodem. */
 export function ImageBlock({ image, caption }: { image: unknown; caption?: string | null }) {
   if (!image || typeof image !== 'object') return null
   const media = image as Media
-  const src = media.sizes?.large?.url ?? media.url
+  const src = mediaSrc(media.sizes?.large?.url ?? media.url)
   if (!src || !media.width || !media.height) return null
   return (
     <figure className="flex flex-col gap-2">

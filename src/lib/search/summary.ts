@@ -5,6 +5,7 @@ import type { FirmPhotoData, FirmSummary } from '@/components/features/firm/type
 import type { CalendarDate } from '@/lib/format/date'
 import { availabilityState } from '@/lib/panel/availability'
 import type { Firm, Media } from '@/payload-types'
+import { mediaSrc } from '@/lib/images'
 
 const REGISTRY: Record<string, FirmSummary['registry']> = { ceidg: 'CEIDG', krs: 'KRS', vat: 'VAT' }
 
@@ -20,7 +21,7 @@ export function mediaPhoto(
 ): FirmPhotoData | undefined {
   if (!media || typeof media !== 'object' || !('url' in media)) return undefined
   const doc = media as Media
-  const src = doc.sizes?.[size]?.url ?? doc.url
+  const src = mediaSrc(doc.sizes?.[size]?.url ?? doc.url)
   return src ? { src, alt: doc.alt } : undefined
 }
 

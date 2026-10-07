@@ -4,6 +4,20 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Dane przykładowe i dokumenty (2026-10-07)
+- `pnpm seed demo` (tylko lokalnie):
+  - 20 nowych firm z długimi opisami, 56 realizacjami ze zdjęciami i 85 opiniami (część z emotikonami i odpowiedziami firm);
+  - 10 artykułów w 6 kategoriach z okładkami;
+  - opublikowane 4 kalkulatory (parametry testowe) i dokumenty.
+  - Zdjęcia: ręcznie wybrane z Pexels (bezpłatna licencja), pobierane raz do `.cache/demo-photos`, tylko do demo.
+- Regulamin, polityka prywatności (z plikami cookies), „Jak sprawdzamy opinie”, „Zasady moderacji”, „Kontakt”, „O nas”:
+  - `pnpm seed` tworzy je jako szkice do przeglądu przez prawnika;
+  - dane operatora do uzupełnienia w `scripts/demo/pages.ts`.
+- Usunięcie firmy (także w `/admin`) usuwa jej realizacje, zdjęcia, opinie, zapytania, statystyki i ogłoszenia.
+- Stopka w kolumnach: Serwis, Poradnik (kategorie), Popularne w Łodzi, Informacje. Menu na telefonie ze stronami informacyjnymi.
+- Poprawka: profile, wyniki i artykuły ze zdjęciami nie zwracają już błędu 500. Adresy plików z Payload są względne, więc `next/image` je przyjmuje pod każdym adresem.
+- Codespaces: serwer deweloperski przyjmuje akcje z `*.app.github.dev` także bez zmiennych środowiska i wypisuje rozpoznany adres.
+
 ### Faza 6 – treści (2026-10-07)
 - ADR 0022 (trasy treści, harmonogram publikacji) i ADR 0023 (podgląd na żywo w ramce tylko w trybie podglądu).
 - Artykuły `/artykuly`:

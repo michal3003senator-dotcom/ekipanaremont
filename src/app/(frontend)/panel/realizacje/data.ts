@@ -5,6 +5,7 @@ import type { SelectOption } from '@/components/ui/Select'
 import type { Media } from '@/payload-types'
 
 import type { Photo } from './PhotoManager'
+import { mediaSrc } from '@/lib/images'
 
 /** Usługi do listy wyboru: podusługi z nazwą usługi nadrzędnej. */
 export async function serviceOptions(payload: Payload): Promise<SelectOption[]> {
@@ -28,7 +29,7 @@ export const toPhoto = (media: unknown): Photo | null =>
   media && typeof media === 'object' && 'id' in media
     ? {
         id: (media as Media).id,
-        url: (media as Media).sizes?.thumb?.url ?? (media as Media).url ?? null,
+        url: mediaSrc((media as Media).sizes?.thumb?.url ?? (media as Media).url) ?? null,
         alt: (media as Media).alt,
       }
     : null

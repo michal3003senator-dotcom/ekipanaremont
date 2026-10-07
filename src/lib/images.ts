@@ -41,3 +41,12 @@ export async function compressImage(file: File, maxSide = UPLOAD_MAX_SIDE): Prom
     return file
   }
 }
+
+/**
+ * Adres pliku z Payload jako ścieżka względna. Payload dokleja `serverURL`, a `next/image` przyjmuje
+ * tylko własne ścieżki (localPatterns) – i tak działa pod każdym adresem (localhost, Codespaces).
+ */
+export function mediaSrc(url: string | null | undefined): string | undefined {
+  if (!url) return undefined
+  return /^https?:\/\/[^/]+(\/api\/media\/file\/[^?#]+)$/.exec(url)?.[1] ?? url
+}
