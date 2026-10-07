@@ -18,6 +18,9 @@ export function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-nonce', nonce)
   requestHeaders.set('Content-Security-Policy', csp)
+  // payload-totp ustala ścieżkę z tego nagłówka; bez niego przekierowuje w kółko na /admin/setup-totp.
+  // `set` nadpisuje wartość podaną przez klienta.
+  requestHeaders.set('x-pathname', request.nextUrl.pathname)
 
   const response = NextResponse.next({ request: { headers: requestHeaders } })
   response.headers.set('Content-Security-Policy', csp)

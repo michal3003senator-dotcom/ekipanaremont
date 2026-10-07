@@ -29,7 +29,8 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
   - 404 i brak w mapie strony, gdy nie ma żadnej firmy.
 - `sitemap.xml`: strony lokalne, artykuły, kategorie, kalkulatory i strony.
 - `pnpm seed` tworzy szkice 4 kalkulatorów i 6 stron (treść regulaminu i polityki od prawnika). `pnpm seed demo` publikuje przykładowy artykuł i kalkulator łazienki z cenami testowymi.
-- Codespaces: `pnpm env:init` ustawia adres przekierowanego portu, akcje serwera przyjmują ten adres (naprawia „Invalid Server Actions request”).
+- Codespaces: aplikacja sama rozpoznaje adres przekierowanego portu (akcje serwera, panel, HMR), naprawia „Invalid Server Actions request” przy zmianie motywu i w `/admin`. `pnpm demo`: konfiguracja, baza, dane przykładowe i serwer jedną komendą.
+- Panel: pierwsze logowanie personelu nie wpada już w pętlę przekierowań na `/admin/setup-totp` (proxy przekazuje ścieżkę wtyczce 2FA); test E2E konfiguracji 2FA.
 - Wydajność (Lighthouse mobile, build produkcyjny; artykuł, kalkulator, strona lokalna):
   - wydajność 93–98, dostępność 100, dobre praktyki 100, CLS 0;
   - SEO obniża tylko celowy `noindex` poza produkcją.

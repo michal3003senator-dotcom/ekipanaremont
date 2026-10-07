@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { withCodespaceUrl } from './runtime'
+
 const emptyToUndefined = (value: unknown) => (value === '' ? undefined : value)
 
 const sentryDsn = z
@@ -43,4 +45,4 @@ export function parseEnv(source: Record<string, string | undefined>): Env {
   return result.data
 }
 
-export const env = parseEnv(process.env)
+export const env = parseEnv(withCodespaceUrl(process.env))
