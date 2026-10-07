@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { cookies } from 'next/headers'
 import type { ReactNode } from 'react'
 
+import { Toaster } from '@/components/ui/Toast'
 import { readTheme, THEME_COOKIE, themeAttribute, themeColor } from '@/lib/theme'
 
 import { fontVariables } from './fonts'
@@ -26,7 +27,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="pl" data-theme={themeAttribute(theme)} className={fontVariables}>
-      <body className="bg-bg font-sans text-text">{children}</body>
+      <body className="bg-bg font-sans text-text">
+        {children}
+        <Toaster />
+      </body>
     </html>
   )
 }

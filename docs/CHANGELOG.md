@@ -4,6 +4,15 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 2b – design system (2026-10-07)
+- ADR 0013: kierunek B „Grafik” (Instrument Sans 75/100 + JetBrains Mono), z A zdjęcie realizacji na pasku kafli w profilu. ADR 0014: biblioteki komponentów.
+- Kroje globalnie przez `next/font`, rola „dane” z cyframi tabelarycznymi; tokeny animacji nakładek, warianty `state-*` dla Radix; test blokujący wartości spoza tokenów.
+- Motyw: ciemny domyślnie, przełącznik zapisuje ciasteczko HttpOnly przez Server Action (Zod), `data-theme` na `<html>` bez mrugania.
+- Komponenty (`src/components/ui`): Button, Field, Input, Textarea, Select, Combobox (WAI-ARIA, bez polskich znaków), DatePicker, Checkbox, Radio, Switch, Badge, Rating, RatingInput, Dialog, Sheet z gestem, Toast, Tabs, Pagination, Breadcrumbs, EmptyState, ErrorState, Skeleton.
+- Funkcjonalne i układy: kafel terminu, FirmCard, FirmBoard (grafik), FirmProfileHeader, ProjectGallery z lightboxem, SiteHeader z menu w dolnym panelu, SiteFooter, PanelBottomNav; przejście zdjęcia karty w profil (View Transitions).
+- `/styleguide` (poza produkcją): wszystkie komponenty w stanach; zrzuty w `docs/screens/styleguide/` (`pnpm screens`). Usunięto `/design-lab` (zrzuty decyzji zostają).
+- Testy: jednostkowe (`cn`, tokeny, motyw, wyszukiwanie, paginacja, daty), e2e na 360 px i komputerze: axe WCAG 2.2 AA w obu motywach, klawiatura (okno, podpowiedzi, zakładki, galeria, kalendarz), motyw po przeładowaniu, przejście karta → profil, ograniczony ruch.
+
 ### Faza 2a – kierunek wizualny (2026-10-07)
 - Tokeny w Tailwind CSS 4 (`src/app/(frontend)/globals.css`): kolory obu motywów z DESIGN.md i nowe z planu fazy (`line-strong`, `on-accent`, `accent-hover`, `scrim`, jasny `success` #166534), skala tekstu, zaokrąglenia, ruch. Domyślna paleta i skala Tailwinda wyłączone.
 - Kafel terminu, wersja 1 (`src/components/features/availability-tiles/`): 4 stany, 3 rozmiary, animacja raz po wejściu w ekran (≤ 400 ms), stan końcowy bez JS i przy ograniczonym ruchu, pełne zdanie dla czytników ekranu.

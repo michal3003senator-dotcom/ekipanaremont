@@ -81,7 +81,7 @@ export function FirmProfileHeader({ firm, today }: Props) {
           {confirmed && <p className="text-small text-text-muted">{confirmed}</p>}
         </div>
         <div className="mt-3 flex gap-3 lg:mt-6 lg:flex-col">
-          <Button variant="primary" className="flex-1 lg:w-full">
+          <Button variant="primary" className="max-lg:flex-1 lg:w-full">
             Wyślij zapytanie
           </Button>
           <Button

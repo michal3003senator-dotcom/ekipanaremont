@@ -20,7 +20,7 @@ function State({ icon, title, description, action, tone = 'neutral', className }
   return (
     <div
       className={cn(
-        'flex flex-col items-start gap-3 rounded-card border border-dashed border-line-strong p-6 md:p-8',
+        'flex flex-col items-start gap-3 rounded-card border border-line p-6 md:p-8',
         className,
       )}
     >

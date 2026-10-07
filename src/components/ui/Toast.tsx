@@ -40,7 +40,9 @@ function subscribe(listener: () => void) {
 }
 
 const getItems = () => items
-const getServerItems = (): ToastItem[] => []
+// Ta sama tablica przy każdym wywołaniu – wymóg useSyncExternalStore.
+const NO_ITEMS: ToastItem[] = []
+const getServerItems = () => NO_ITEMS
 
 const TONE_ICON = { success: Check, danger: CircleAlert, neutral: null } as const
 

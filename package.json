@@ -22,7 +22,7 @@
     "test:unit": "vitest run --project unit",
     "test:int": "vitest run --project int",
     "test:e2e": "playwright test",
-    "screens:design-lab": "node scripts/screens.ts",
+    "screens": "node scripts/screens.ts",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "generate:types": "pnpm payload generate:types",
     "generate:importmap": "pnpm payload generate:importmap",

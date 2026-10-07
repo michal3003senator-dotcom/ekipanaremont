@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import Image from 'next/image'
 import { Dialog as DialogPrimitive } from 'radix-ui'
-import { type KeyboardEvent, useState } from 'react'
+import { type KeyboardEvent, useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
@@ -24,6 +24,7 @@ const caption = (project: Project) =>
 export function ProjectGallery({ projects }: { projects: readonly Project[] }) {
   const [index, setIndex] = useState(0)
   const reduceMotion = useReducedMotion()
+  const thumbnails = useRef<Array<HTMLButtonElement | null>>([])
   const total = projects.length
   const current = projects[index]
 
@@ -40,6 +41,9 @@ export function ProjectGallery({ projects }: { projects: readonly Project[] }) {
         {projects.map((project, position) => (
           <li key={project.id}>
             <DialogPrimitive.Trigger
+              ref={(element) => {
+                thumbnails.current[position] = element
+              }}
               onClick={() => setIndex(position)}
               aria-label={`Powiększ: ${caption(project)}`}
               className="group block w-full cursor-zoom-in overflow-hidden rounded-control"
@@ -58,6 +62,11 @@ export function ProjectGallery({ projects }: { projects: readonly Project[] }) {
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-bg state-open:animate-fade-in state-closed:animate-fade-out" />
         <DialogPrimitive.Content
           onKeyDown={onKeyDown}
+          // Fokus wraca na miniaturę ostatnio oglądanego zdjęcia, nie na pierwszą z siatki.
+          onCloseAutoFocus={(event) => {
+            event.preventDefault()
+            thumbnails.current[index]?.focus()
+          }}
           className="fixed inset-0 z-40 flex flex-col state-open:animate-fade-in state-closed:animate-fade-out"
         >
           <div className="flex items-center justify-between gap-4 px-4 py-3 md:px-6">
