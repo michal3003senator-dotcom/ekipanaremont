@@ -13,11 +13,21 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 const hostOf = (url: string | undefined) => (url ? new URL(url).host : undefined)
 const codespaceHost = hostOf(codespaceUrl())
 const serverHost = hostOf(withCodespaceUrl().NEXT_PUBLIC_SERVER_URL)
+const isDev = process.env.NODE_ENV !== 'production'
+// Serwer deweloperski za przekierowaniem portów (Codespaces) – działa nawet bez zmiennych środowiska.
+const DEV_TUNNELS = ['*.app.github.dev']
+const actionOrigins = [serverHost, codespaceHost, ...(isDev ? DEV_TUNNELS : [])].filter(
+  (host): host is string => host !== undefined,
+)
+if (isDev && codespaceHost)
+  process.stdout.write(
+    `Codespaces: serwis pod https://${codespaceHost} (akcje serwera dozwolone)\n`,
+  )
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Serwer deweloperski (HMR, zasoby) otwierany przez adres Codespaces.
-  allowedDevOrigins: codespaceHost ? [codespaceHost] : undefined,
+  allowedDevOrigins: isDev ? DEV_TUNNELS : undefined,
   turbopack: { root: dirname },
   // Sentry tylko do błędów (ADR 0011): bez kodu śledzenia wydajności i logów SDK w paczce przeglądarki.
   compiler: { define: { __SENTRY_DEBUG__: false, __SENTRY_TRACING__: false } },
@@ -25,9 +35,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: '5mb',
-      allowedOrigins: [...new Set([serverHost, codespaceHost])].filter(
-        (host) => host !== undefined,
-      ),
+      allowedOrigins: [...new Set(actionOrigins)],
     },
   },
   // Optymalizacja tylko zdjęć z Payload i plików z builda – bez dowolnych adresów lokalnych.
