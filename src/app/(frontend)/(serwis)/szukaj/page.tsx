@@ -57,8 +57,8 @@ export default async function SearchPage({ searchParams }: Props) {
     .filter(Boolean)
     .join(', ')
   const activeCount =
-    [params.termin, params.promien, params.vat, params.ocena, params.gwarancja].filter(Boolean)
-      .length + (params.zakres?.length ?? 0)
+    [params.promien, params.vat, params.ocena, params.gwarancja].filter(Boolean).length +
+    (params.zakres?.length ?? 0)
   const serviceOption = resolved.service?.slug
     ? { value: resolved.service.slug, label: resolved.service.name }
     : null
@@ -66,13 +66,22 @@ export default async function SearchPage({ searchParams }: Props) {
   // Pusty wynik: jedna konkretna akcja, która poszerza wyszukiwanie (DESIGN §8).
   const widen =
     resolved.localityId && !params.promien
-      ? { href: searchHref(params, { promien: '25' }), label: 'Szukam w promieniu 25 km' }
+      ? {
+          href: searchHref(params, { promien: '25' }),
+          label: 'Szukam w promieniu 25 km',
+          description: 'Firmy z sąsiednich miejscowości często dojeżdżają.',
+        }
       : params.termin
         ? {
             href: searchHref(params, { termin: undefined }),
             label: 'Pokaż firmy z każdym terminem',
+            description: 'W tym terminie nikt nie ma wolnego dnia – sprawdź późniejsze.',
           }
-        : { href: '/szukaj', label: 'Pokaż wszystkie firmy' }
+        : {
+            href: '/szukaj',
+            label: 'Pokaż wszystkie firmy',
+            description: 'Zmień usługę albo miejscowość, albo przejrzyj wszystkie firmy.',
+          }
 
   return (
     <div className="mx-auto max-w-page px-4 py-8 md:px-6 md:py-12">
@@ -101,18 +110,20 @@ export default async function SearchPage({ searchParams }: Props) {
             <h1 id="wyniki" className="font-display text-h2 font-medium">
               {heading}
             </h1>
-            <p className="text-small text-text-muted" aria-live="polite">
-              {formatCount(result.total, { one: 'firma', few: 'firmy', many: 'firm' })} · od
-              najbliższego terminu
-            </p>
+            {result.total > 0 && (
+              <p className="text-small text-text-muted" aria-live="polite">
+                {formatCount(result.total, { one: 'firma', few: 'firmy', many: 'firm' })} · od
+                najbliższego terminu
+              </p>
+            )}
           </div>
           {firms.length === 0 ? (
             <EmptyState
               icon={SearchX}
               title="Brak firm dla tych filtrów"
-              description="Poszerz wyszukiwanie – firmy z sąsiednich miejscowości często dojeżdżają."
+              description={widen.description}
               action={
-                <Button asChild variant="primary">
+                <Button asChild variant="secondary">
                   <Link href={widen.href}>{widen.label}</Link>
                 </Button>
               }

@@ -20,12 +20,6 @@ type Props = {
   activeCount: number
 }
 
-const TERMS = [
-  { value: '', label: 'Obojętnie' },
-  { value: '7', label: 'Do 7 dni' },
-  { value: '14', label: 'Do 14 dni' },
-  { value: '30', label: 'Do 30 dni' },
-]
 const RADII = [
   { value: '', label: 'Obszar działania firmy' },
   { value: '10', label: 'Do 10 km' },
@@ -33,7 +27,10 @@ const RADII = [
   { value: '50', label: 'Do 50 km' },
 ]
 
-/** Filtry w adresie (SPEC 3.1). Na komputerze działają od razu, na telefonie w dolnym panelu. */
+/**
+ * Filtry w adresie (SPEC 3.1). Na komputerze działają od razu, na telefonie w dolnym panelu.
+ * Termin startu jest w wyszukiwarce nad wynikami – tu go nie powtarzamy.
+ */
 export function Filters({ params, scope, hasLocality, activeCount }: Props) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -49,16 +46,6 @@ export function Filters({ params, scope, hasLocality, activeCount }: Props) {
 
   const body = (
     <div className="flex flex-col gap-6">
-      <label className="flex flex-col gap-2 text-small font-medium">
-        Kiedy start
-        <Select
-          options={TERMS}
-          value={params.termin ?? ''}
-          onChange={(event) =>
-            go({ termin: (event.target.value || undefined) as SearchParams['termin'] })
-          }
-        />
-      </label>
       {hasLocality && (
         <label className="flex flex-col gap-2 text-small font-medium">
           Obszar

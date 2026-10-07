@@ -55,16 +55,19 @@ export function FirmProfileHeader({ firm, today, logo, lead, actions, children }
           </div>
         </div>
         <div className="mt-6 flex items-start gap-4">
-          <div
-            aria-hidden="true"
-            className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-control border border-line bg-surface-2 font-display text-h3 font-medium"
-          >
-            {logo ? (
-              <Image src={logo.src} alt="" fill sizes="56px" className="object-contain" />
-            ) : (
-              initials
-            )}
-          </div>
+          {/* Bez zdjęcia inicjały stoją już w polu zdjęcia – drugi raz byłyby ozdobnikiem. */}
+          {(logo || firm.photo) && (
+            <div
+              aria-hidden="true"
+              className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-control border border-line bg-surface-2 font-display text-h3 font-medium"
+            >
+              {logo ? (
+                <Image src={logo.src} alt="" fill sizes="56px" className="object-contain" />
+              ) : (
+                initials
+              )}
+            </div>
+          )}
           <div className="flex flex-col gap-1">
             <h1 className="font-display text-h1 font-medium">{firm.name}</h1>
             <p className="text-body text-text-muted">

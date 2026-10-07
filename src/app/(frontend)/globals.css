@@ -367,6 +367,10 @@
     .sticky-cta {
       padding-block-end: calc(var(--spacing) * 6);
     }
+
+    .sticky-cta[data-covered] .inquiry-cta {
+      display: none;
+    }
   }
 
   /* Dolna nawigacja panelu firmy nad paskiem systemowym telefonu. */

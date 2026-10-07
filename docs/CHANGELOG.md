@@ -4,6 +4,38 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 5 – część publiczna (2026-10-07)
+- ADR 0020: jasny motyw domyślny z fioletowym akcentem i krój Archivo (ciemny w przełączniku); ADR 0021: budżet wydajności.
+- Wyszukiwanie:
+  - usługa z podusługami, miejscowość z podpowiedziami odpornymi na literówki (`pg_trgm`), termin 7/14/30 dni;
+  - filtry w adresie: promień 10/25/50 km, zakres prac, faktura VAT, ocena 4,5+, gwarancja;
+  - wyniki od najbliższego aktywnego terminu, firmy bez terminu na końcu, po 12 na stronę;
+  - pusty wynik z jedną akcją poszerzającą.
+- Strona główna: wyszukiwarka, „Często szukane”, prawdziwe najbliższe terminy, „Jak to działa”, wejście dla firm.
+- Profil firmy `/firma/[slug]`:
+  - nagłówek z kaflami terminu, panel boczny przyklejony (na telefonie dolny pasek);
+  - realizacje z galerią, usługi, opinie z rozkładem ocen, o firmie (Lexical), dane z rejestru, podobne firmy;
+  - „Pokaż numer telefonu” i wyświetlenia raz na sesję liczone w statystykach dziennych;
+  - JSON-LD LocalBusiness z AggregateRating, obrazki do udostępniania (OG).
+- Zapytanie z profilu:
+  - Zod, Turnstile, limit 5 na godzinę na skrót IP, do 5 zdjęć zmniejszanych w przeglądarce (widzi je tylko firma-adresat), dane zaszyfrowane;
+  - e-mail do firmy bez danych klienta, potwierdzenie dla klienta, strona „Zapytanie wysłane”.
+- Opinie:
+  - zadanie dzienne wysyła jednorazowy link (ważny 30 dni, w bazie tylko skrót) po `reviewDelayDays`;
+  - formularz `/opinia/[token]`, opinia czeka na moderację, jedna na zapytanie.
+- `sitemap.xml` (strona główna i aktywne profile, co godzinę) i `robots.txt` (bez `/panel`, `/api`, `/admin`, `/opinia`).
+- Wydajność (Lighthouse mobile, build produkcyjny): wydajność 94–99, dostępność 98–100, dobre praktyki 100. Na tę zmianę złożyły się:
+  - podzbiór Archivo 38 KB;
+  - brak Zod i Motion w kodzie stron publicznych;
+  - Sentry bez kodu tracingu;
+  - nagłówek `Critical-CH` tylko w `/admin`.
+- Poprawki: wyszukiwarka nie blokuje wysłania przy „Obojętnie”; w CI przed testami E2E ładowane są słowniki (`pnpm seed`).
+- Testy:
+  - unit: parametry URL, JSON-LD, token opinii, schematy;
+  - int: wyszukiwanie z promieniem i filtrami, liczniki przy równoległych wywołaniach, zapytanie z e-mailami i limitem, opinie z linku;
+  - E2E: wyszukanie → profil → zapytanie → panel firmy → link do opinii → opinia czeka na moderację (360 px i komputer), axe ekranów publicznych w obu motywach.
+- Zrzuty: `docs/screens/publiczne` (`SCREENS_SET=publiczne pnpm screens`).
+
 ### Faza 4 – konta i panel firmy (2026-10-07)
 - ADR 0018 (uwierzytelnianie firm) i ADR 0019 (rejestry NIP).
 - Konta: rejestracja (hasło min. 12 znaków z oceną siły, zgoda z wersją regulaminu, Turnstile, limit prób), potwierdzenie e-maila linkiem ważnym 24 h, logowanie z blokadą po 5 próbach, reset hasła (link 1 h). Odpowiedzi nie zdradzają, czy konto istnieje.

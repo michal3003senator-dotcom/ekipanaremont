@@ -16,7 +16,8 @@ export function ProfileActions({ slug, hasPhone }: Props) {
   const [pending, startTransition] = useTransition()
   const root = useRef<HTMLDivElement>(null)
 
-  // Na telefonie pasek z akcjami chowa się, gdy formularz zapytania jest już na ekranie.
+  // Gdy formularz zapytania jest na ekranie: na telefonie pasek się chowa, na komputerze znika
+  // przycisk „Wyślij zapytanie” – jeden przycisk akcentu na widoku (DESIGN §11).
   useEffect(() => {
     const bar = root.current?.closest('aside')
     const form = document.getElementById('zapytanie')?.closest('section')
@@ -68,7 +69,7 @@ export function ProfileActions({ slug, hasPhone }: Props) {
 
   return (
     <div ref={root} className="contents">
-      <Button asChild variant="primary" className="max-lg:flex-1 lg:w-full">
+      <Button asChild variant="primary" className="inquiry-cta max-lg:flex-1 lg:w-full">
         <a href="#zapytanie">Wyślij zapytanie</a>
       </Button>
       {hasPhone && phoneButton}

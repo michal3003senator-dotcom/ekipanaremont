@@ -276,7 +276,7 @@ export default async function FirmProfilePage({ params }: Props) {
 
           {similar.length > 0 && (
             <Section id="podobne" title="Podobne firmy">
-              <ul className="grid gap-4 md:grid-cols-2">
+              <ul className="flex flex-col gap-4">
                 {similar.map((firm) => (
                   <li key={firm.slug}>
                     <FirmCard firm={firm} today={today} />

@@ -247,7 +247,7 @@ export function InquiryForm({ firmSlug, firmName, services, siteKey, nonce }: Pr
         <Field
           id="clientPhone"
           label="Telefon"
-          hint="Opcjonalnie. Firmy chętniej oddzwaniają, niż piszą."
+          hint="Firmy chętniej oddzwaniają, niż piszą."
           error={errors.clientPhone?.message}
         >
           {(field) => (

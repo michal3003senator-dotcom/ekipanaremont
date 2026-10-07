@@ -2,7 +2,7 @@
  * Zrzuty styleguide do pętli wizualnej (CLAUDE.md, DESIGN.md §10): każdy ekran × 390 i 1440 px × 2 motywy.
  * Wymaga działającego serwera (`pnpm dev`).
  *
- * Zmienne: BASE_URL (domyślnie http://localhost:3000), SCREENS_SET (styleguide, konto, panel),
+ * Zmienne: BASE_URL (domyślnie http://localhost:3000), SCREENS_SET (styleguide, konto, panel, publiczne),
  * SCREENS_DIR (domyślnie docs/screens/styleguide),
  * SCREENS_SCALE (gęstość pikseli, domyślnie 1), CHROMIUM_PATH (własna binarka Chromium).
  */
@@ -42,6 +42,25 @@ const ACCOUNT: Shot[] = [
   { name: 'reset-hasla', path: '/reset-hasla' },
 ]
 
+/** Filtry wyników w dolnym panelu – tylko na telefonie (na komputerze stoją obok listy). */
+const openFiltersOnPhone = async (page: Page) => {
+  const button = page.getByRole('button', { name: /^Filtry/ })
+  if (!(await button.isVisible())) return
+  await button.click()
+  await page.waitForTimeout(400)
+}
+
+// Część publiczna na danych z `pnpm seed demo` (firmy przykładowe bez zdjęć – pole z inicjałami).
+const PUBLIC: Shot[] = [
+  { name: 'glowna', path: '/' },
+  { name: 'wyniki', path: '/szukaj?usluga=glazurnik&gdzie=lodz' },
+  { name: 'wyniki-filtry', path: '/szukaj?usluga=glazurnik&gdzie=lodz', open: openFiltersOnPhone },
+  { name: 'wyniki-puste', path: '/szukaj?usluga=dekarz&gdzie=zgierz&termin=7' },
+  { name: 'profil', path: '/firma/plytka-i-fuga' },
+  { name: 'zapytanie-wyslane', path: '/firma/plytka-i-fuga/wyslane' },
+  { name: 'opinia-wygasla', path: '/opinia/nieprawidlowy-link-do-opinii' },
+]
+
 const PANEL: Shot[] = [
   { name: 'pulpit', path: '/panel' },
   { name: 'termin', path: '/panel/termin' },
@@ -54,8 +73,13 @@ const PANEL: Shot[] = [
   { name: 'ustawienia', path: '/panel/ustawienia' },
 ]
 
-// SCREENS_SET: styleguide (domyślnie), konto, panel. Panel wymaga konta: SCREENS_EMAIL i SCREENS_PASSWORD.
-const SETS: Record<string, Shot[]> = { styleguide: STYLEGUIDE, konto: ACCOUNT, panel: PANEL }
+// SCREENS_SET: styleguide (domyślnie), konto, panel, publiczne. Panel wymaga konta: SCREENS_EMAIL i SCREENS_PASSWORD.
+const SETS: Record<string, Shot[]> = {
+  styleguide: STYLEGUIDE,
+  konto: ACCOUNT,
+  panel: PANEL,
+  publiczne: PUBLIC,
+}
 const SHOTS = SETS[process.env.SCREENS_SET ?? 'styleguide'] ?? STYLEGUIDE
 
 const VIEWPORTS = [
