@@ -8,6 +8,7 @@ const valid = {
   NEXT_PUBLIC_SERVER_URL: 'https://ekipanatermin.pl',
   DATA_ENCRYPTION_KEY: Buffer.alloc(32, 1).toString('base64'),
   DATA_HMAC_KEY: Buffer.alloc(32, 2).toString('base64'),
+  LINK_SIGNING_KEY: Buffer.alloc(32, 4).toString('base64'),
 }
 
 describe('parseEnv', () => {

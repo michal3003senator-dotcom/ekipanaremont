@@ -43,7 +43,7 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Jednorazowe sekrety
         run: |
-          for name in PAYLOAD_SECRET DATA_ENCRYPTION_KEY DATA_HMAC_KEY; do
+          for name in PAYLOAD_SECRET DATA_ENCRYPTION_KEY DATA_HMAC_KEY LINK_SIGNING_KEY; do
             secret="$(openssl rand -base64 32)"
             echo "::add-mask::$secret"
             echo "$name=$secret" >> "$GITHUB_ENV"
@@ -99,7 +99,7 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Jednorazowe sekrety
         run: |
-          for name in PAYLOAD_SECRET DATA_ENCRYPTION_KEY DATA_HMAC_KEY; do
+          for name in PAYLOAD_SECRET DATA_ENCRYPTION_KEY DATA_HMAC_KEY LINK_SIGNING_KEY; do
             secret="$(openssl rand -base64 32)"
             echo "::add-mask::$secret"
             echo "$name=$secret" >> "$GITHUB_ENV"

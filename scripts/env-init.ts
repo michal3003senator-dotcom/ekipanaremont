@@ -12,6 +12,7 @@ const GENERATED: Record<string, () => string> = {
   DATA_ENCRYPTION_KEY: () => randomBytes(32).toString('base64'),
   DATA_HMAC_KEY: () => randomBytes(32).toString('base64'),
   CRON_SECRET: () => randomBytes(32).toString('base64url'),
+  LINK_SIGNING_KEY: () => randomBytes(32).toString('base64'),
 }
 
 if (!existsSync(TARGET)) copyFileSync('.env.example', TARGET)

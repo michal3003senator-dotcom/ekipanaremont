@@ -10,6 +10,7 @@ Object.assign(process.env, {
   PAYLOAD_SECRET: randomBytes(32).toString('hex'),
   DATA_ENCRYPTION_KEY: randomBytes(32).toString('base64'),
   DATA_HMAC_KEY: randomBytes(32).toString('base64'),
+  LINK_SIGNING_KEY: randomBytes(32).toString('base64'),
 })
 
 export default defineConfig({

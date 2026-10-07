@@ -21,6 +21,8 @@ Każda decyzja architektoniczna ma osobny plik `NNNN-tytul.md` (zasada 6 z CLAUD
 | [0015](0015-akcent-i-liczby.md) | Własny fiolet i liczby w kroju tekstu | zaakceptowana |
 | [0016](0016-2fa-personelu.md) | 2FA personelu: payload-totp i własna reguła dostępu | zaakceptowana |
 | [0017](0017-slownik-miejscowosci.md) | Słownik miejscowości z TERYT i PRNG w repozytorium | zaakceptowana |
+| [0018](0018-uwierzytelnianie-firm.md) | Uwierzytelnianie firm: Server Actions na Local API Payload | zaakceptowana |
+| [0019](0019-rejestry-nip.md) | Weryfikacja NIP w rejestrach | zaakceptowana |
 
 ## Szablon
 

@@ -22,6 +22,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_SENTRY_DSN: z.preprocess(emptyToUndefined, sentryDsn.optional()),
   DATA_ENCRYPTION_KEY: base64Key('DATA_ENCRYPTION_KEY'),
   DATA_HMAC_KEY: base64Key('DATA_HMAC_KEY'),
+  LINK_SIGNING_KEY: base64Key('LINK_SIGNING_KEY'),
   CRON_SECRET: z.preprocess(
     emptyToUndefined,
     z.string().min(32, 'CRON_SECRET musi mieć co najmniej 32 znaki').optional(),
