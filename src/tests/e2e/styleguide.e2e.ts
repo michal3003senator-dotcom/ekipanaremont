@@ -17,7 +17,7 @@ const PAGES = [
 
 test.describe('styleguide', () => {
   for (const path of PAGES) {
-    test(`${path}: bez błędów konsoli i naruszeń WCAG (ciemny)`, async ({ page }) => {
+    test(`${path}: bez błędów konsoli i naruszeń WCAG (jasny)`, async ({ page }) => {
       const errors = collectErrors(page)
       expect((await page.goto(path))?.status()).toBe(200)
       await page.waitForLoadState('networkidle')
@@ -25,10 +25,10 @@ test.describe('styleguide', () => {
       expect(errors).toEqual([])
     })
 
-    test(`${path}: bez naruszeń WCAG (jasny)`, async ({ page, context, baseURL }) => {
-      await context.addCookies([{ name: 'motyw', value: 'jasny', url: baseURL ?? '' }])
+    test(`${path}: bez naruszeń WCAG (ciemny)`, async ({ page, context, baseURL }) => {
+      await context.addCookies([{ name: 'motyw', value: 'ciemny', url: baseURL ?? '' }])
       await page.goto(path)
-      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
       await page.waitForLoadState('networkidle')
       await expectNoAxeViolations(page)
     })
@@ -109,16 +109,16 @@ test.describe('motyw i ruch', () => {
   test('przełącznik motywu zapisuje wybór po przeładowaniu', async ({ page, isMobile }) => {
     test.skip(isMobile, 'Na telefonie przełącznik jest w menu')
     await page.goto('/styleguide')
-    await page.getByRole('button', { name: 'Jasny motyw' }).click()
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+    await page.getByRole('button', { name: 'Ciemny motyw' }).click()
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
     await expect
       .poll(
         async () =>
           (await page.context().cookies()).find((cookie) => cookie.name === 'motyw')?.value,
       )
-      .toBe('jasny')
+      .toBe('ciemny')
     await page.reload()
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
   })
 
   test('przejście karta → profil prowadzi do profilu z tym samym zdjęciem', async ({ page }) => {

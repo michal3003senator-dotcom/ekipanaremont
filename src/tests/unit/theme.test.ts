@@ -3,15 +3,15 @@ import { describe, expect, it } from 'vitest'
 import { readTheme, themeAttribute, themeSchema } from '../../lib/theme'
 
 describe('motyw', () => {
-  it('domyślnie ciemny, także przy nieznanej wartości ciasteczka', () => {
-    expect(readTheme(undefined)).toBe('ciemny')
-    expect(readTheme('fioletowy')).toBe('ciemny')
-    expect(readTheme('jasny')).toBe('jasny')
+  it('domyślnie jasny, także przy nieznanej wartości ciasteczka (ADR 0020)', () => {
+    expect(readTheme(undefined)).toBe('jasny')
+    expect(readTheme('fioletowy')).toBe('jasny')
+    expect(readTheme('ciemny')).toBe('ciemny')
   })
 
-  it('jasny motyw włącza atrybut data-theme', () => {
-    expect(themeAttribute('jasny')).toBe('light')
-    expect(themeAttribute('ciemny')).toBeUndefined()
+  it('ciemny motyw włącza atrybut data-theme', () => {
+    expect(themeAttribute('ciemny')).toBe('dark')
+    expect(themeAttribute('jasny')).toBeUndefined()
   })
 
   it('akcja przyjmuje tylko znane motywy', () => {

@@ -100,8 +100,9 @@ try {
         deviceScaleFactor: scale,
         reducedMotion: 'reduce',
       })
-      if (theme === 'jasny')
-        await context.addCookies([{ name: 'motyw', value: 'jasny', url: baseUrl }])
+      // Jasny jest domyślny (ADR 0020) – ciasteczko ustawiamy dla ciemnego.
+      if (theme === 'ciemny')
+        await context.addCookies([{ name: 'motyw', value: 'ciemny', url: baseUrl }])
       const page = await context.newPage()
       if (process.env.SCREENS_SET === 'panel') await login(page)
 

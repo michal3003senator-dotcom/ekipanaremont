@@ -54,7 +54,7 @@ Plan faz i prompty: `docs/PROMPTY.md`. Decyzje: `docs/adr/`.
 
 ## Design (premium, szczegóły w `docs/DESIGN.md`)
 - Wygląd wyznacza `docs/DESIGN.md`, nie makiety. Poprzeczka: jakość wykonania na poziomie najlepszych produktów, nie szablon.
-- Ciemny motyw domyślny z fioletowym akcentem, do tego jasny. Wszystkie wartości wyłącznie z tokenów.
+- Jasny motyw domyślny z fioletowym akcentem (ADR 0020), do tego ciemny. Krój Archivo. Wszystkie wartości wyłącznie z tokenów.
 - Element sygnaturowy: kafel terminu. Moment sygnaturowy: przejście zdjęcia z karty w profil (View Transitions).
 - Mobile-first. **Panel firmy projektuj przede wszystkim na telefon**: fachowcy używają go na budowie.
 - WCAG 2.2 AA: kontrast, widoczny fokus, obsługa klawiaturą, `prefers-reduced-motion`.

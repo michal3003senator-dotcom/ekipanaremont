@@ -1,6 +1,6 @@
 # 0013. Kierunek wizualny: B „Grafik”
 
-- Status: zaakceptowana (wybór właściciela po fazie 2a)
+- Status: zaakceptowana (wybór właściciela po fazie 2a); częściowo zmieniona przez ADR 0020 (jasny motyw, Archivo)
 - Data: 2026-10-07
 
 ## Kontekst

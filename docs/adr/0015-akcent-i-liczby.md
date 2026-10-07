@@ -1,6 +1,6 @@
 # 0015. Własny fiolet i liczby w kroju tekstu
 
-- Status: zaakceptowana (decyzja właściciela po fazie 2b)
+- Status: zaakceptowana (decyzja właściciela po fazie 2b); częściowo zmieniona przez ADR 0020 (jasny motyw, Archivo)
 - Data: 2026-10-07
 - Zmienia: DESIGN.md §3 (wartości akcentu), ADR 0013 (krój danych)
 

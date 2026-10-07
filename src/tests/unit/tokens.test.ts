@@ -6,8 +6,7 @@ import { describe, expect, it } from 'vitest'
 // „Wszystkie wartości wyłącznie z tokenów” (CLAUDE.md, DESIGN.md): kolory i wymiary pochodzą z @theme
 // w globals.css. Skan blokuje arbitralne klasy Tailwinda i kolory wpisane wprost w komponentach.
 const SRC = join(import.meta.dirname, '../..')
-// kierunki: próby poza systemem tokenów – po wyborze kolory trafią do globals.css.
-const SKIPPED_DIRS = ['app/(payload)', 'app/(frontend)/kierunki', 'migrations', 'tests']
+const SKIPPED_DIRS = ['app/(payload)', 'migrations', 'tests']
 const SKIPPED_FILES = [
   'app/(frontend)/globals.css', // definicje tokenów
   'payload-types.ts', // generowany

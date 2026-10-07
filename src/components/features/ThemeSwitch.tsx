@@ -31,14 +31,14 @@ export function ThemeSwitch({ initialTheme, className }: Props) {
     <button
       type="button"
       onClick={toggle}
-      aria-pressed={isLight}
+      aria-pressed={!isLight}
       className={cn(
         'inline-flex size-11 cursor-pointer items-center justify-center rounded-control text-text-muted transition-colors duration-150 hover:bg-surface-2 hover:text-text',
         className,
       )}
     >
       <Icon icon={isLight ? Sun : Moon} />
-      <span className="sr-only">Jasny motyw</span>
+      <span className="sr-only">Ciemny motyw</span>
     </button>
   )
 }

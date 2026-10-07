@@ -15,32 +15,28 @@ Przeczytaj w całości przed każdą pracą nad interfejsem. Ten dokument wyznac
 - Odwagę wydajemy w jednym miejscu: kafel terminu i przejście karty w profil (punkt 6). Wszystko inne jest spokojne i zdyscyplinowane.
 
 ## 3. Kolor
-Ciemny motyw domyślny. Neutralne kolory lekko zabarwione fioletem, nigdy czysta czerń.
+Jasny motyw domyślny (ADR 0020), ciemny w przełączniku. Neutralne kolory ciepłe w jasnym, lekko fioletowe w ciemnym.
 
-| Token | Nazwa | Ciemny | Jasny | Użycie |
+| Token | Nazwa | Jasny | Ciemny | Użycie |
 | --- | --- | --- | --- | --- |
-| `bg` | Noc / Wapno | #0B0910 | #F6F5F9 | Tło strony |
-| `surface-1` | Grafit | #13101A | #FFFFFF | Karty, panele |
-| `surface-2` | Grafit jasny | #1B1724 | #EFEDF4 | Pola, wyróżnione obszary |
-| `line` | Fuga | #2A2435 | #DEDAE6 | Obramowania, podziały |
-| `text` | Kreda | #F1EEF6 | #16121D | Tekst główny |
-| `text-muted` | Mgła | #A39DB0 | #5E5869 | Tekst drugorzędny |
-| `accent` | Fiolet | #7C3AED | #6D28D9 | Główne przyciski, aktywny kafel |
-| `accent-soft` | Lawenda | #C4B5FD | #6D28D9 | Linki i podpisy akcentu na ciemnym |
-| `success` | Szałwia | #86EFAC | #15803D | Tylko potwierdzenia akcji |
-| `danger` | Cegła | #FCA5A5 | #B91C1C | Błędy |
+| `bg` | Wapno / Noc | #F7F7F4 | #0B0910 | Tło strony |
+| `surface-1` | Biel / Grafit | #FFFFFF | #13101A | Karty, panele |
+| `surface-2` | Tynk / Grafit jasny | #EFEFEA | #1B1724 | Pola, wyróżnione obszary |
+| `line` | Fuga | #E3E3DE | #2A2435 | Obramowania, podziały |
+| `text` | Grafit / Kreda | #111318 | #F1EEF6 | Tekst główny |
+| `text-muted` | Mgła | #5D6270 | #A39DB0 | Tekst drugorzędny |
+| `accent` | Fiolet | #6B3FF5 | #6B3FF5 | Główne przyciski, aktywny kafel, fokus |
+| `accent-soft` | Lawenda | #5A2FE0 | #B8A3FF | Linki i podpisy akcentu |
+| `success` | Szałwia | #166534 | #86EFAC | Tylko potwierdzenia akcji |
+| `danger` | Cegła | #B91C1C | #FCA5A5 | Błędy |
 
 - Akcent tylko dla: głównej akcji na ekranie, aktywnego kafla terminu, fokusu, linków. Na jednym ekranie najwyżej jeden pełny fioletowy przycisk.
 - Głębię budujesz jaśniejszą powierzchnią, nie cieniem. Cień tylko dla elementów pływających (menu, okna, toast).
 - Każda para tekst–tło sprawdzona testem kontrastu (min. 4,5:1, duży tekst 3:1).
 
 ## 4. Typografia
-- Trzy role: **display** (nagłówki, oszczędnie), **tekst** (wszystko inne), **dane** (daty, ceny, liczby, NIP – cyfry o stałej szerokości).
-- Zaproponuj 3 zestawy (licencja OFL, wersje variable, pełne polskie znaki) i pokaż je w `/design-lab` na prawdziwych treściach. Kierunki do sprawdzenia:
-  1. Schibsted Grotesk (display) + Onest (tekst) + Geist Mono (dane)
-  2. Instrument Sans (display i tekst, różne szerokości) + JetBrains Mono (dane)
-  3. Unbounded (tylko duże nagłówki) + Onest (tekst) + IBM Plex Mono (dane)
-- Sprawdź każdy zestaw zdaniem „Zażółć gęślą jaźń. Wolny od 14 października, 1 250 zł”. Odrzuć zestaw, jeśli polskie znaki wyglądają gorzej niż reszta.
+- Trzy role w jednym kroju (ADR 0020): **display** – Archivo poszerzony (108%), oszczędnie; **tekst** – Archivo; **dane** – Archivo z cyframi tabelarycznymi (daty, ceny, liczby, NIP).
+- Polskie znaki sprawdzone zdaniem „Zażółć gęślą jaźń. Wolny od 14 października, 1 250 zł”.
 - Bez Inter, Roboto, Arial, Bricolage Grotesque i IBM Plex Sans.
 - Skala (desktop / telefon): 64/40, 44/32, 32/26, 24/21, 18/17, 16/16, 14/14, 12/12. Nagłówki z ujemnym światłem (−0,02 em), wersaliki z dodatnim (+0,06 em). Interlinia tekstu 1,55, nagłówków 1,05–1,15.
 - Cyfry tabelaryczne (`font-variant-numeric: tabular-nums`) w datach, cenach i statystykach.
