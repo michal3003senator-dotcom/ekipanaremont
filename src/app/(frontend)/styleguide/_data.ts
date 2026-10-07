@@ -169,6 +169,11 @@ export const LOCALITIES = [
 
 export const GROUPS = [
   {
+    slug: 'glowna',
+    title: 'Strona główna',
+    description: 'Prototyp pełnego ekranu na komponentach.',
+  },
+  {
     slug: 'formularze',
     title: 'Formularze',
     description: 'Przyciski, pola, wybór z listy, daty, oceny.',

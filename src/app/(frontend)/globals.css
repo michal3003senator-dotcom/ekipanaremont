@@ -13,9 +13,9 @@
   --line-strong: #6e6780;
   --text: #f1eef6;
   --text-muted: #a39db0;
-  --accent: #7c3aed;
-  --accent-hover: #6d28d9;
-  --accent-soft: #c4b5fd;
+  --accent: #6b3ff5;
+  --accent-hover: #5a2fe0;
+  --accent-soft: #b8a3ff;
   --on-accent: #ffffff;
   --success: #86efac;
   --danger: #fca5a5;
@@ -40,7 +40,7 @@
   /* Role krojów (ADR 0013): zmienne --font-* ustawia next/font na <html> (src/app/(frontend)/fonts.ts). */
   --ff-display: var(--font-instrument);
   --ff-text: var(--font-instrument);
-  --ff-data: var(--font-jetbrains);
+  --ff-data: var(--font-instrument);
 }
 
 [data-theme='light'] {
@@ -52,9 +52,9 @@
   --line-strong: #8a8496;
   --text: #16121d;
   --text-muted: #5e5869;
-  --accent: #6d28d9;
-  --accent-hover: #5b21b6;
-  --accent-soft: #6d28d9;
+  --accent: #5a2fe0;
+  --accent-hover: #4a22c4;
+  --accent-soft: #5a2fe0;
   --on-accent: #ffffff;
   --success: #166534;
   --danger: #b91c1c;

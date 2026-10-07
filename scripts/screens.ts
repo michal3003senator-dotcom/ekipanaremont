@@ -21,6 +21,7 @@ const click = (name: string) => async (page: Page) => {
 }
 
 const SHOTS: Shot[] = [
+  { name: 'glowna', path: '/styleguide/glowna' },
   { name: 'formularze', path: '/styleguide/formularze' },
   { name: 'nakladki-okno', path: '/styleguide/nakladki', open: click('Otwórz okno') },
   { name: 'nakladki-panel', path: '/styleguide/nakladki', open: click('Otwórz panel') },

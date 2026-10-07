@@ -5,6 +5,7 @@ import { collectErrors } from './support'
 
 const PAGES = [
   '/styleguide',
+  '/styleguide/glowna',
   '/styleguide/formularze',
   '/styleguide/nakladki',
   '/styleguide/termin',

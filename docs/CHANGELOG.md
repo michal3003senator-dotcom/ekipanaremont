@@ -4,6 +4,11 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 2b – runda „premium” (2026-10-07)
+- ADR 0015: własny fiolet (`#6B3FF5` ciemny, `#5A2FE0` jasny) i liczby w Instrument Sans z cyframi tabelarycznymi (bez JetBrains Mono).
+- Materia: jasna górna krawędź kart i paneli, kafle jak szkliwione płytki, ramka zdjęć, lżejsze nagłówki, wciśnięcie przycisków.
+- `/styleguide/glowna`: prototyp strony głównej (wyszukiwarka, grafik, realizacja na szerokość, wyniki) do oceny kierunku na pełnym ekranie.
+
 ### Faza 2b – design system (2026-10-07)
 - ADR 0013: kierunek B „Grafik” (Instrument Sans 75/100 + JetBrains Mono), z A zdjęcie realizacji na pasku kafli w profilu. ADR 0014: biblioteki komponentów.
 - Kroje globalnie przez `next/font`, rola „dane” z cyframi tabelarycznymi; tokeny animacji nakładek, warianty `state-*` dla Radix; test blokujący wartości spoza tokenów.
