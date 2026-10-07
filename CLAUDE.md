@@ -45,7 +45,7 @@ Plan faz i prompty: `docs/PROMPTY.md`. Decyzje: `docs/adr/`.
 - Każde wejście (Server Action, route handler, hook) walidowane Zod po stronie serwera.
 - Upload: tylko obrazy sprawdzone po zawartości pliku, limit rozmiaru, ponowne kodowanie przez sharp, usunięcie EXIF.
 - Treści z edytora renderuj tylko rendererem Lexical. Zero `dangerouslySetInnerHTML` bez sanityzacji.
-- Nagłówki: CSP z nonce, HSTS, `frame-ancestors 'none'`, Referrer-Policy, Permissions-Policy.
+- Nagłówki: CSP z nonce, HSTS, `frame-ancestors 'none'` (jedyny wyjątek: podgląd redakcji, ADR 0023), Referrer-Policy, Permissions-Policy.
 - Ciasteczka HttpOnly, Secure, SameSite=Lax. Konta personelu z 2FA (TOTP) i krótszą sesją.
 - Limity żądań na: logowaniu, rejestracji, formularzach, forum, giełdzie.
 - GraphQL Payload wyłączony. REST tylko tam, gdzie potrzebny, z ograniczonym `depth`.

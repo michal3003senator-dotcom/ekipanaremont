@@ -135,3 +135,28 @@ describe('telefon', () => {
     expect(formatPhone('+48 600-100-200')).toBe('+48 600 100 200')
   })
 })
+
+describe('adresy treści i podglądu', () => {
+  it('podgląd przekierowuje tylko w obrębie serwisu', async () => {
+    const { SAFE_PATH, contentPath } = await import('../../lib/content/paths')
+    expect(SAFE_PATH.test('/artykuly/remont-lazienki')).toBe(true)
+    for (const path of ['//evil.com', 'https://evil.com', '/\\evil', 'javascript:alert(1)'])
+      expect(SAFE_PATH.test(path)).toBe(false)
+    expect(contentPath('articles', 'abc')).toBe('/artykuly/abc')
+    expect(contentPath('pages', 'regulamin')).toBe('/regulamin')
+    expect(contentPath('media', 'x')).toBeNull()
+  })
+
+  it('czas czytania z tekstu bloków', async () => {
+    const { blocksText, readingMinutes } = await import('../../lib/content/text')
+    const text = blocksText([
+      { blockType: 'heading', text: 'Kolejność prac' },
+      { blockType: 'faq', items: [{ question: 'Ile trwa?', answer: 'Dwa tygodnie.' }] },
+      { blockType: 'calculator', calculator: 'x' },
+    ])
+    expect(text).toContain('Kolejność prac')
+    expect(text).toContain('Dwa tygodnie.')
+    expect(readingMinutes(text)).toBe(1)
+    expect(readingMinutes('słowo '.repeat(1000))).toBe(5)
+  })
+})

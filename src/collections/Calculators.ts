@@ -67,7 +67,8 @@ export const Calculators: CollectionConfig = {
     update: editorial,
     delete: editorial,
   },
-  versions: { drafts: true, maxPerDoc: 50 },
+  // Autozapis szkicu – podgląd na żywo odświeża się w trakcie pisania (ADR 0023).
+  versions: { drafts: { autosave: { interval: 1500 } }, maxPerDoc: 50 },
   hooks: { beforeValidate: [uniqueSlug('calculators')] },
   fields: [
     { name: 'title', type: 'text', label: 'Tytuł', required: true, maxLength: 120 },

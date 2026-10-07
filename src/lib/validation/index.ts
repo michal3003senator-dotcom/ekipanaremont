@@ -34,6 +34,7 @@ export const ROUTE_SLUGS: ReadonlySet<string> = new Set([
   'opengraph-image',
   'opinia',
   'panel',
+  'podglad',
   'potwierdz',
   'rejestracja',
   'reset-hasla',

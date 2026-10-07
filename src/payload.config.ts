@@ -26,6 +26,7 @@ import { Services } from './collections/Services'
 import { Staff } from './collections/Staff'
 import { Settings } from './globals/Settings'
 import { jobs } from './jobs'
+import { contentPath } from './lib/content/paths'
 import { encryptedFieldHooks } from './lib/crypto'
 import { emailAdapter } from './lib/email/adapter'
 import { env } from './lib/env'
@@ -53,6 +54,20 @@ export default buildConfig({
   serverURL: env.NEXT_PUBLIC_SERVER_URL,
   secret: env.PAYLOAD_SECRET,
   admin: {
+    // Podgląd na żywo (SPEC 3.8, ADR 0023): strona w ramce obok edytora, odświeżana przy zapisie.
+    livePreview: {
+      collections: ['articles', 'pages', 'calculators'],
+      url: ({ data, collectionConfig }) => {
+        const path = contentPath(collectionConfig?.slug, data?.slug)
+        return path
+          ? `${env.NEXT_PUBLIC_SERVER_URL}/podglad?sciezka=${encodeURIComponent(path)}`
+          : null
+      },
+      breakpoints: [
+        { name: 'telefon', label: 'Telefon', width: 390, height: 844 },
+        { name: 'komputer', label: 'Komputer', width: 1440, height: 900 },
+      ],
+    },
     // Bez Gravatara: nie wysyłamy skrótów e-maili personelu do zewnętrznej usługi.
     avatar: 'default',
     importMap: { baseDir: path.resolve(dirname) },

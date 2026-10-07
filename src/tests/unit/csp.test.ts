@@ -21,6 +21,27 @@ describe('buildCsp', () => {
     expect(directive(production, 'form-action')).toBe("form-action 'self'")
   })
 
+  it('ramka tylko w podglądzie redakcji (ADR 0023), panel osadza tylko własne strony', () => {
+    const preview = buildCsp({
+      nonce: 'abc123',
+      isDev: false,
+      upgradeInsecureRequests: true,
+      previewFraming: true,
+    })
+    expect(directive(preview, 'frame-ancestors')).toBe("frame-ancestors 'self'")
+    expect(directive(production, 'frame-src')).toBe('frame-src https://challenges.cloudflare.com')
+    const adminPanel = buildCsp({
+      nonce: 'abc123',
+      isDev: false,
+      upgradeInsecureRequests: true,
+      framesSelf: true,
+    })
+    expect(directive(adminPanel, 'frame-src')).toBe(
+      "frame-src 'self' https://challenges.cloudflare.com",
+    )
+    expect(directive(adminPanel, 'frame-ancestors')).toBe("frame-ancestors 'none'")
+  })
+
   it("dodaje 'unsafe-eval' tylko w trybie deweloperskim", () => {
     const dev = buildCsp({ nonce: 'abc123', isDev: true, upgradeInsecureRequests: false })
     expect(directive(dev, 'script-src')).toContain("'unsafe-eval'")

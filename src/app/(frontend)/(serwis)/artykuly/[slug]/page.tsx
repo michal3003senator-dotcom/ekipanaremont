@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import { ArticleCard } from '@/components/features/content/ArticleCard'
 import { RenderBlocks } from '@/components/features/content/blocks/RenderBlocks'
+import { PreviewBar } from '@/components/features/content/PreviewBar'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { faqItems, getArticle, relatedArticles } from '@/lib/content/articles'
 import { contentReader } from '@/lib/content/preview'
@@ -19,7 +20,7 @@ type Props = { params: Promise<{ slug: string }> }
 async function articleFor(params: Props['params']) {
   const { slug } = await params
   const [{ payload }, reader] = await Promise.all([publicContext(), contentReader()])
-  return { payload, article: await getArticle(payload, slug, reader) }
+  return { payload, reader, article: await getArticle(payload, slug, reader) }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -76,7 +77,7 @@ function jsonLd(article: Article, url: string) {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const { payload, article } = await articleFor(params)
+  const { payload, reader, article } = await articleFor(params)
   if (!article) notFound()
   const category = typeof article.category === 'object' ? article.category : null
   const cover = mediaPhoto(article.cover, 'large')
@@ -93,6 +94,7 @@ export default async function ArticlePage({ params }: Props) {
         // Bezpieczne: serializeJsonLd zamienia „<” na <, dane nie zamkną znacznika.
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd(article, url)) }}
       />
+      {reader.draft && <PreviewBar path={`/artykuly/${article.slug}`} />}
       <Breadcrumbs
         items={[
           { label: 'Poradnik', href: '/artykuly' },

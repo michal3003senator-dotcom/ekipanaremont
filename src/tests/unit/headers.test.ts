@@ -18,6 +18,16 @@ describe('securityHeaders', () => {
     expect(headers['Cross-Origin-Opener-Policy']).toBe('same-origin')
   })
 
+  it('w podglądzie redakcji dopuszcza ramkę tylko z tej samej domeny', () => {
+    const preview = Object.fromEntries(
+      securityHeaders({ indexable: true, framing: 'sameorigin' }).map(({ key, value }) => [
+        key,
+        value,
+      ]),
+    )
+    expect(preview['X-Frame-Options']).toBe('SAMEORIGIN')
+  })
+
   it('ogranicza referrer i uprawnienia przeglądarki', () => {
     expect(headers['Referrer-Policy']).toBe('strict-origin-when-cross-origin')
     expect(headers['Permissions-Policy']).toContain('camera=()')

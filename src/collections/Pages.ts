@@ -31,7 +31,8 @@ export const Pages: CollectionConfig = {
     update: editorial,
     delete: editorial,
   },
-  versions: { drafts: true, maxPerDoc: 100 },
+  // Autozapis szkicu – podgląd na żywo odświeża się w trakcie pisania (ADR 0023).
+  versions: { drafts: { autosave: { interval: 1500 } }, maxPerDoc: 100 },
   hooks: { beforeValidate: [uniqueSlug('pages')] },
   fields: [
     { name: 'title', type: 'text', label: 'Tytuł', required: true, maxLength: 120 },

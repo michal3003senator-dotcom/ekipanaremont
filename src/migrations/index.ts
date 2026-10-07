@@ -6,6 +6,7 @@ import * as migration_20261007_054348_phase4_accounts from './20261007_054348_ph
 import * as migration_20261007_061554_phase4_jobs from './20261007_061554_phase4_jobs'
 import * as migration_20261007_131052_phase5_reviews_job from './20261007_131052_phase5_reviews_job'
 import * as migration_20261007_152205_phase6_content from './20261007_152205_phase6_content'
+import * as migration_20261007_153940_phase6_autosave from './20261007_153940_phase6_autosave'
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20261007_152205_phase6_content.up,
     down: migration_20261007_152205_phase6_content.down,
     name: '20261007_152205_phase6_content',
+  },
+  {
+    up: migration_20261007_153940_phase6_autosave.up,
+    down: migration_20261007_153940_phase6_autosave.down,
+    name: '20261007_153940_phase6_autosave',
   },
 ]
