@@ -1,0 +1,15 @@
+# Projekt jednopakietowy – plik zawiera tylko ustawienia pnpm.
+
+# Nie instaluj wersji opublikowanych mniej niż 24 h temu (ochrona przed przejętymi paczkami).
+minimumReleaseAge: 1440
+
+# Skrypty instalacyjne uruchamiają tylko pakiety z tej listy.
+onlyBuiltDependencies:
+  - '@sentry/cli'
+  - esbuild
+  - unrs-resolver
+
+# Vite 8 kompiluje przez Oxc; esbuild to jego opcjonalny peer, którego tu nie używamy.
+peerDependencyRules:
+  allowedVersions:
+    vite>esbuild: '0.25'

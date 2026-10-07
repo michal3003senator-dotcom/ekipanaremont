@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Tymczasowa ikona: trzy kafle terminu, ostatni wolny. Docelowa w fazie 2a. -->
+  <rect width="32" height="32" rx="7" fill="#13101A" />
+  <rect x="6" y="11" width="5" height="10" rx="1.5" fill="#2A2435" />
+  <rect x="13.5" y="11" width="5" height="10" rx="1.5" fill="#2A2435" />
+  <rect x="21" y="11" width="5" height="10" rx="1.5" fill="#7C3AED" />
+</svg>
