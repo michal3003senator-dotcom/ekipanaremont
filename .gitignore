@@ -30,3 +30,6 @@ next-env.d.ts
 *.pem
 npm-debug.log*
 pnpm-debug.log*
+
+# Zdjęcia do danych przykładowych (pnpm seed demo)
+/.cache/

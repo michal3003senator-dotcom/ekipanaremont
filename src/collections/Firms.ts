@@ -14,6 +14,7 @@ import {
   where,
 } from '@/access'
 import { auditHooks } from '@/hooks/audit'
+import { deleteFirmContent } from '@/hooks/firmCascade'
 import { notifyModerationDecision, startTrialOnApproval } from '@/hooks/firmModeration'
 import {
   checkAvailabilityDate,
@@ -63,6 +64,7 @@ export const Firms: CollectionConfig = {
   indexes: [{ fields: ['status', 'availability.date'] }],
   hooks: {
     afterChange: [...auditHooks.afterChange, notifyModerationDecision],
+    beforeDelete: [deleteFirmContent],
     afterDelete: auditHooks.afterDelete,
     beforeValidate: [
       uniqueSlug('firms'),

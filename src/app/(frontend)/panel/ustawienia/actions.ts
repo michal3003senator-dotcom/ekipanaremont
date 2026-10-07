@@ -149,25 +149,8 @@ export async function deleteAccountAction(input: unknown): Promise<ActionResult>
     return WRONG_PASSWORD
 
   const system = { overrideAccess: true } as const
-  if (ctx.firmId) {
-    const byFirm = { firm: { equals: ctx.firmId } }
-    for (const collection of [
-      'projects',
-      'inquiries',
-      'reviews',
-      'firmStatsDaily',
-      'listings',
-      'media',
-    ] as const) {
-      await ctx.payload.delete({ collection, where: byFirm, ...system })
-    }
-    await ctx.payload.delete({
-      collection: 'listingMessages',
-      where: { fromFirm: { equals: ctx.firmId } },
-      ...system,
-    })
-    await ctx.payload.delete({ collection: 'firms', id: ctx.firmId, ...system })
-  }
+  // Treści firmy (realizacje, zdjęcia, opinie, …) usuwa hook kolekcji firm.
+  if (ctx.firmId) await ctx.payload.delete({ collection: 'firms', id: ctx.firmId, ...system })
   const byAccount = { account: { equals: ctx.session.id } }
   await ctx.payload.delete({ collection: 'forumReactions', where: byAccount, ...system })
   await ctx.payload.delete({ collection: 'sanctions', where: byAccount, ...system })

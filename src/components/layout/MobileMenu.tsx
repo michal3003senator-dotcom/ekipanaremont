@@ -13,7 +13,16 @@ import type { Theme } from '@/lib/theme'
 import type { NavLink } from './nav'
 
 /** Menu na telefonie w dolnym panelu – w zasięgu kciuka. */
-export function MobileMenu({ links, theme }: { links: readonly NavLink[]; theme: Theme }) {
+export function MobileMenu({
+  links,
+  secondary = [],
+  theme,
+}: {
+  links: readonly NavLink[]
+  /** Strony informacyjne (regulamin, kontakt, …) – mniejsze, pod głównym menu. */
+  secondary?: readonly NavLink[]
+  theme: Theme
+}) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -39,6 +48,23 @@ export function MobileMenu({ links, theme }: { links: readonly NavLink[]; theme:
             ))}
           </ul>
         </nav>
+        {secondary.length > 0 && (
+          <nav aria-label="Informacje">
+            <ul className="grid grid-cols-2 gap-x-4 text-small">
+              {secondary.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="flex min-h-11 items-center text-text-muted"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
         <div className="flex items-center justify-between">
           <Button asChild variant="secondary" size="sm">
             <Link href="/logowanie" onClick={() => setOpen(false)}>

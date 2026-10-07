@@ -249,6 +249,72 @@ describe('firmy', () => {
   })
 })
 
+describe('usunięcie firmy', () => {
+  it('moderator nie usuwa firmy; administrator usuwa ją razem z realizacjami, zdjęciami i opiniami', async () => {
+    const firm = await payload.create({
+      collection: 'firms',
+      data: {
+        name: 'Firma do usunięcia',
+        nip: '0000000129',
+        status: 'active',
+        subscriptionStatus: 'trial',
+      },
+      ...system,
+    })
+    const media = await payload.create({
+      collection: 'media',
+      data: { alt: 'Zdjęcie realizacji', purpose: 'project', firm: firm.id },
+      file: await png(),
+      ...system,
+    })
+    const project = await payload.create({
+      collection: 'projects',
+      data: { firm: firm.id, title: 'Łazienka', images: [media.id], status: 'published' },
+      ...system,
+    })
+    const inquiry = await payload.create({
+      collection: 'inquiries',
+      data: {
+        firm: firm.id,
+        description: 'Remont łazienki 4 m².',
+        clientName: 'Ola',
+        clientEmail: 'ola@example.com',
+        consentTextVersion: '1',
+        consentAt: new Date().toISOString(),
+        status: 'new',
+      },
+      ...system,
+    })
+    const review = await payload.create({
+      collection: 'reviews',
+      data: {
+        firm: firm.id,
+        inquiry: inquiry.id,
+        rating: 4,
+        body: 'Dobra robota, drobne poprawki zrobione od ręki.',
+        authorDisplayName: 'Ola, Polesie',
+        status: 'approved',
+      },
+      ...system,
+    })
+
+    await expect(
+      payload.delete({ collection: 'firms', id: firm.id, ...as(f.users.moderator) }),
+    ).rejects.toThrow()
+    await payload.delete({ collection: 'firms', id: firm.id, ...as(f.users.admin) })
+
+    const gone = async (
+      collection: 'firms' | 'projects' | 'media' | 'inquiries' | 'reviews',
+      id: string,
+    ) => payload.findByID({ collection, id, ...system, disableErrors: true })
+    expect(await gone('firms', firm.id)).toBeNull()
+    expect(await gone('projects', project.id)).toBeNull()
+    expect(await gone('media', media.id)).toBeNull()
+    expect(await gone('inquiries', inquiry.id)).toBeNull()
+    expect(await gone('reviews', review.id)).toBeNull()
+  })
+})
+
 describe('realizacje i pliki', () => {
   it('firma tworzy realizację zawsze na swoją firmę, gość widzi tylko opublikowane', async () => {
     const doc = await payload.create({
