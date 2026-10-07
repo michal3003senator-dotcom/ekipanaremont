@@ -102,10 +102,28 @@ async function seedServices(payload: Payload) {
 
 /** NIP-y z prefiksem 000 (nie istnieje taki urząd skarbowy) – nie trafimy w prawdziwą firmę. */
 const DEMO_FIRMS = [
-  { name: 'Płytka i Fuga', nip: '0000000017', service: 'glazurnik', locality: 'lodz', days: 3 },
-  { name: 'Gładko Remonty', nip: '0000000023', service: 'malarz', locality: 'lodz', days: 9 },
+  {
+    name: 'Płytka i Fuga',
+    description:
+      'Glazura i gres w łazienkach i kuchniach w Łodzi. Równe fugi, hydroizolacja w strefie prysznica i sprzątanie po każdym dniu pracy.',
+    nip: '0000000017',
+    service: 'glazurnik',
+    locality: 'lodz',
+    days: 3,
+  },
+  {
+    name: 'Gładko Remonty',
+    description:
+      'Malowanie, gładzie i drobne naprawy ścian w mieszkaniach. Zabezpieczamy podłogi i meble, pracujemy z odkurzaczem przy szlifowaniu.',
+    nip: '0000000023',
+    service: 'malarz',
+    locality: 'lodz',
+    days: 9,
+  },
   {
     name: 'Hydro-Serwis Zgierz',
+    description:
+      'Instalacje wodne i kanalizacyjne, biały montaż i wymiana pionów w Zgierzu i okolicach. Próba szczelności przed zakryciem instalacji.',
     nip: '0000000046',
     service: 'hydraulik',
     locality: 'zgierz',
@@ -113,6 +131,8 @@ const DEMO_FIRMS = [
   },
   {
     name: 'Remonty Bałuty',
+    description:
+      'Łazienki pod klucz na Bałutach i w całej Łodzi: od skucia płytek po biały montaż, jedna ekipa i jeden harmonogram.',
     nip: '0000000052',
     service: 'remont-lazienki',
     locality: 'lodz',
@@ -120,6 +140,8 @@ const DEMO_FIRMS = [
   },
   {
     name: 'Elektro Pabianice',
+    description:
+      'Instalacje elektryczne w mieszkaniach i domach, wymiana starych aluminiowych przewodów, pomiary z protokołem.',
     nip: '0000000069',
     service: 'elektryk',
     locality: 'pabianice',
@@ -127,6 +149,8 @@ const DEMO_FIRMS = [
   },
   {
     name: 'Suchy Tynk',
+    description:
+      'Ścianki działowe, sufity podwieszane i zabudowa poddaszy z płyt g-k w Piotrkowie Trybunalskim i okolicy.',
     nip: '0000000075',
     service: 'sucha-zabudowa',
     locality: 'piotrkow-trybunalski',
@@ -146,12 +170,22 @@ async function seedDemo(payload: Payload) {
   const today = todayInWarsaw()
   let created = 0
   for (const firm of DEMO_FIRMS) {
+    // Starsze bazy demo miały opis zastępczy – podmieniamy go na właściwy.
+    const placeholder = await payload.update({
+      collection: 'firms',
+      where: {
+        nip: { equals: firm.nip },
+        shortDescription: { equals: 'Firma przykładowa do testów lokalnych.' },
+      },
+      data: { shortDescription: firm.description },
+      ...system,
+    })
     const exists = await payload.count({
       collection: 'firms',
       where: { nip: { equals: firm.nip } },
       ...system,
     })
-    if (exists.totalDocs) continue
+    if (placeholder.docs.length || exists.totalDocs) continue
     const [service, locality] = await Promise.all([
       payload.find({
         collection: 'services',
@@ -174,7 +208,7 @@ async function seedDemo(payload: Payload) {
         status: 'active',
         subscriptionStatus: 'trial',
         registryVerifiedAt: new Date().toISOString(),
-        shortDescription: 'Firma przykładowa do testów lokalnych.',
+        shortDescription: firm.description,
         services: service.docs.map((doc) => doc.id),
         baseLocality: locality.docs[0]?.id,
         serviceArea: locality.docs.map((doc) => doc.id),
@@ -289,6 +323,9 @@ if (process.argv.includes('demo')) {
   report.push(`firmy przykładowe: +${await seedDemo(payload)}`)
   report.push(`konto demo: ${await seedDemoAccount(payload)}`)
   report.push(`artykuł demo: ${await seedDemoContent(payload)}`)
+  process.stdout.write('Świat przykładowy (zdjęcia pobierane raz do .cache/demo-photos)…\n')
+  const world = await seedDemoWorld(payload)
+  report.push(...Object.entries(world).map(([name, count]) => `${name} przykładowe: +${count}`))
 }
 process.stdout.write(`Seed gotowy (${report.join(', ')}).\n`)
 await payload.destroy()
