@@ -11,7 +11,7 @@
   "packageManager": "pnpm@10.34.6",
   "scripts": {
     "dev": "pnpm payload migrate && cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "demo": "pnpm env:init && docker compose up -d --wait && pnpm payload migrate && pnpm seed demo && pnpm dev",
+    "demo": "pnpm env:init && docker compose up -d --wait --force-recreate && pnpm payload migrate && pnpm seed demo && pnpm dev",
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "vercel-build": "DATABASE_URL=\"${DATABASE_URL_UNPOOLED:-$DATABASE_URL}\" pnpm payload migrate && pnpm build",
