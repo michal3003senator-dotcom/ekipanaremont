@@ -30,6 +30,7 @@ import { contentPath } from './lib/content/paths'
 import { encryptedFieldHooks } from './lib/crypto'
 import { emailAdapter } from './lib/email/adapter'
 import { env } from './lib/env'
+import { r2Storage } from './lib/storage'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -123,6 +124,7 @@ export default buildConfig({
   plugins: [
     payloadTotp({ collection: 'staff', forceSetup: true, disableAccessWrapper: true }),
     encryptTotpSecret,
+    r2Storage(),
   ],
   sharp,
   telemetry: false,

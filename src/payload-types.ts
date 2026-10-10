@@ -284,6 +284,8 @@ export interface Media {
   alt: string;
   purpose: 'project' | 'logo' | 'cover' | 'forum' | 'listing' | 'article' | 'inquiry';
   firm?: (string | null) | Firm;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1989,6 +1991,8 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   purpose?: T;
   firm?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

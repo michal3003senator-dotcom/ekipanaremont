@@ -26,16 +26,18 @@ export function emailAdapter(env = process.env) {
   const from = env.EMAIL_FROM || 'powiadomienia@ekipanatermin.pl'
   if (!env.SMTP_HOST || env.NODE_ENV === 'test') return memoryAdapter(from)
   const port = Number(env.SMTP_PORT || 587)
+  // Mailpit nie ma TLS ani logowania; Brevo: port 587 ze STARTTLS i loginem. `auth` należy do
+  // opcji transportu SMTP – typ adaptera Payload (Nodemailer 10) opisuje tylko połączenie.
+  const transportOptions = {
+    host: env.SMTP_HOST,
+    port,
+    secure: port === 465,
+    auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
+  }
   return nodemailerAdapter({
     defaultFromAddress: from,
     defaultFromName: FROM_NAME,
-    // Mailpit nie ma TLS ani logowania; Brevo: port 587 ze STARTTLS i loginem.
-    transportOptions: {
-      host: env.SMTP_HOST,
-      port,
-      secure: port === 465,
-      auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
-    },
+    transportOptions,
     skipVerify: true,
   })
 }

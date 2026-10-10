@@ -13,3 +13,9 @@ onlyBuiltDependencies:
 peerDependencyRules:
   allowedVersions:
     vite>esbuild: '0.25'
+
+# Łatki bezpieczeństwa zależności przechodnich (pnpm audit, faza 10). Usunąć, gdy Payload podniesie je sam.
+overrides:
+  nodemailer: 10.0.10
+  undici: ^7.29.1
+  dompurify: ^3.4.16
