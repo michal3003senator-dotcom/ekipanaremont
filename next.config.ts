@@ -13,15 +13,18 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 const hostOf = (url: string | undefined) => (url ? new URL(url).host : undefined)
 const codespaceHost = hostOf(codespaceUrl())
 const serverHost = hostOf(withCodespaceUrl().NEXT_PUBLIC_SERVER_URL)
-const isDev = process.env.NODE_ENV !== 'production'
+const isDev = process.env.NODE_ENV !== 'production' || process.argv.includes('dev')
 // Serwer deweloperski za przekierowaniem portów (Codespaces) – działa nawet bez zmiennych środowiska.
 const DEV_TUNNELS = ['*.app.github.dev']
 const actionOrigins = [serverHost, codespaceHost, ...(isDev ? DEV_TUNNELS : [])].filter(
   (host): host is string => host !== undefined,
 )
-if (isDev && codespaceHost)
+// Widać w terminalu, że działa ta wersja konfiguracji i z jakich adresów przyjmuje akcje serwera.
+if (isDev)
   process.stdout.write(
-    `Codespaces: serwis pod https://${codespaceHost} (akcje serwera dozwolone)\n`,
+    `Akcje serwera dozwolone z: ${actionOrigins.join(', ')}` +
+      (codespaceHost ? ` · Codespaces: https://${codespaceHost}` : '') +
+      '\n',
   )
 
 const nextConfig: NextConfig = {
