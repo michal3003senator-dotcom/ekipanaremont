@@ -9,10 +9,10 @@ import type { CalendarDate } from '@/lib/format/date'
 
 export const OG_SIZE = { width: 1200, height: 630 }
 
-/** Archivo SemiBold z repozytorium (OFL, `assets/fonts`) – bez pobierania fontów w czasie działania. */
+/** Manrope Bold z repozytorium (OFL, `assets/fonts`) – bez pobierania fontów w czasie działania. */
 async function fonts() {
-  const data = await readFile(join(process.cwd(), 'assets/fonts/Archivo-SemiBold.ttf'))
-  return [{ name: 'Archivo', data, weight: 600 as const, style: 'normal' as const }]
+  const data = await readFile(join(process.cwd(), 'assets/fonts/Manrope-Bold.ttf'))
+  return [{ name: 'Manrope', data, weight: 700 as const, style: 'normal' as const }]
 }
 
 type Props = {
@@ -38,7 +38,7 @@ export async function ogImage({ eyebrow, title, subtitle, today, availability, l
         padding: 72,
         background: t.bg,
         color: t.text,
-        fontFamily: 'Archivo',
+        fontFamily: 'Manrope',
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

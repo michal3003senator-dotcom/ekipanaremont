@@ -4,66 +4,79 @@
  * Tokeny projektu (DESIGN.md §3–§6, plan fazy 2a). Wszystkie wartości w interfejsie pochodzą stąd.
  * Motyw jasny jest domyślny (ADR 0020); ciemny włącza atrybut data-theme="dark" na dowolnym przodku.
  */
+/*
+ * Paleta ADR 0024 (Material Design 3): neutralne szarości i jeden akcent – głęboki fiolet.
+ * Jasny motyw domyślny, grafitowy (ciemny) z przełącznika. Kontenery tonalne zamiast cieni (MD3).
+ */
 :root {
   color-scheme: light;
-  /* Jasny motyw domyślny (ADR 0020): ciepła biel, grafit, fiolet tylko dla głównej akcji i wolnego kafla. */
-  --bg: #f7f7f4;
+  --bg: #f6f6f8;
   --surface-1: #ffffff;
-  --surface-2: #efefea;
-  --line: #e3e3de;
-  --line-strong: #8a8d93;
-  --text: #111318;
-  --text-muted: #5d6270;
-  --accent: #6b3ff5;
-  --accent-hover: #5a2fe0;
-  --accent-soft: #5a2fe0;
+  --surface-2: #ececf0;
+  --line: #dedde3;
+  --line-strong: #7a7983;
+  --text: #1b1b1f;
+  --text-muted: #5e5d66;
+  --accent: #5b2ebf;
+  --accent-hover: #4c23a6;
+  --accent-soft: #5b2ebf;
   --on-accent: #ffffff;
+  /* Kontener tonalny (MD3 primary-container): przycisk tonalny, chipy, baner. */
+  --accent-container: #ebe2ff;
+  --on-accent-container: #2a0a6b;
   --success: #166534;
-  --danger: #b91c1c;
+  --danger: #b3261e;
 
-  /* Skala tekstu: telefon / od 768 px (DESIGN §4). */
+  /* Skala tekstu: telefon / od 768 px. */
   --fs-display: 2.5rem;
   --fs-h1: 2rem;
   --fs-h2: 1.625rem;
-  --fs-h3: 1.3125rem;
+  --fs-h3: 1.25rem;
   --fs-lead: 1.0625rem;
 
-  /* Materia (DESIGN §1: precyzja, nie ozdobniki): światło górnej krawędzi powierzchni, szkliwo kafla, ramka zdjęcia. */
   --edge: rgb(255 255 255 / 0);
   --glaze: rgb(255 255 255 / 0.75);
-  --glaze-shade: rgb(17 19 24 / 0.08);
-  --photo-edge: rgb(17 19 24 / 0.08);
+  --glaze-shade: rgb(27 27 31 / 0.08);
+  --photo-edge: rgb(27 27 31 / 0.08);
+  /* Uniesienie MD3 (poziomy 1–3): delikatne, tylko dla kart w ruchu i elementów pływających. */
+  --elevation-1: 0 1px 2px rgb(27 27 31 / 0.08), 0 1px 3px 1px rgb(27 27 31 / 0.05);
+  --elevation-2: 0 2px 6px 2px rgb(27 27 31 / 0.07), 0 1px 2px rgb(27 27 31 / 0.1);
+  --elevation-3: 0 8px 24px -6px rgb(27 27 31 / 0.18), 0 2px 6px rgb(27 27 31 / 0.08);
 
   --duration-state: 150ms;
-  --duration-enter: 250ms;
-  --duration-page: 400ms;
+  --duration-enter: 300ms;
+  --duration-page: 450ms;
 
-  /* Jeden krój we wszystkich rolach (ADR 0020): Archivo z osią szerokości, liczby tabelaryczne. */
-  --ff-display: var(--font-archivo);
-  --ff-text: var(--font-archivo);
-  --ff-data: var(--font-archivo);
+  --ff-display: var(--font-manrope);
+  --ff-text: var(--font-manrope);
+  --ff-data: var(--font-manrope);
 }
 
-/* Ciemny motyw – z przełącznika (ciasteczko `motyw=ciemny`). */
+/* Motyw grafitowy – z przełącznika (ciasteczko `motyw=ciemny`). */
 [data-theme='dark'] {
   color-scheme: dark;
-  --bg: #0b0910;
-  --surface-1: #13101a;
-  --surface-2: #1b1724;
-  --line: #2a2435;
-  --line-strong: #6e6780;
-  --text: #f1eef6;
-  --text-muted: #a39db0;
-  --accent: #6b3ff5;
-  --accent-hover: #5a2fe0;
-  --accent-soft: #b8a3ff;
+  --bg: #121214;
+  --surface-1: #1b1b1f;
+  --surface-2: #26262b;
+  --line: #34343a;
+  --line-strong: #8b8a93;
+  --text: #e6e5ea;
+  --text-muted: #adacb5;
+  --accent: #6d3fe0;
+  --accent-hover: #7c52ea;
+  --accent-soft: #bba6ff;
   --on-accent: #ffffff;
+  --accent-container: #33215f;
+  --on-accent-container: #e9ddff;
   --success: #86efac;
-  --danger: #fca5a5;
-  --edge: rgb(255 255 255 / 0.05);
+  --danger: #f2b8b5;
+  --edge: rgb(255 255 255 / 0.04);
   --glaze: rgb(255 255 255 / 0.07);
-  --glaze-shade: rgb(0 0 0 / 0.22);
+  --glaze-shade: rgb(0 0 0 / 0.24);
   --photo-edge: rgb(255 255 255 / 0.07);
+  --elevation-1: 0 1px 2px rgb(0 0 0 / 0.4), 0 1px 3px 1px rgb(0 0 0 / 0.2);
+  --elevation-2: 0 2px 6px 2px rgb(0 0 0 / 0.3), 0 1px 2px rgb(0 0 0 / 0.4);
+  --elevation-3: 0 10px 28px -8px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.35);
 }
 
 @media (width >= 48rem) {
@@ -98,9 +111,11 @@
   --text-micro: 0.75rem;
   --text-micro--line-height: 1.4;
 
-  --radius-card: 18px;
+  /* Kształty MD3: karty 16 px, pola 12 px, chipy 8 px, przyciski jako pigułki. */
+  --radius-card: 16px;
   --radius-control: 12px;
   --radius-badge: 8px;
+  --radius-pill: 9999px;
   --radius-tile: 3px;
   --radius-tile-lg: 6px;
 
@@ -109,12 +124,14 @@
   --inset-shadow-edge: inset 0 1px 0 var(--edge);
   --inset-shadow-glaze: inset 0 1px 0 rgb(255 255 255 / 0.2);
 
-  --shadow-float: 0 16px 40px -16px rgb(11 9 16 / 0.55), 0 2px 8px -2px rgb(11 9 16 / 0.3);
+  --shadow-float: 0 16px 40px -16px rgb(18 18 20 / 0.5), 0 2px 8px -2px rgb(18 18 20 / 0.25);
 
   --tracking-tight: -0.02em;
   --tracking-caps: 0.06em;
 
-  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Ruch MD3: emphasized dla wejść i przejść, standard dla stanów. */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
 
   /* Wejścia 250 ms, wyjścia 150 ms (DESIGN §6). */
   --animate-fade-in: fade-in 250ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -195,11 +212,18 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
+  --color-accent-container: var(--accent-container);
+  --color-on-accent-container: var(--on-accent-container);
   --color-success: var(--success);
   --color-danger: var(--danger);
   /* Przyciemnienie tylko pod tekstem leżącym na zdjęciu (DESIGN §7) – takie samo w obu motywach. */
-  --color-scrim: rgb(11 9 16 / 0.72);
-  --color-on-scrim: #f1eef6;
+  --color-scrim: rgb(18 18 20 / 0.72);
+  --color-on-scrim: #f3f2f7;
+
+  /* Uniesienie MD3 – wartości zależą od motywu. */
+  --shadow-e1: var(--elevation-1);
+  --shadow-e2: var(--elevation-2);
+  --shadow-e3: var(--elevation-3);
 
   --text-display: var(--fs-display);
   --text-display--line-height: 1.05;
@@ -228,10 +252,9 @@
     color: var(--text);
   }
 
-  /* Krój ma wagi 400–600 (ADR 0021): pogrubienie z edytora to najcięższa dostępna waga, bez syntezy. */
   b,
   strong {
-    font-weight: 600;
+    font-weight: 700;
   }
 
   body {
@@ -268,6 +291,71 @@
       transition-delay: 0s !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+/*
+ * Warstwa stanu MD3: najechanie 8%, wciśnięcie i fokus 12% koloru treści – na dowolnym tle
+ * (przycisk, chip, karta, wiersz listy), bez osobnych kolorów „hover” dla każdego wariantu.
+ */
+@utility state-layer {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    transition: opacity var(--duration-state) var(--ease-standard);
+    pointer-events: none;
+  }
+  &:hover::before {
+    opacity: 0.08;
+  }
+  &:active::before,
+  &:focus-visible::before {
+    opacity: 0.12;
+  }
+}
+
+/*
+ * Wejście sekcji przy przewijaniu (MD3 emphasized): tylko gdy przeglądarka zna animacje
+ * sterowane przewijaniem; przy ograniczonym ruchu treść stoi od razu.
+ */
+@utility reveal {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* Ptaszek w logo rysuje się raz po wczytaniu strony (MD3 emphasized). */
+@media (prefers-reduced-motion: no-preference) {
+  .logo-check {
+    stroke-dasharray: 1;
+    animation: logo-check-draw 700ms var(--ease-emphasized) 200ms both;
+  }
+}
+
+@keyframes logo-check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    translate: 0 24px;
   }
 }
 
@@ -319,8 +407,7 @@
 
   /* Role krojów (ADR 0013, DESIGN §4). */
   .font-display {
-    /* Archivo lekko poszerzony w nagłówkach (ADR 0020). */
-    font-stretch: 108%;
+    letter-spacing: -0.025em;
   }
 
   .font-data {

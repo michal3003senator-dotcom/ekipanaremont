@@ -1,7 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Tymczasowa ikona: trzy kafle terminu, ostatni wolny. Docelowa w fazie 2a. -->
-  <rect width="32" height="32" rx="7" fill="#13101A" />
-  <rect x="6" y="11" width="5" height="10" rx="1.5" fill="#2A2435" />
-  <rect x="13.5" y="11" width="5" height="10" rx="1.5" fill="#2A2435" />
-  <rect x="21" y="11" width="5" height="10" rx="1.5" fill="#6B3FF5" />
+  <!-- Ikona (ADR 0024): kalendarz z kaflami na fiolecie, ptaszek wyrasta z wolnego kafla i wychodzi za ramkę. -->
+  <rect width="32" height="32" rx="8" fill="#5B2EBF" />
+  <rect x="4.5" y="8.5" width="18" height="17.5" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+  <path d="M9.5 5.6v4.2M17.5 5.6v4.2M9.5 7.1h8" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+  <g fill="#FFFFFF" fill-opacity="0.5">
+    <rect x="7.6" y="13" width="3" height="3" rx="0.8" />
+    <rect x="12" y="13" width="3" height="3" rx="0.8" />
+    <rect x="16.4" y="13" width="3" height="3" rx="0.8" />
+    <rect x="7.6" y="17.4" width="3" height="3" rx="0.8" />
+    <rect x="12" y="17.4" width="3" height="3" rx="0.8" />
+    <rect x="16.4" y="17.4" width="3" height="3" rx="0.8" />
+    <rect x="7.6" y="21.8" width="3" height="3" rx="0.8" />
+    <rect x="12" y="21.8" width="3" height="3" rx="0.8" />
+  </g>
+  <path d="M14.4 20.9 L17.6 24.1 L28 10.8" fill="none" stroke="#5B2EBF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="16.4" y="21.8" width="3" height="3" rx="0.8" fill="#FFFFFF" />
+  <path d="M14.4 20.9 L17.6 24.1 L28 10.8" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
 </svg>

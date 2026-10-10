@@ -8,16 +8,18 @@ import { cn } from '@/lib/cn'
 import { Icon } from './Icon'
 
 export const buttonVariants = cva(
-  'inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap rounded-control font-semibold transition duration-150 ease-standard active:scale-98 disabled:cursor-not-allowed disabled:opacity-50 aria-busy:cursor-progress',
+  // Przyciski MD3: pigułki z warstwą stanu (najechanie 8%, wciśnięcie 12%) i lekkim uniesieniem.
+  'state-layer inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-pill font-semibold transition duration-200 ease-standard active:scale-98 disabled:cursor-not-allowed disabled:opacity-50 aria-busy:cursor-progress',
   {
     variants: {
       variant: {
         // Najwyżej jeden przycisk primary na ekranie (DESIGN §3).
-        primary: 'bg-accent text-on-accent inset-shadow-glaze hover:bg-accent-hover',
-        secondary:
-          'border border-line-strong bg-surface-2 text-text inset-shadow-edge hover:border-text-muted',
-        ghost: 'text-text hover:bg-surface-2',
-        danger: 'border border-danger text-danger hover:bg-surface-2',
+        primary: 'bg-accent text-on-accent shadow-e1 hover:shadow-e2',
+        // Tonalny (MD3 filled tonal): druga ważna akcja bez konkurowania z główną.
+        tonal: 'bg-accent-container text-on-accent-container hover:shadow-e1',
+        secondary: 'border border-line-strong bg-transparent text-text',
+        ghost: 'text-text',
+        danger: 'border border-danger text-danger',
       },
       size: {
         md: 'h-12 px-6 text-body',
