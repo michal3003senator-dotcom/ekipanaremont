@@ -1,7 +1,10 @@
 import Image from 'next/image'
 import type { ReactNode } from 'react'
 
-import { AvailabilityStrip } from '@/components/features/availability-tiles/AvailabilityTiles'
+import {
+  AvailabilityLegend,
+  AvailabilityStrip,
+} from '@/components/features/availability-tiles/AvailabilityTiles'
 import {
   availabilityDescription,
   availabilityLabel,
@@ -52,6 +55,7 @@ export function FirmProfileHeader({ firm, today, logo, lead, actions, children }
           />
           <div className="border-t border-line p-4 md:p-6">
             <AvailabilityStrip today={today} availability={availability} size="hero" />
+            <AvailabilityLegend className="mt-3" />
           </div>
         </div>
         <div className="mt-6 flex items-start gap-4">

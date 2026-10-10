@@ -53,6 +53,13 @@ export const Localities: CollectionConfig = {
       label: 'Jednostka nadrzędna',
       index: true,
     },
+    {
+      name: 'isCity',
+      type: 'checkbox',
+      label: 'Miasto (prawa miejskie)',
+      defaultValue: false,
+      index: true,
+    },
     // Nazwy się powtarzają (np. Nowa Wieś) – import TERYT dopisuje do slugu gminę (faza 3.8).
     slugField('name'),
     { name: 'lat', type: 'number', label: 'Szerokość geogr.' },

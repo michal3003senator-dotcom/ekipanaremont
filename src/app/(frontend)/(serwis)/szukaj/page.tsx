@@ -2,6 +2,7 @@ import { SearchX } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+import { AvailabilityLegend } from '@/components/features/availability-tiles/AvailabilityTiles'
 import { FirmCard } from '@/components/features/firm/FirmCard'
 import { Filters } from '@/components/features/search/Filters'
 import { SearchForm } from '@/components/features/search/SearchForm'
@@ -10,6 +11,7 @@ import { Pagination } from '@/components/ui/Pagination'
 import { EmptyState } from '@/components/ui/States'
 import { formatCount } from '@/lib/format/number'
 import { PAGE_SIZE, searchFirms } from '@/lib/search/firms'
+import { cityList, cityOptions } from '@/lib/localities'
 import { allServices, resolveSearch, serviceOptions } from '@/lib/search/options'
 import { searchHref } from '@/lib/search/href'
 import { parseSearchParams } from '@/lib/search/params'
@@ -34,8 +36,9 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function SearchPage({ searchParams }: Props) {
   const params = parseSearchParams(await searchParams)
   const { payload, today, expiryDays } = await publicContext()
-  const [services, resolved] = await Promise.all([
+  const [services, cities, resolved] = await Promise.all([
     allServices(payload),
+    cityList(payload),
     resolveSearch(payload, params),
   ])
   const page = params.strona ?? 1
@@ -88,6 +91,7 @@ export default async function SearchPage({ searchParams }: Props) {
       <SearchForm
         variant="bar"
         services={serviceOptions(services)}
+        cities={cityOptions(cities)}
         service={serviceOption}
         locality={resolved.locality}
         term={params.termin ?? ''}
@@ -129,13 +133,16 @@ export default async function SearchPage({ searchParams }: Props) {
               }
             />
           ) : (
-            <ol className="results flex flex-col gap-4">
-              {firms.map((firm, index) => (
-                <li key={firm.slug} style={{ '--i': index } as React.CSSProperties}>
-                  <FirmCard firm={firm} today={today} heading="h2" />
-                </li>
-              ))}
-            </ol>
+            <>
+              <AvailabilityLegend className="mb-1" />
+              <ol className="results flex flex-col gap-4">
+                {firms.map((firm, index) => (
+                  <li key={firm.slug} style={{ '--i': index } as React.CSSProperties}>
+                    <FirmCard firm={firm} today={today} heading="h2" />
+                  </li>
+                ))}
+              </ol>
+            </>
           )}
           {totalPages > 1 && (
             <Pagination

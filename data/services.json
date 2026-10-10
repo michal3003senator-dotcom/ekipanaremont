@@ -3,90 +3,496 @@
     "name": "Remont mieszkania",
     "slug": "remont-mieszkania",
     "icon": "house",
-    "children": ["Remont pod klucz", "Odświeżenie mieszkania", "Wykończenie stanu deweloperskiego"]
+    "children": [
+      "Remont pod klucz",
+      "Odświeżenie mieszkania",
+      "Wykończenie stanu deweloperskiego",
+      "Remont kawalerki",
+      "Remont mieszkania w kamienicy",
+      "Remont po zalaniu",
+      "Odświeżenie przed wynajmem lub sprzedażą"
+    ]
   },
   {
     "name": "Remont łazienki",
     "slug": "remont-lazienki",
     "icon": "bath",
-    "children": ["Łazienka pod klucz", "Wymiana wanny na prysznic", "Zabudowa stelaża WC"]
+    "children": [
+      "Łazienka pod klucz",
+      "Wymiana wanny na prysznic",
+      "Zabudowa stelaża WC",
+      "Remont małej łazienki",
+      "Łazienka bez barier (dla seniora)",
+      "Prysznic z odpływem liniowym",
+      "Wymiana płytek w łazience"
+    ]
+  },
+  {
+    "name": "Remont kuchni",
+    "slug": "remont-kuchni",
+    "icon": "cooking-pot",
+    "children": [
+      "Kuchnia pod klucz",
+      "Montaż mebli kuchennych",
+      "Płytki nad blatem",
+      "Podłączenie AGD",
+      "Przeróbka instalacji w kuchni",
+      "Otwarcie kuchni na salon"
+    ]
+  },
+  {
+    "name": "Remont domu",
+    "slug": "remont-domu",
+    "icon": "house-plus",
+    "children": [
+      "Remont kapitalny domu",
+      "Modernizacja starego domu",
+      "Adaptacja poddasza",
+      "Remont piwnicy",
+      "Przebudowa i zmiana układu pomieszczeń",
+      "Remont klatki schodowej"
+    ]
+  },
+  {
+    "name": "Budowa domu",
+    "slug": "budowa-domu",
+    "icon": "construction",
+    "children": [
+      "Stan surowy otwarty",
+      "Stan surowy zamknięty",
+      "Dom pod klucz",
+      "Domy szkieletowe",
+      "Garaże i budynki gospodarcze",
+      "Rozbudowa i nadbudowa domu"
+    ]
   },
   {
     "name": "Glazurnik",
     "slug": "glazurnik",
     "icon": "grid-3x3",
-    "children": ["Układanie płytek", "Gres wielkoformatowy", "Mozaika", "Fugowanie"]
+    "children": [
+      "Układanie płytek",
+      "Gres wielkoformatowy",
+      "Mozaika",
+      "Fugowanie",
+      "Płytki na tarasie i balkonie",
+      "Szlifowanie krawędzi na 45°",
+      "Wnęki i półki z płytek"
+    ]
   },
   {
     "name": "Malarz",
     "slug": "malarz",
     "icon": "paint-roller",
-    "children": ["Malowanie ścian i sufitów", "Gładzie gipsowe", "Tapetowanie"]
+    "children": [
+      "Malowanie ścian i sufitów",
+      "Gładzie gipsowe",
+      "Tapetowanie",
+      "Malowanie natryskowe",
+      "Farby i tynki dekoracyjne",
+      "Malowanie klatek schodowych",
+      "Malowanie elewacji"
+    ]
   },
   {
     "name": "Tynkarz",
     "slug": "tynkarz",
-    "icon": "layers",
-    "children": ["Tynki gipsowe", "Tynki cementowo-wapienne", "Tynki maszynowe"]
+    "icon": "trowel",
+    "children": [
+      "Tynki gipsowe",
+      "Tynki cementowo-wapienne",
+      "Tynki maszynowe",
+      "Tynki wapienne",
+      "Tynki dekoracyjne",
+      "Naprawa i uzupełnianie tynków"
+    ]
   },
   {
     "name": "Sucha zabudowa",
     "slug": "sucha-zabudowa",
-    "icon": "panel-top",
-    "children": ["Ścianki działowe", "Sufity podwieszane", "Zabudowa poddasza"]
+    "icon": "layout-panel-left",
+    "children": [
+      "Ścianki działowe",
+      "Sufity podwieszane",
+      "Zabudowa poddasza",
+      "Zabudowy pod TV i oświetlenie",
+      "Ścianki akustyczne",
+      "Obudowy rur i stelaży"
+    ]
   },
   {
     "name": "Posadzki i wylewki",
     "slug": "posadzki",
-    "icon": "square",
-    "children": ["Wylewki", "Posadzki żywiczne", "Mikrocement"]
+    "icon": "layers",
+    "children": [
+      "Wylewki",
+      "Posadzki żywiczne",
+      "Mikrocement",
+      "Wylewki anhydrytowe",
+      "Wylewki samopoziomujące",
+      "Posadzki przemysłowe",
+      "Lastryko"
+    ]
   },
   {
     "name": "Podłogi",
     "slug": "podlogi",
     "icon": "rows-3",
-    "children": ["Panele", "Parkiet", "Cyklinowanie", "Winyl"]
+    "children": [
+      "Panele",
+      "Parkiet",
+      "Cyklinowanie",
+      "Winyl",
+      "Deska warstwowa",
+      "Jodełka i wzory",
+      "Lakierowanie i olejowanie",
+      "Listwy przypodłogowe"
+    ]
   },
   {
     "name": "Hydraulik",
     "slug": "hydraulik",
-    "icon": "droplet",
-    "children": ["Instalacja wodno-kanalizacyjna", "Biały montaż", "Ogrzewanie podłogowe"]
+    "icon": "wrench",
+    "children": [
+      "Instalacja wodno-kanalizacyjna",
+      "Biały montaż",
+      "Ogrzewanie podłogowe",
+      "Wymiana pionów",
+      "Usuwanie awarii i przecieków",
+      "Uzdatnianie i zmiękczanie wody",
+      "Podłączenie pralki i zmywarki"
+    ]
   },
   {
     "name": "Elektryk",
     "slug": "elektryk",
-    "icon": "zap",
-    "children": ["Instalacja elektryczna", "Pomiary elektryczne", "Oświetlenie"]
+    "icon": "plug",
+    "children": [
+      "Instalacja elektryczna",
+      "Pomiary elektryczne",
+      "Oświetlenie",
+      "Wymiana instalacji aluminiowej",
+      "Rozdzielnice i zabezpieczenia",
+      "Usuwanie awarii elektrycznych",
+      "Instalacja odgromowa"
+    ]
+  },
+  {
+    "name": "Ogrzewanie i pompy ciepła",
+    "slug": "ogrzewanie",
+    "icon": "flame",
+    "children": [
+      "Pompy ciepła",
+      "Kotły gazowe",
+      "Grzejniki",
+      "Wymiana pieca",
+      "Kotłownia",
+      "Serwis i przeglądy ogrzewania"
+    ]
+  },
+  {
+    "name": "Instalacje gazowe",
+    "slug": "instalacje-gazowe",
+    "icon": "gauge",
+    "children": [
+      "Instalacja gazowa w domu",
+      "Podłączenie kuchenki gazowej",
+      "Próby szczelności",
+      "Przyłącze gazowe"
+    ]
+  },
+  {
+    "name": "Klimatyzacja i wentylacja",
+    "slug": "klimatyzacja",
+    "icon": "air-vent",
+    "children": [
+      "Montaż klimatyzacji",
+      "Serwis klimatyzacji",
+      "Rekuperacja",
+      "Wentylacja mechaniczna",
+      "Czyszczenie kanałów wentylacyjnych"
+    ]
+  },
+  {
+    "name": "Fotowoltaika i magazyny energii",
+    "slug": "fotowoltaika",
+    "icon": "sun",
+    "children": [
+      "Instalacje fotowoltaiczne",
+      "Magazyny energii",
+      "Ładowarki do samochodów",
+      "Serwis i rozbudowa instalacji"
+    ]
+  },
+  {
+    "name": "Alarmy, monitoring i smart home",
+    "slug": "instalacje-niskopradowe",
+    "icon": "cctv",
+    "children": [
+      "Systemy alarmowe",
+      "Monitoring CCTV",
+      "Domofony i wideodomofony",
+      "Sieci komputerowe i Wi-Fi",
+      "Inteligentny dom",
+      "Instalacje antenowe"
+    ]
   },
   {
     "name": "Stolarz",
     "slug": "stolarz",
     "icon": "hammer",
-    "children": ["Zabudowy meblowe", "Kuchnie na wymiar", "Schody"]
+    "children": [
+      "Zabudowy meblowe",
+      "Kuchnie na wymiar",
+      "Schody",
+      "Szafy wnękowe i garderoby",
+      "Meble łazienkowe",
+      "Drzwi drewniane",
+      "Renowacja mebli i drzwi"
+    ]
   },
   {
     "name": "Okna i drzwi",
     "slug": "okna-i-drzwi",
     "icon": "door-open",
-    "children": ["Montaż okien", "Montaż drzwi", "Parapety"]
+    "children": [
+      "Montaż okien",
+      "Montaż drzwi",
+      "Parapety",
+      "Drzwi wewnętrzne",
+      "Drzwi zewnętrzne i antywłamaniowe",
+      "Regulacja i serwis okien",
+      "Bramy garażowe"
+    ]
+  },
+  {
+    "name": "Rolety, żaluzje i moskitiery",
+    "slug": "rolety",
+    "icon": "blinds",
+    "children": [
+      "Rolety zewnętrzne",
+      "Rolety wewnętrzne",
+      "Żaluzje",
+      "Moskitiery",
+      "Markizy i pergole"
+    ]
   },
   {
     "name": "Ocieplenia i elewacje",
     "slug": "elewacje",
     "icon": "building",
-    "children": ["Docieplenie styropianem", "Docieplenie wełną", "Tynk elewacyjny"]
+    "children": [
+      "Docieplenie styropianem",
+      "Docieplenie wełną",
+      "Tynk elewacyjny",
+      "Ocieplenie pianką PUR",
+      "Ocieplenie stropu i stropodachu",
+      "Klinkier i płytki elewacyjne",
+      "Mycie i malowanie elewacji"
+    ]
   },
   {
     "name": "Dekarz",
     "slug": "dekarz",
     "icon": "home",
-    "children": ["Pokrycia dachowe", "Rynny", "Ocieplenie dachu"]
+    "children": [
+      "Pokrycia dachowe",
+      "Rynny",
+      "Ocieplenie dachu",
+      "Dachówka ceramiczna i betonowa",
+      "Blachodachówka i blacha na rąbek",
+      "Papa termozgrzewalna",
+      "Okna dachowe",
+      "Naprawa i przegląd dachu"
+    ]
   },
   {
     "name": "Murarz",
     "slug": "murarz",
     "icon": "brick-wall",
-    "children": ["Ściany i przemurowania", "Kominy", "Fundamenty"]
+    "children": [
+      "Ściany i przemurowania",
+      "Kominy",
+      "Fundamenty",
+      "Murowanie z bloczków",
+      "Wykucia otworów i nadproża",
+      "Klinkier"
+    ]
+  },
+  {
+    "name": "Izolacje i osuszanie",
+    "slug": "izolacje",
+    "icon": "droplets",
+    "children": [
+      "Izolacja fundamentów",
+      "Osuszanie budynków",
+      "Izolacja przeciwwilgociowa",
+      "Hydroizolacja tarasów i balkonów",
+      "Usuwanie grzyba i pleśni"
+    ]
+  },
+  {
+    "name": "Tarasy i balkony",
+    "slug": "tarasy-balkony",
+    "icon": "fence",
+    "children": [
+      "Remont balkonu",
+      "Tarasy drewniane i kompozytowe",
+      "Balustrady",
+      "Zadaszenia tarasów"
+    ]
+  },
+  {
+    "name": "Kominki i piece",
+    "slug": "kominki",
+    "icon": "heater",
+    "children": [
+      "Montaż kominków",
+      "Obudowy kominkowe",
+      "Wkłady kominkowe",
+      "Piece kaflowe",
+      "Przeglądy i czyszczenie kominów"
+    ]
+  },
+  {
+    "name": "Ślusarz",
+    "slug": "slusarz",
+    "icon": "anvil",
+    "children": [
+      "Balustrady stalowe",
+      "Konstrukcje stalowe",
+      "Schody metalowe",
+      "Kraty i zabezpieczenia",
+      "Spawanie"
+    ]
+  },
+  {
+    "name": "Szklarz i lustra",
+    "slug": "szklarz",
+    "icon": "square-dashed",
+    "children": [
+      "Kabiny prysznicowe ze szkła",
+      "Lustra na wymiar",
+      "Szkło w kuchni",
+      "Balustrady szklane",
+      "Ścianki szklane"
+    ]
+  },
+  {
+    "name": "Kamieniarz",
+    "slug": "kamieniarz",
+    "icon": "gem",
+    "children": [
+      "Blaty kamienne i konglomeraty",
+      "Parapety kamienne",
+      "Schody z kamienia",
+      "Okładziny kamienne"
+    ]
+  },
+  {
+    "name": "Ogrodzenia i bramy",
+    "slug": "ogrodzenia",
+    "icon": "fence",
+    "children": [
+      "Ogrodzenia panelowe",
+      "Ogrodzenia murowane",
+      "Bramy wjazdowe i furtki",
+      "Automatyka bram",
+      "Ogrodzenia z siatki"
+    ]
+  },
+  {
+    "name": "Brukarstwo",
+    "slug": "brukarz",
+    "icon": "square-stack",
+    "children": [
+      "Kostka brukowa",
+      "Podjazdy",
+      "Chodniki i ścieżki",
+      "Tarasy z płyt",
+      "Obrzeża i krawężniki"
+    ]
+  },
+  {
+    "name": "Ogrody i zieleń",
+    "slug": "ogrody",
+    "icon": "trees",
+    "children": [
+      "Zakładanie ogrodów",
+      "Trawniki z rolki i siewu",
+      "Systemy nawadniania",
+      "Pielęgnacja ogrodów",
+      "Wycinka i pielęgnacja drzew"
+    ]
+  },
+  {
+    "name": "Roboty ziemne i przyłącza",
+    "slug": "roboty-ziemne",
+    "icon": "shovel",
+    "children": [
+      "Wykopy",
+      "Niwelacja terenu",
+      "Drenaż i odwodnienie",
+      "Przyłącza wodno-kanalizacyjne",
+      "Szamba i przydomowe oczyszczalnie",
+      "Studnie głębinowe"
+    ]
+  },
+  {
+    "name": "Rozbiórki i wywóz gruzu",
+    "slug": "rozbiorki",
+    "icon": "hammer",
+    "children": [
+      "Skuwanie płytek i tynków",
+      "Wyburzanie ścian",
+      "Demontaż starej instalacji i wyposażenia",
+      "Wywóz gruzu i kontenery",
+      "Opróżnianie mieszkań"
+    ]
+  },
+  {
+    "name": "Złota rączka",
+    "slug": "zlota-raczka",
+    "icon": "toolbox",
+    "children": [
+      "Drobne naprawy",
+      "Montaż mebli",
+      "Wieszanie półek, lamp i karniszy",
+      "Regulacja drzwi i okien",
+      "Silikonowanie i uszczelnianie"
+    ]
+  },
+  {
+    "name": "Sprzątanie po remoncie",
+    "slug": "sprzatanie-po-remoncie",
+    "icon": "spray-can",
+    "children": [
+      "Sprzątanie poremontowe",
+      "Mycie okien po remoncie",
+      "Doczyszczanie fug i posadzek"
+    ]
+  },
+  {
+    "name": "Projektowanie wnętrz",
+    "slug": "projektowanie-wnetrz",
+    "icon": "pencil-ruler",
+    "children": [
+      "Projekt wnętrza",
+      "Wizualizacje 3D",
+      "Projekt łazienki i kuchni",
+      "Nadzór autorski"
+    ]
+  },
+  {
+    "name": "Nadzór i odbiory",
+    "slug": "nadzor-budowlany",
+    "icon": "clipboard-check",
+    "children": [
+      "Kierownik budowy",
+      "Inspektor nadzoru",
+      "Odbiór mieszkania od dewelopera",
+      "Przeglądy budowlane",
+      "Kosztorysy"
+    ]
   }
 ]

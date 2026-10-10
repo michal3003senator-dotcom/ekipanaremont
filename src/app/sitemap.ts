@@ -55,6 +55,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ])
   return [
     { url: url('/'), changeFrequency: 'daily', priority: 1 },
+    { url: url('/uslugi'), priority: 0.6 },
+    { url: url('/miasta'), priority: 0.6 },
     ...pairs.map((pair) => ({
       url: url(`/${pair.service}/${pair.locality}`),
       changeFrequency: 'daily' as const,

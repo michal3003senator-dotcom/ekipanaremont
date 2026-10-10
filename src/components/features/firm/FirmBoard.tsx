@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import {
   AvailabilityCaption,
+  AvailabilityLegend,
   AvailabilityStrip,
   TileLabels,
 } from '@/components/features/availability-tiles/AvailabilityTiles'
@@ -44,6 +45,7 @@ export function FirmBoard({ firms, today, className }: Props) {
         />
         <span className="col-span-2">Termin</span>
       </div>
+      <AvailabilityLegend className="border-b border-line px-4 py-2 lg:px-6" />
       <ol className="divide-y divide-line">
         {firms.map((firm) => {
           const availability = getAvailability(today, firm.availableFrom)

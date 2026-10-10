@@ -25,6 +25,8 @@ const TERMS = [
 
 type Props = {
   services: ComboboxOption[]
+  /** Miasta województwa – lista w pustym polu „Gdzie?”. */
+  cities?: ComboboxOption[]
   service?: ComboboxOption | null
   locality?: ComboboxOption | null
   term?: string
@@ -40,6 +42,7 @@ type Props = {
  */
 export function SearchForm({
   services,
+  cities = [],
   service = null,
   locality = null,
   term = '',
@@ -51,7 +54,7 @@ export function SearchForm({
   const [chosenService, setService] = useState(service)
   const [chosenLocality, setLocality] = useState(locality)
   const [when, setWhen] = useState(term)
-  const { places, loading, search: searchPlaces } = useLocalitySuggestions(locality)
+  const { places, loading, search: searchPlaces } = useLocalitySuggestions(locality, cities)
 
   const hero = variant === 'hero'
   return (
@@ -89,6 +92,7 @@ export function SearchForm({
             label="Usługa"
             name="usluga"
             options={services}
+            browseOnFocus
             value={chosenService}
             onValueChange={setService}
             placeholder="np. glazurnik, remont łazienki"
@@ -103,6 +107,7 @@ export function SearchForm({
             label="Miejscowość"
             name="gdzie"
             options={places}
+            browseOnFocus
             loading={loading}
             onQueryChange={searchPlaces}
             value={chosenLocality}

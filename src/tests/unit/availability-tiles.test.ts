@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   availabilityDescription,
   availabilityLabel,
+  availabilitySummary,
   buildTiles,
   confirmedLabel,
   getAvailability,
@@ -66,9 +67,21 @@ describe('podpisy', () => {
   it('opisuje termin krótko', () => {
     expect(availabilityLabel(getAvailability(TODAY, '2026-10-07'))).toBe('Wolny od dziś')
     expect(availabilityLabel(getAvailability(TODAY, '2026-10-08'))).toBe('Wolny od jutra')
-    expect(availabilityLabel(getAvailability(TODAY, '2026-10-14'))).toBe('Wolny od 14 paź')
-    expect(availabilityLabel(getAvailability(TODAY, '2026-11-03'))).toBe('Wolny od 3 lis')
-    expect(availabilityLabel(getAvailability(TODAY, null))).toBe('Zapytaj o termin')
+    expect(availabilityLabel(getAvailability(TODAY, '2026-10-14'))).toBe('Wolny od śr 14 paź')
+    expect(availabilityLabel(getAvailability(TODAY, '2026-11-03'))).toBe('Wolny od wt 3 lis')
+    expect(availabilityLabel(getAvailability(TODAY, null))).toBe('Termin do uzgodnienia')
+  })
+
+  it('nagłówek kafla: data z dniem tygodnia i odstęp od dziś', () => {
+    expect(availabilitySummary(getAvailability(TODAY, '2026-10-14'))).toEqual({
+      date: 'śr 14 paź',
+      distance: 'za 7 dni',
+    })
+    expect(availabilitySummary(getAvailability(TODAY, '2026-10-07')).distance).toBe('dziś')
+    expect(availabilitySummary(getAvailability(TODAY, null))).toEqual({
+      date: 'do uzgodnienia',
+      distance: null,
+    })
   })
 
   it('opisuje potwierdzenie względem dziś', () => {
@@ -81,7 +94,7 @@ describe('podpisy', () => {
       'Najbliższy wolny termin: środa, 14 października, za 7 dni. Potwierdzony wczoraj.',
     )
     expect(availabilityDescription(TODAY, getAvailability(TODAY, null))).toBe(
-      'Brak potwierdzonego terminu. Zapytaj o termin.',
+      'Najbliższy wolny termin: do uzgodnienia – firma nie podała daty.',
     )
   })
 })

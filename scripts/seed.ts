@@ -14,6 +14,7 @@ import { seedDemoWorld } from './demo/seed'
 import { seedCalculators, seedDemoContent, seedPages } from './seed-content'
 
 import { addDays, todayInWarsaw } from '@/lib/format/date'
+import { townIds } from '@/lib/teryt'
 
 type LocalityRow = {
   terytId: string
@@ -39,6 +40,7 @@ async function inChunks<T>(items: T[], task: (item: T) => Promise<unknown>) {
 
 async function seedLocalities(payload: Payload) {
   const rows = readJson<LocalityRow[]>('data/teryt-lodzkie.json')
+  const towns = townIds(rows)
   const existing = await payload.find({
     collection: 'localities',
     pagination: false,
@@ -54,7 +56,7 @@ async function seedLocalities(payload: Payload) {
     await inChunks(missing, async ({ parent, ...row }) => {
       const doc = await payload.create({
         collection: 'localities',
-        data: { ...row, parent: parent ? ids.get(parent) : null },
+        data: { ...row, parent: parent ? ids.get(parent) : null, isCity: towns.has(row.terytId) },
         ...system,
       })
       ids.set(row.terytId, doc.id)

@@ -85,6 +85,14 @@ export const formatShortDate = (date: CalendarDate) => formatters.short.format(t
 export const formatShortDateWithWeekday = (date: CalendarDate) =>
   formatters.shortWithWeekday.format(toUtc(date))
 
+/** „pt 16 paź” – dzień tygodnia bez kropki, do kafla terminu i podpisów. */
+export function formatDayAndDate(date: CalendarDate): string {
+  const parts = formatters.shortWithWeekday.formatToParts(toUtc(date))
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((item) => item.type === type)?.value ?? ''
+  return `${part('weekday').replace('.', '')} ${part('day')} ${part('month')}`
+}
+
 /** „środa, 14 października” – pełna forma dla czytników ekranu. */
 export const formatLongDate = (date: CalendarDate) => formatters.long.format(toUtc(date))
 

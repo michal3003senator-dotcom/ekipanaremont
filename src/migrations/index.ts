@@ -10,6 +10,7 @@ import * as migration_20261007_153940_phase6_autosave from './20261007_153940_ph
 import * as migration_20261010_024435_phase7_moderation from './20261010_024435_phase7_moderation'
 import * as migration_20261010_032124_media_storage from './20261010_032124_media_storage'
 import * as migration_20261010_110103_inquiry_retention from './20261010_110103_inquiry_retention'
+import * as migration_20261010_204452_localities_city from './20261010_204452_localities_city'
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20261010_110103_inquiry_retention.up,
     down: migration_20261010_110103_inquiry_retention.down,
     name: '20261010_110103_inquiry_retention',
+  },
+  {
+    up: migration_20261010_204452_localities_city.up,
+    down: migration_20261010_204452_localities_city.down,
+    name: '20261010_204452_localities_city',
   },
 ]

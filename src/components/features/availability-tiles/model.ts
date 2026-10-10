@@ -2,9 +2,9 @@ import {
   addDays,
   type CalendarDate,
   daysBetween,
+  formatDayAndDate,
   formatLongDate,
   formatRelativeDays,
-  formatShortDate,
   weekdayIndex,
 } from '../../../lib/format/date'
 
@@ -18,7 +18,10 @@ export type Availability =
   | { status: 'soon'; date: CalendarDate; offset: number }
   | { status: 'later'; date: CalendarDate; offset: number }
 
-/** taken – dzień przed terminem, free – wolny termin, open – dalsze dni, beyond – termin poza paskiem, off – brak terminu. */
+/**
+ * Firma podaje jedną datę: od kiedy może zacząć. taken – dni wcześniej (zajęte), free – ta data,
+ * open – dni po niej (też możliwe, do uzgodnienia), beyond – termin dalej niż 2 tygodnie, off – brak.
+ */
 export type TileKind = 'taken' | 'free' | 'open' | 'beyond' | 'off'
 
 export type Tile = {
@@ -76,18 +79,30 @@ export function revealStaggerMs(availability: Availability): number {
   return Math.floor(REVEAL_SPREAD_MS / Math.max(lastRevealIndex(availability), 1))
 }
 
-/** „od dziś”, „od jutra”, „od 14 paź”; null, gdy nie ma terminu. */
+/** „od dziś”, „od jutra”, „od pt 16 paź”; null, gdy nie ma terminu. */
 export function availabilityFrom(availability: Availability): string | null {
   if (availability.status === 'none') return null
   if (availability.offset === 0) return 'od dziś'
   if (availability.offset === 1) return 'od jutra'
-  return `od ${formatShortDate(availability.date)}`
+  return `od ${formatDayAndDate(availability.date)}`
 }
 
-/** Podpis pod paskiem: „Wolny od 14 paź”, „Wolny od dziś”, „Zapytaj o termin”. */
+/** Podpis: „Wolny od pt 16 paź”, „Wolny od dziś”, „Termin do uzgodnienia”. */
 export function availabilityLabel(availability: Availability): string {
   const from = availabilityFrom(availability)
-  return from ? `Wolny ${from}` : 'Zapytaj o termin'
+  return from ? `Wolny ${from}` : 'Termin do uzgodnienia'
+}
+
+/** Nagłówek kafla: data i odstęp od dziś („pt 16 paź” + „za 7 dni”). */
+export function availabilitySummary(availability: Availability): {
+  date: string
+  distance: string | null
+} {
+  if (availability.status === 'none') return { date: 'do uzgodnienia', distance: null }
+  return {
+    date: formatDayAndDate(availability.date),
+    distance: formatRelativeDays(availability.offset),
+  }
 }
 
 /** „potwierdzony wczoraj”, „potwierdzony 3 dni temu”. */
@@ -101,7 +116,8 @@ export function availabilityDescription(
   availability: Availability,
   confirmedOn?: CalendarDate,
 ): string {
-  if (availability.status === 'none') return 'Brak potwierdzonego terminu. Zapytaj o termin.'
+  if (availability.status === 'none')
+    return 'Najbliższy wolny termin: do uzgodnienia – firma nie podała daty.'
   const when = `${formatLongDate(availability.date)}, ${formatRelativeDays(availability.offset)}`
   const confirmed = confirmedOn ? ` ${capitalize(confirmedLabel(today, confirmedOn))}.` : ''
   return `Najbliższy wolny termin: ${when}.${confirmed}`

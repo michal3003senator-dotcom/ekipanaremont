@@ -475,12 +475,16 @@
     padding-block-end: env(safe-area-inset-bottom);
   }
 
-  /* Kafel terminu (DESIGN §2): 14 dni od dziś, szersza fuga między tygodniami. */
+  /* Kafel terminu (DESIGN §2): 14 dni od dziś z numerami dni, szersza fuga między tygodniami. */
   .tiles,
   .tiles-labels {
     --tile-gap: calc(var(--spacing) * 1);
     display: flex;
     gap: var(--tile-gap);
+  }
+
+  .tiles {
+    container-type: inline-size;
   }
 
   :is(.tiles, .tiles-labels)[data-size='hero'] {
@@ -495,19 +499,30 @@
   .tiles-labels > * {
     flex: 1 1 0;
     min-width: 0;
+    text-align: center;
     white-space: nowrap;
   }
 
   .tile {
     flex: 1 1 0;
+    min-width: 0;
     aspect-ratio: 1;
     display: grid;
     place-items: center;
     border-radius: var(--radius-tile);
+    /* Numer dnia rośnie z paskiem: czytelny na telefonie i nie za duży na komputerze. */
+    font-size: clamp(0.625rem, 3.4cqi, 0.9375rem);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
     transition-property: opacity, scale, background-color;
     transition-duration: var(--duration-state);
     transition-timing-function: var(--ease-standard);
     transition-delay: calc(var(--step, 0) * var(--tile-stagger, 0ms));
+  }
+
+  .tile[data-day]::before {
+    content: attr(data-day);
   }
 
   .tiles[data-size='hero'] .tile {
@@ -519,23 +534,18 @@
     block-size: 60%;
   }
 
-  .tile[data-tile='taken'] {
+  /* Dni przed terminem: zajęte. */
+  .tile[data-tile='taken'],
+  .tile-swatch[data-tile='taken'] {
     background-color: var(--line);
-    box-shadow:
-      inset 0 1px 0 var(--glaze),
-      inset 0 -1px 0 var(--glaze-shade);
+    color: var(--text-muted);
   }
 
-  .tile[data-tile='open'] {
-    box-shadow: inset 0 0 0 1px var(--line);
-  }
-
-  .tile:is([data-tile='free'], [data-tile='beyond']) {
+  /* Najbliższy wolny dzień – jedyny pełny fiolet. */
+  .tile[data-tile='free'],
+  .tile-swatch[data-tile='free'] {
     background-color: var(--accent);
     color: var(--on-accent);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.3),
-      inset 0 -1px 0 rgb(0 0 0 / 0.2);
     /* Fiolet zapala się chwilę po pojawieniu się kafla. */
     transition-delay:
       calc(var(--step, 0) * var(--tile-stagger, 0ms)),
@@ -543,9 +553,39 @@
       calc(var(--step, 0) * var(--tile-stagger, 0ms) + 50ms);
   }
 
+  /* Dni po terminie: firma może też wtedy, do uzgodnienia. */
+  .tile[data-tile='open'],
+  .tile-swatch[data-tile='open'] {
+    background-color: var(--accent-container);
+    color: var(--on-accent-container);
+  }
+
+  /* Termin dalej niż 2 tygodnie: wszystkie dni zajęte, strzałka „później”. */
+  .tile[data-tile='beyond'] {
+    background-color: var(--surface-2);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+  }
+
   .tile[data-tile='off'] {
     background-color: var(--surface-2);
+    color: var(--text-muted);
     box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  /* Dziś: obwódka w kolorze tekstu (także w legendzie). */
+  .tile[data-today],
+  .tile-swatch[data-today] {
+    outline: 2px solid var(--text);
+    outline-offset: -2px;
+  }
+
+  .tile-swatch {
+    display: inline-block;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-tile);
   }
 
   /* Animacja raz, po wejściu w ekran (TilesReveal). Bez JS i przy ograniczeniu ruchu: stan końcowy. */
@@ -555,9 +595,9 @@
       scale: 0.6;
     }
 
-    .tiles:not([data-played], [data-state='none'])
-      .tile:is([data-tile='free'], [data-tile='beyond']) {
+    .tiles:not([data-played], [data-state='none']) .tile[data-tile='free'] {
       background-color: var(--line);
+      color: var(--text-muted);
     }
   }
 }

@@ -5,6 +5,7 @@ import { FirmCard } from '@/components/features/firm/FirmCard'
 import { SearchForm } from '@/components/features/search/SearchForm'
 import { Button } from '@/components/ui/Button'
 import { searchFirms } from '@/lib/search/firms'
+import { cityList, cityOptions } from '@/lib/localities'
 import { allServices, serviceOptions } from '@/lib/search/options'
 import { publicContext } from '@/lib/search/context'
 import { loadFirmSummaries } from '@/lib/search/summary'
@@ -38,8 +39,9 @@ const STEPS = [
 
 export default async function HomePage() {
   const { payload, today, expiryDays } = await publicContext()
-  const [services, nearest] = await Promise.all([
+  const [services, cities, nearest] = await Promise.all([
     allServices(payload),
+    cityList(payload),
     searchFirms(payload, { today, expiryDays, withinDays: 30, limit: 6 }),
   ])
   const firms = await loadFirmSummaries(payload, nearest.ids, today, expiryDays)
@@ -58,7 +60,7 @@ export default async function HomePage() {
               zacząć. Porównaj i napisz do tych, które mają czas.
             </p>
           </div>
-          <SearchForm services={serviceOptions(services)} />
+          <SearchForm services={serviceOptions(services)} cities={cityOptions(cities)} />
           <nav aria-label="Często szukane" className="flex flex-wrap items-center gap-2 text-small">
             <span className="text-text-muted">Często szukane:</span>
             {QUICK.map((item) => (

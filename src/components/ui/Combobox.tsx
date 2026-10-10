@@ -25,6 +25,8 @@ type Props = FieldControlProps & {
   /** Pole ukryte z wybraną wartością – do wysłania formularzem. */
   name?: string
   className?: string
+  /** Lista rozwija się już po wejściu w puste pole – do przeglądania (miasta, kategorie usług). */
+  browseOnFocus?: boolean
 }
 
 /**
@@ -38,6 +40,7 @@ export function Combobox({
   onValueChange,
   onQueryChange,
   loading = false,
+  browseOnFocus = false,
   placeholder,
   name,
   className,
@@ -52,7 +55,8 @@ export function Combobox({
     ? [...options]
     : filterByQuery(options, query, (option) => option.label)
   const optionId = (index: number) => `${control.id}-opcja-${index}`
-  const expanded = open && query.trim().length > 0
+  const browsing = browseOnFocus && query.trim().length === 0 && results.length > 0
+  const expanded = open && (query.trim().length > 0 || browsing)
 
   function choose(option: ComboboxOption) {
     onValueChange(option)
@@ -114,6 +118,9 @@ export function Combobox({
           onQueryChange?.(event.target.value)
         }}
         onKeyDown={onKeyDown}
+        onFocus={() => {
+          if (browseOnFocus) setOpen(true)
+        }}
         onBlur={() => {
           setOpen(false)
           // Wartość tylko z listy: tekst bez wyboru wraca do wybranej pozycji.

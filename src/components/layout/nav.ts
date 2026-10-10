@@ -2,6 +2,8 @@ export type NavLink = { href: string; label: string }
 
 export const SITE_NAV: readonly NavLink[] = [
   { href: '/szukaj', label: 'Szukaj firm' },
+  { href: '/uslugi', label: 'Usługi' },
+  { href: '/miasta', label: 'Miasta' },
   // Poradnik i Kalkulatory dokłada siteNav(), gdy są opublikowane treści.
   { href: '/rejestracja', label: 'Dla firm' },
 ]

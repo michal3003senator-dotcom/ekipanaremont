@@ -1,6 +1,7 @@
 import type { PostgresAdapter } from '@payloadcms/db-postgres'
 import { sql } from '@payloadcms/db-postgres'
 import type { Payload } from 'payload'
+import { cache } from 'react'
 
 import { normalizeSearch } from '@/lib/format/search'
 import type { Locality } from '@/payload-types'
@@ -28,7 +29,7 @@ export const toOption = (locality: Locality): LocalityOption => ({
 
 /**
  * Podpowiedzi miejscowości bez polskich znaków i odporne na literówki (SPEC 3.1, pg_trgm):
- * najpierw dokładna nazwa, potem nazwy zaczynające się od frazy, potem najbardziej podobne.
+ * najpierw dokładna nazwa, potem nazwy zaczynające się od frazy (miasta przed wsiami), potem podobne.
  */
 export async function searchLocalities(
   payload: Payload,
@@ -43,7 +44,7 @@ export async function searchLocalities(
     WHERE type IN ('miejscowosc', 'dzielnica')
       AND (name_search LIKE ${`${needle}%`} OR name_search % ${needle})
     ORDER BY name_search = ${needle} DESC, name_search LIKE ${`${needle}%`} DESC,
-      similarity(name_search, ${needle}) DESC, length(name) ASC
+      is_city DESC, similarity(name_search, ${needle}) DESC, length(name) ASC
     LIMIT ${limit}
   `)
   if (!rows.length) return []
@@ -61,3 +62,23 @@ export async function searchLocalities(
     .filter((doc): doc is Locality => Boolean(doc))
     .map((doc) => ({ ...toOption(doc), value: value === 'slug' ? (doc.slug ?? doc.id) : doc.id }))
 }
+
+/**
+ * Miasta województwa (prawa miejskie wg TERYT) i dzielnice Łodzi – lista w pustym polu „Gdzie?”
+ * i na stronie /miasta. Łódź i jej dzielnice pierwsze, dalej alfabetycznie.
+ */
+export const cityList = cache(async (payload: Payload): Promise<Locality[]> => {
+  const { docs } = await payload.find({
+    collection: 'localities',
+    where: { or: [{ isCity: { equals: true } }, { type: { equals: 'dzielnica' } }] },
+    depth: 2,
+    pagination: false,
+    overrideAccess: true,
+  })
+  const rank = (doc: Locality) => (doc.slug === 'lodz' ? 0 : doc.type === 'dzielnica' ? 1 : 2)
+  return docs.sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name, 'pl'))
+})
+
+/** Opcje pola „Gdzie?” z listy miast (wartość: slug – jak w adresie wyszukiwania). */
+export const cityOptions = (cities: Locality[]): LocalityOption[] =>
+  cities.map((doc) => ({ ...toOption(doc), value: doc.slug ?? doc.id }))

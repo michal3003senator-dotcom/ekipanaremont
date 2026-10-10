@@ -18,9 +18,11 @@ export const siteNav = cache(async (): Promise<NavLink[]> => {
     }),
     calculatorsEnabled().then((enabled) => (enabled ? listCalculators(payload) : [])),
   ])
-  const [search, ...rest] = SITE_NAV
+  const [search, services, cities, ...rest] = SITE_NAV
   return [
     search!,
+    services!,
+    cities!,
     ...(articles.totalDocs > 0 ? [{ href: '/artykuly', label: 'Poradnik' }] : []),
     ...(calculators.length > 0 ? [{ href: '/kalkulatory', label: 'Kalkulatory' }] : []),
     ...rest,

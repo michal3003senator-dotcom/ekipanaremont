@@ -29,6 +29,7 @@ export const ROUTE_SLUGS: ReadonlySet<string> = new Set([
   'kalkulatory',
   'kierunki',
   'logowanie',
+  'miasta',
   'moderacja',
   'monitoring',
   'odwolanie',
@@ -44,6 +45,7 @@ export const ROUTE_SLUGS: ReadonlySet<string> = new Set([
   'styleguide',
   'szukaj',
   'termin',
+  'uslugi',
   'zgloszenie',
   'zglos',
 ])

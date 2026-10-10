@@ -4,6 +4,12 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Miasta, usługi i czytelny kafel terminu (2026-10-10)
+- Miasta: znacznik `isCity` (60 miast województwa wg TERYT, migracja uzupełnia dane); puste pole „Gdzie?” pokazuje Łódź z dzielnicami i wszystkie miasta, podpowiedzi stawiają miasta przed wsiami; nowa strona `/miasta`.
+- Usługi: słownik z 15 do 39 kategorii i 223 rodzajów prac (m.in. kuchnie, budowa domu, ogrzewanie i pompy ciepła, klimatyzacja, fotowoltaika, alarmy i smart home, ogrodzenia, bruk, ogrody, roboty ziemne, rozbiórki, złota rączka, projektowanie, nadzór); dotychczasowe adresy bez zmian; nowa strona `/uslugi`; pole „Czego szukasz?” rozwija listę po kliknięciu.
+- Kafel terminu (ADR 0025): nagłówek „Najbliższy wolny termin” z datą i odstępem, numery dni, obwódka dziś, legenda, fiolet tylko dla wolnego dnia.
+- Menu: „Usługi” i „Miasta”; mapa strony z nowymi stronami.
+
 ### Faza 12 – przygotowanie wdrożenia (2026-10-10)
 - `docs/RUNBOOK.md`: usługi i zmienne, wdrożenie i pierwsze uruchomienie, wycofanie wersji, kopia i odtworzenie bazy (Neon PITR), rotacja kluczy, incydent (72 h na zgłoszenie do UODO), wnioski RODO klientów bez konta, zadania cykliczne, lista kontrolna startu.
 - `.env.example`: zmienne R2 (`R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`).

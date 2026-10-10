@@ -359,6 +359,7 @@ export interface Locality {
   nameSearch?: string | null;
   type: 'wojewodztwo' | 'powiat' | 'gmina' | 'miejscowosc' | 'dzielnica';
   parent?: (string | null) | Locality;
+  isCity?: boolean | null;
   /**
    * Uzupełnia się z nazwy. Małe litery, cyfry i myślniki.
    */
@@ -1982,6 +1983,7 @@ export interface LocalitiesSelect<T extends boolean = true> {
   nameSearch?: T;
   type?: T;
   parent?: T;
+  isCity?: T;
   slug?: T;
   lat?: T;
   lng?: T;
