@@ -7,6 +7,7 @@ import { isVerifiedStaff, nobody, staff } from '@/access'
 import { publishScheduled } from './content'
 import { expireAvailability, remindAvailability, remindTrialEnding } from './firms'
 import { moderationAlert, moderationDailyDigest } from './moderation'
+import { anonymizeInquiries } from './retention'
 import { requestReviews } from './reviews'
 
 /**
@@ -56,6 +57,7 @@ export const jobs: JobsConfig = {
   }),
   tasks: [
     purgeExpiredLeads,
+    anonymizeInquiries,
     remindAvailability,
     expireAvailability,
     remindTrialEnding,

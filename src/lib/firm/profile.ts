@@ -93,7 +93,7 @@ async function loadProfile(
   const firm: Firm | undefined = found[0]
   if (!firm) return null
 
-  const [projects, reviews, ratings] = await Promise.all([
+  const [projects, reviews, ratings, contact] = await Promise.all([
     payload.find({
       collection: 'projects',
       where: { firm: { equals: firm.id }, status: { equals: 'published' } },
@@ -118,6 +118,14 @@ async function loadProfile(
       pagination: false,
       ...guest,
     }),
+    // Telefon jest ukryty przed gościem (reguła pola) – tu tylko informacja, czy jest.
+    payload.findByID({
+      collection: 'firms',
+      id: firm.id,
+      select: { phone: true },
+      depth: 0,
+      overrideAccess: true,
+    }),
   ])
 
   const base = firm.baseLocality as Locality | null | undefined
@@ -132,7 +140,7 @@ async function loadProfile(
     shortDescription: firm.shortDescription ?? null,
     about: firm.about ?? null,
     logo: mediaPhoto(firm.logo),
-    hasPhone: Boolean(firm.phone),
+    hasPhone: Boolean(contact.phone),
     website: firm.website ?? null,
     vatInvoice: Boolean(firm.vatInvoice),
     warrantyMonths: firm.warrantyMonths ?? null,

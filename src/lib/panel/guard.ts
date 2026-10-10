@@ -4,6 +4,7 @@ import { getPayload, type Payload } from 'payload'
 import { idOf } from '@/access'
 import { tooManyRequests } from '@/lib/actions'
 import { getFirmSession, type FirmSession } from '@/lib/auth/session'
+import { hasActiveBan } from '@/lib/moderation/sanctions'
 import { rateLimit } from '@/lib/rate-limit'
 
 export type ActionContext = {
@@ -18,7 +19,10 @@ export type ActionContext = {
  * Wspólny początek każdej akcji panelu: sesja firmy (bez niej – błąd, nie przekierowanie,
  * bo akcja jest publicznym endpointem) i limit żądań na konto.
  */
-export async function actionContext(): Promise<
+/**
+ * `allowBanned` – eksport i usunięcie danych (RODO art. 15, 17, 20) działają także przy blokadzie.
+ */
+export async function actionContext({ allowBanned = false } = {}): Promise<
   ActionContext | { error: ReturnType<typeof tooManyRequests> | { ok: false; message: string } }
 > {
   const session = await getFirmSession()
@@ -26,6 +30,11 @@ export async function actionContext(): Promise<
   const limit = await rateLimit('panelAction', session.id)
   if (!limit.ok) return { error: tooManyRequests(limit.retryAfterSeconds) }
   const payload = await getPayload({ config })
+  // Blokada całego konta (SPEC 3.11) zamyka także zapis – nie tylko strony panelu.
+  if (!allowBanned && (await hasActiveBan(payload, session.id, 'account')))
+    return {
+      error: { ok: false, message: 'Konto jest zablokowane. Szczegóły w e-mailu od moderatora.' },
+    }
   return {
     session,
     payload,

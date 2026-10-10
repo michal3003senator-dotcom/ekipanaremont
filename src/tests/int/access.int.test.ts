@@ -166,6 +166,42 @@ describe('firmy', () => {
     expect(list.docs[0]).not.toHaveProperty('registryData')
   })
 
+  it('treści ukrytej (zawieszonej) firmy znikają też z REST', async () => {
+    const project = await payload.create({
+      collection: 'projects',
+      data: { firm: f.firmC.id, title: 'Łazienka ukrytej firmy', status: 'published' },
+      overrideAccess: true,
+    })
+    const guest = await payload.find({
+      collection: 'projects',
+      where: { id: { equals: project.id } },
+      ...as(),
+    })
+    expect(guest.totalDocs).toBe(0)
+    const owner = await payload.find({
+      collection: 'projects',
+      where: { id: { equals: project.id } },
+      ...as(f.users.c),
+    })
+    expect(owner.totalDocs).toBe(1)
+  })
+
+  it('gość nie pobiera telefonów hurtowo ani nie filtruje po numerze', async () => {
+    await payload.update({
+      collection: 'firms',
+      id: f.firmA.id,
+      data: { phone: '600100200' },
+      overrideAccess: true,
+    })
+    const guest = await payload.findByID({ collection: 'firms', id: f.firmA.id, ...as() })
+    expect(guest).not.toHaveProperty('phone')
+    await expect(
+      payload.find({ collection: 'firms', where: { phone: { like: '600' } }, ...as() }),
+    ).rejects.toThrow()
+    const own = await payload.findByID({ collection: 'firms', id: f.firmA.id, ...as(f.users.a) })
+    expect(own.phone).toBe('600100200')
+  })
+
   it('firma A edytuje swój profil, ale nie status ani profil firmy B', async () => {
     const doc = await payload.update({
       collection: 'firms',

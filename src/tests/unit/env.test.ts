@@ -22,6 +22,21 @@ describe('parseEnv', () => {
     expect(() => parseEnv({ ...valid, PAYLOAD_SECRET: secret })).not.toThrow(secret)
   })
 
+  it('produkcja wymaga Upstash, Turnstile, SMTP i CRON_SECRET; podgląd i lokalnie nie', () => {
+    expect(() => parseEnv({ ...valid, VERCEL_ENV: 'production' })).toThrow(/UPSTASH_REDIS_REST_URL/)
+    expect(parseEnv({ ...valid, VERCEL_ENV: 'preview' })).toMatchObject(valid)
+    const production = {
+      ...valid,
+      VERCEL_ENV: 'production',
+      CRON_SECRET: 'c'.repeat(32),
+      UPSTASH_REDIS_REST_URL: 'https://eu1.upstash.io',
+      UPSTASH_REDIS_REST_TOKEN: 'token',
+      TURNSTILE_SECRET_KEY: 'sekret',
+      SMTP_HOST: 'smtp-relay.brevo.com',
+    }
+    expect(parseEnv(production)).toMatchObject(production)
+  })
+
   it('wymaga adresu bazy PostgreSQL', () => {
     expect(() => parseEnv({ ...valid, DATABASE_URL: 'mysql://localhost/db' })).toThrow(
       /DATABASE_URL/,

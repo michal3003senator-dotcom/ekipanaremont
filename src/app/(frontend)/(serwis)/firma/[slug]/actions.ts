@@ -23,7 +23,7 @@ const slugSchema = z
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
   .max(140)
 
-/** Aktywna firma po adresie (reguły dostępu gościa) – tylko id i telefon. */
+/** Aktywna firma po adresie (reguła dostępu gościa), numer telefonu – odczyt systemowy. */
 async function activeFirm(slug: unknown) {
   const parsed = slugSchema.safeParse(slug)
   if (!parsed.success) return null
@@ -31,12 +31,20 @@ async function activeFirm(slug: unknown) {
   const { docs } = await payload.find({
     collection: 'firms',
     where: { slug: { equals: parsed.data } },
-    select: { phone: true },
+    select: { slug: true },
     depth: 0,
     limit: 1,
     overrideAccess: false,
   })
-  return docs[0] ? { payload, firm: docs[0] } : null
+  if (!docs[0]) return null
+  const firm = await payload.findByID({
+    collection: 'firms',
+    id: docs[0].id,
+    select: { phone: true },
+    depth: 0,
+    overrideAccess: true,
+  })
+  return { payload, firm }
 }
 
 /** „Pokaż numer telefonu” (SPEC 3.2): numer nie trafia do HTML strony, każde pokazanie jest liczone. */

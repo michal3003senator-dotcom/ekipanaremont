@@ -8,7 +8,7 @@ import { firmForLink } from '@/lib/panel/availability-link'
 
 /** Potwierdzenie przyciskiem na stronie (POST) – skanery linków w poczcie nie potwierdzą terminu same. */
 export async function confirmFromEmailAction(formData: FormData): Promise<void> {
-  const token = String(formData.get('token') ?? '')
+  const token = String(formData.get('token') ?? '').slice(0, 1000)
   const firm = await firmForLink(token)
   if (!firm) redirect(`/termin/potwierdz/${encodeURIComponent(token)}`)
   const payload = await getPayload({ config })

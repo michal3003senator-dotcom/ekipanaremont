@@ -154,6 +154,7 @@ export interface Config {
   jobs: {
     tasks: {
       purgeExpiredLeads: TaskPurgeExpiredLeads;
+      anonymizeInquiries: TaskAnonymizeInquiries;
       remindAvailability: TaskRemindAvailability;
       expireAvailability: TaskExpireAvailability;
       remindTrialEnding: TaskRemindTrialEnding;
@@ -410,6 +411,7 @@ export interface Inquiry {
   reviewRequestedAt?: string | null;
   source?: ('direct' | 'calculator') | null;
   ipHash?: string | null;
+  anonymizedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1161,6 +1163,7 @@ export interface PayloadJob {
         taskSlug:
           | 'inline'
           | 'purgeExpiredLeads'
+          | 'anonymizeInquiries'
           | 'remindAvailability'
           | 'expireAvailability'
           | 'remindTrialEnding'
@@ -1204,6 +1207,7 @@ export interface PayloadJob {
     | (
         | 'inline'
         | 'purgeExpiredLeads'
+        | 'anonymizeInquiries'
         | 'remindAvailability'
         | 'expireAvailability'
         | 'remindTrialEnding'
@@ -1476,6 +1480,7 @@ export interface InquiriesSelect<T extends boolean = true> {
   reviewRequestedAt?: T;
   source?: T;
   ipHash?: T;
+  anonymizedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2319,6 +2324,14 @@ export interface CollectionsWidget {
  * via the `definition` "TaskPurgeExpiredLeads".
  */
 export interface TaskPurgeExpiredLeads {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskAnonymizeInquiries".
+ */
+export interface TaskAnonymizeInquiries {
   input?: unknown;
   output?: unknown;
 }

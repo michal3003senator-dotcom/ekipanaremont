@@ -1,6 +1,7 @@
 import type { CollectionConfig, FieldAccess } from 'payload'
 
 import {
+  ACTIVE_FIRM,
   admin,
   either,
   fieldFor,
@@ -46,7 +47,11 @@ export const Reviews: CollectionConfig = {
   labels: { singular: 'Opinia', plural: 'Opinie' },
   admin: { defaultColumns: ['firm', 'rating', 'status', 'createdAt'], group: 'Moderacja' },
   access: {
-    read: either(moderation, ownFirm(), where({ status: { equals: 'approved' } })),
+    read: either(
+      moderation,
+      ownFirm(),
+      where({ and: [{ status: { equals: 'approved' } }, ACTIVE_FIRM] }),
+    ),
     create: nobody,
     update: either(moderation, ownFirm()),
     delete: admin,

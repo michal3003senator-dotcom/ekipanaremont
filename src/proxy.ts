@@ -1,9 +1,29 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
+import { hmacFor } from '@/lib/crypto'
+import { rateLimit } from '@/lib/rate-limit'
+import { apiAuthVerdict, clientIp } from '@/lib/security/api-guard'
 import { buildCsp, createNonce } from '@/lib/security/csp'
 import { DRAFT_MODE_COOKIE } from '@/lib/security/headers'
 
-export function proxy(request: NextRequest) {
+/** Logowanie REST: konta firm tylko przez formularze serwisu, personel z limitem na IP. */
+async function guardApi(request: NextRequest) {
+  const verdict = apiAuthVerdict(request.method, request.nextUrl.pathname)
+  if (verdict === 'block')
+    return NextResponse.json({ errors: [{ message: 'Not Found' }] }, { status: 404 })
+  if (verdict === 'limit') {
+    const limit = await rateLimit('login', hmacFor('ip', clientIp(request.headers)))
+    if (!limit.ok)
+      return NextResponse.json(
+        { errors: [{ message: 'Za dużo prób. Spróbuj za kilka minut.' }] },
+        { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } },
+      )
+  }
+  return NextResponse.next()
+}
+
+export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/api/')) return guardApi(request)
   const nonce = createNonce()
   const csp = buildCsp({
     nonce,
@@ -37,5 +57,8 @@ export const config = {
         { type: 'header', key: 'purpose', value: 'prefetch' },
       ],
     },
+    // Tylko endpointy uwierzytelniania kont (reszta API bez proxy).
+    '/api/firmAccounts/:path*',
+    '/api/staff/:path*',
   ],
 }

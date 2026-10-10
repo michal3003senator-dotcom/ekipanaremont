@@ -4,6 +4,16 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 10 – audyt bezpieczeństwa i RODO (2026-10-10)
+- Raport `docs/AUDYT.md`: 8 poprawek, 5 punktów otwartych z propozycjami.
+- Pliki w Cloudflare R2 (`@payloadcms/storage-s3`, prywatny kubełek, reguły dostępu Payload); bez R2 na Vercelu start się zatrzymuje. Migracja `media_storage`.
+- Retencja: zadanie `anonymizeInquiries` usuwa dane klienta i zdjęcia zapytań po `retention.inquiriesMonths`. Migracja `inquiry_retention`.
+- REST: endpointy logowania i resetu hasła kont firm zablokowane (tylko formularze serwisu z Turnstile i limitami), logowanie personelu z limitem na IP.
+- Telefon firmy niedostępny w `GET /api/firms`; treści zawieszonej firmy i zdjęcia forum/giełdy niepubliczne także w REST.
+- Blokada konta obejmuje akcje panelu; eksport i usunięcie danych działają mimo blokady.
+- Produkcja wymaga Upstash, Turnstile, SMTP i `CRON_SECRET` (walidacja środowiska).
+- Zależności: nodemailer 10.0.10, undici ≥ 7.29.1, dompurify ≥ 3.4.16 (nadpisania pnpm).
+
 ### Faza 7 – centrum moderacji i zgłoszenia (2026-10-10)
 - `/moderacja` (moderator i administrator po 2FA, telefon najpierw):
   - kolejki Profile, Opinie, Zgłoszenia z licznikami; bez wyboru otwiera pierwszą z oczekującymi;

@@ -1,6 +1,16 @@
 import { APIError, type CollectionBeforeChangeHook, type CollectionConfig } from 'payload'
 
-import { admin, either, firmAccount, isFirmUser, moderation, ownFirm, staff, where } from '@/access'
+import {
+  ACTIVE_FIRM,
+  admin,
+  either,
+  firmAccount,
+  isFirmUser,
+  moderation,
+  ownFirm,
+  staff,
+  where,
+} from '@/access'
 import { assignOwnFirm } from '@/hooks/assignOwner'
 import { CALENDAR_MONTH } from '@/lib/validation'
 
@@ -32,7 +42,11 @@ export const Projects: CollectionConfig = {
     group: 'Firmy',
   },
   access: {
-    read: either(staff(), ownFirm(), where({ status: { equals: 'published' } })),
+    read: either(
+      staff(),
+      ownFirm(),
+      where({ and: [{ status: { equals: 'published' } }, ACTIVE_FIRM] }),
+    ),
     create: either(admin, firmAccount),
     update: either(moderation, ownFirm()),
     delete: either(moderation, ownFirm()),

@@ -137,5 +137,12 @@ export const Inquiries: CollectionConfig = {
       access: systemOnly,
     },
     hashField('ipHash'),
+    {
+      name: 'anonymizedAt',
+      type: 'date',
+      label: 'Dane klienta usunięte (retencja)',
+      index: true,
+      access: systemOnly,
+    },
   ],
 }

@@ -288,3 +288,51 @@ describe('centrum moderacji', () => {
     expect(counts.reports).toBeGreaterThanOrEqual(1)
   })
 })
+
+describe('retencja zapytań (RODO)', () => {
+  it('po okresie przechowywania dane klienta i zdjęcia znikają, rekord zostaje', async () => {
+    const target = await firm('active', 'Firma z dawnym zapytaniem')
+    const inquiry = await payload.create({
+      collection: 'inquiries',
+      data: {
+        firm: target.id,
+        description: 'Remont łazienki 6 m², płytki i biały montaż.',
+        clientName: 'Anna',
+        clientEmail: 'anna@example.com',
+        clientPhone: '600100200',
+        consentTextVersion: 'test',
+        consentAt: new Date().toISOString(),
+        status: 'closed',
+      },
+      ...system,
+    })
+    const fresh = await payload.create({
+      collection: 'inquiries',
+      data: {
+        firm: target.id,
+        description: 'Malowanie mieszkania 50 m².',
+        clientName: 'Jan',
+        clientEmail: 'jan@example.com',
+        consentTextVersion: 'test',
+        consentAt: new Date().toISOString(),
+        status: 'new',
+      },
+      ...system,
+    })
+    const db = (payload.db as unknown as PostgresAdapter).drizzle
+    await db.execute(
+      sql`UPDATE inquiries SET created_at = now() - interval '25 months' WHERE id = ${inquiry.id}`,
+    )
+
+    await payload.jobs.queue({ task: 'anonymizeInquiries', input: {}, queue: 'retencja' })
+    await payload.jobs.run({ queue: 'retencja' })
+
+    const old = await payload.findByID({ collection: 'inquiries', id: inquiry.id, ...system })
+    expect(old).toMatchObject({ clientName: 'Usunięto', status: 'closed' })
+    expect(old.clientPhone ?? null).toBeNull()
+    expect(old.anonymizedAt).toBeTruthy()
+    expect(JSON.stringify(old)).not.toContain('anna@example.com')
+    const kept = await payload.findByID({ collection: 'inquiries', id: fresh.id, ...system })
+    expect(kept.clientEmail).toBe('jan@example.com')
+  })
+})

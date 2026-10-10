@@ -56,6 +56,9 @@ export const ownFirm =
     return firm ? { [field]: { equals: firm } } : false
   }
 
+/** Treść firmy widoczna publicznie tylko przy aktywnym profilu (ukrycie przez moderatora działa też w REST). */
+export const ACTIVE_FIRM: Where = { 'firm.status': { equals: 'active' } }
+
 /** Stały warunek zapytania, np. publicznie tylko opublikowane. */
 export const where =
   (constraint: Where): Access =>

@@ -14,7 +14,7 @@ const NOTICES: Record<string, string> = {
 }
 
 const BANNED =
-  'Konto jest zablokowane. Uzasadnienie i link do odwołania wysłaliśmy e-mailem. Po zakończeniu blokady panel znowu będzie dostępny.'
+  'Konto jest zablokowane. Uzasadnienie i link do odwołania wysłaliśmy e-mailem. Po zakończeniu blokady panel znowu będzie dostępny. Kopię danych lub ich usunięcie załatwisz przez stronę Kontakt.'
 
 type Props = {
   searchParams: Promise<{ next?: string; haslo?: string; adres?: string; blokada?: string }>

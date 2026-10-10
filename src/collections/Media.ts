@@ -1,13 +1,15 @@
 import type { CollectionConfig } from 'payload'
 
-import { either, moderation, ownFirm, staff, where } from '@/access'
+import { ACTIVE_FIRM, all, either, moderation, ownFirm, staff, where } from '@/access'
+import { community } from '@/access/community'
 import { assignOwnFirm } from '@/hooks/assignOwner'
 
 const TEN_MB = 10 * 1024 * 1024
 
 /**
  * Pliki (SPEC 4, CLAUDE.md): tylko obrazy rozpoznane po zawartości, limit rozmiaru, ponowne kodowanie
- * przez sharp do WebP (bez EXIF). Zdjęcia zapytań widzi tylko firma-adresat i administrator.
+ * przez sharp do WebP (bez EXIF). Zdjęcia zapytań widzi tylko firma-adresat i administrator,
+ * zdjęcia forum i giełdy – tylko członkowie, zdjęcia ukrytej firmy – nikt publicznie.
  */
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -18,7 +20,20 @@ export const Media: CollectionConfig = {
     group: 'Treści',
   },
   access: {
-    read: either(staff('admin'), ownFirm(), where({ purpose: { not_equals: 'inquiry' } })),
+    read: either(
+      staff('admin'),
+      ownFirm(),
+      all(moderation, where({ purpose: { not_equals: 'inquiry' } })),
+      // Publicznie: zdjęcia aktywnych firm i artykułów; forum i giełda – tylko dla członków.
+      where({
+        and: [
+          { purpose: { in: ['project', 'logo', 'cover', 'article'] } },
+          { or: [{ firm: { exists: false } }, ACTIVE_FIRM] },
+        ],
+      }),
+      all(community('forum'), where({ purpose: { equals: 'forum' } })),
+      all(community('marketplace'), where({ purpose: { equals: 'listing' } })),
+    ),
     create: either(staff(), ({ req: { user } }) => user?.collection === 'firmAccounts'),
     update: either(moderation, staff('editor'), ownFirm()),
     delete: either(moderation, ownFirm()),

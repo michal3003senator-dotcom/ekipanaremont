@@ -97,7 +97,7 @@ export async function changeEmailAction(input: unknown): Promise<ActionResult> {
 
 /** Eksport danych konta i firmy w JSON (RODO, art. 20). Zapytania z odszyfrowanymi danymi – to dane firmy. */
 export async function exportDataAction(input: unknown): Promise<ActionResult<{ json: string }>> {
-  const ctx = await actionContext()
+  const ctx = await actionContext({ allowBanned: true })
   if ('error' in ctx) return ctx.error
   const parsed = confirmWithPasswordSchema.safeParse(input)
   if (!parsed.success) return invalid(parsed.error)
@@ -141,7 +141,7 @@ export async function exportDataAction(input: unknown): Promise<ActionResult<{ j
 
 /** Usunięcie konta i profilu firmy z treściami (SPEC 3.4). Nieodwracalne – wymaga hasła. */
 export async function deleteAccountAction(input: unknown): Promise<ActionResult> {
-  const ctx = await actionContext()
+  const ctx = await actionContext({ allowBanned: true })
   if ('error' in ctx) return ctx.error
   const parsed = confirmWithPasswordSchema.safeParse(input)
   if (!parsed.success) return invalid(parsed.error)

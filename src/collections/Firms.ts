@@ -138,6 +138,8 @@ export const Firms: CollectionConfig = {
       name: 'phone',
       type: 'text',
       label: 'Telefon',
+      // Numer tylko przez „Pokaż numer” (zliczane, z limitem) – nie hurtowo z REST (SPEC 3.2).
+      access: { read: ownerOrModeration },
       validate: (value: unknown) =>
         !value || (typeof value === 'string' && PHONE_PL.test(value)) || 'Podaj numer z 9 cyframi.',
     },

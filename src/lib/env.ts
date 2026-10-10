@@ -29,13 +29,37 @@ const envSchema = z.object({
     emptyToUndefined,
     z.string().min(32, 'CRON_SECRET musi mieć co najmniej 32 znaki').optional(),
   ),
+  VERCEL_ENV: z.string().optional(),
+  UPSTASH_REDIS_REST_URL: z.preprocess(emptyToUndefined, z.string().optional()),
+  UPSTASH_REDIS_REST_TOKEN: z.preprocess(emptyToUndefined, z.string().optional()),
+  TURNSTILE_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
+  SMTP_HOST: z.preprocess(emptyToUndefined, z.string().optional()),
 })
 
-export type Env = z.infer<typeof envSchema>
+/**
+ * Produkcja (Vercel `production`) bez tych usług działałaby pozornie: limity tylko w pamięci jednej
+ * instancji, formularze odrzucane bez Turnstile, e-maile w pamięci. Lepiej nie wystartować.
+ */
+const PRODUCTION_REQUIRED = [
+  'CRON_SECRET',
+  'UPSTASH_REDIS_REST_URL',
+  'UPSTASH_REDIS_REST_TOKEN',
+  'TURNSTILE_SECRET_KEY',
+  'SMTP_HOST',
+] as const
+
+const checkedEnvSchema = envSchema.superRefine((value, ctx) => {
+  if (value.VERCEL_ENV !== 'production') return
+  for (const name of PRODUCTION_REQUIRED)
+    if (!value[name])
+      ctx.addIssue({ code: 'custom', path: [name], message: `${name} jest wymagany na produkcji` })
+})
+
+export type Env = z.infer<typeof checkedEnvSchema>
 
 /** Waliduje zmienne środowiskowe. Komunikat błędu nigdy nie zawiera wartości. */
 export function parseEnv(source: Record<string, string | undefined>): Env {
-  const result = envSchema.safeParse(source)
+  const result = checkedEnvSchema.safeParse(source)
   if (!result.success) {
     const problems = result.error.issues.map(
       (issue) => `- ${issue.path.join('.')}: ${issue.message}`,
