@@ -1,3 +1,4 @@
+import { ReportButton } from '@/components/features/report/ReportButton'
 import { Rating } from '@/components/ui/Rating'
 import { formatInstantDate } from '@/lib/format/date'
 import { formatCount, formatRating } from '@/lib/format/number'
@@ -49,7 +50,13 @@ export function RatingSummary({
 }
 
 /** Opublikowane opinie z odpowiedzią firmy. */
-export function ReviewList({ reviews }: { reviews: readonly ProfileReview[] }) {
+export function ReviewList({
+  reviews,
+  nonce,
+}: {
+  reviews: readonly ProfileReview[]
+  nonce?: string
+}) {
   return (
     <ul className="flex flex-col border-t border-line">
       {reviews.map((review) => (
@@ -70,6 +77,7 @@ export function ReviewList({ reviews }: { reviews: readonly ProfileReview[] }) {
               <p className="text-body">{review.firmReply}</p>
             </div>
           )}
+          <ReportButton targetType="reviews" targetId={review.id} label="opinię" nonce={nonce} />
         </li>
       ))}
     </ul>

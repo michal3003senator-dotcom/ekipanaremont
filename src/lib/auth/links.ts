@@ -4,7 +4,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto'
  * Podpisane linki (ADR 0018): `<dane base64url>.<HMAC-SHA256>` z celem, podmiotem i datą ważności.
  * Klucz `LINK_SIGNING_KEY` jest osobny od kluczy szyfrowania, więc rotacja nie psuje skrótów e-maili.
  */
-export type LinkPurpose = 'confirm-availability'
+export type LinkPurpose = 'confirm-availability' | 'appeal'
 
 type Claims = { p: LinkPurpose; s: string; e: number }
 type EnvSource = Readonly<Record<string, string | undefined>>

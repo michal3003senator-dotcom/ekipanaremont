@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { getPayload } from 'payload'
 
 import { isVerifiedStaff } from '@/access'
+import { hasActiveBan } from '@/lib/moderation/sanctions'
 import type { FirmAccount, Staff } from '@/payload-types'
 
 export type FirmSession = FirmAccount & { collection: 'firmAccounts' }
@@ -32,9 +33,20 @@ export async function getEditorialStaff(): Promise<(Staff & { collection: 'staff
   return isVerifiedStaff(user, 'admin', 'editor') ? (user as Staff & { collection: 'staff' }) : null
 }
 
+export type StaffSession = Staff & { collection: 'staff' }
+
+/** Moderator lub administrator po kodzie 2FA – centrum moderacji (SPEC 3.11). */
+export async function getModerator(): Promise<StaffSession | null> {
+  const user = await sessionUser()
+  return isVerifiedStaff(user, 'admin', 'moderator') ? (user as StaffSession) : null
+}
+
 /** Strona tylko dla firm: bez sesji przekierowanie do logowania z powrotem na `next`. */
 export async function requireFirm(next = '/panel'): Promise<FirmSession> {
   const session = await getFirmSession()
   if (!session) redirect(`/logowanie?next=${encodeURIComponent(next)}`)
+  // Blokada całego konta (SPEC 3.11): panel niedostępny do końca blokady.
+  if (await hasActiveBan(await getPayload({ config }), session.id, 'account'))
+    redirect('/logowanie?blokada=1')
   return session
 }

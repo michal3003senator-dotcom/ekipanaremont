@@ -14,6 +14,7 @@ import {
 } from '@/access'
 import { auditHooks } from '@/hooks/audit'
 import { syncRatingAfterChange, syncRatingAfterDelete } from '@/hooks/firmRating'
+import { requireModerationReason, reviewDecisionNotices } from '@/hooks/moderation'
 
 import { options, systemOnly } from './fields'
 
@@ -52,9 +53,10 @@ export const Reviews: CollectionConfig = {
   },
   indexes: [{ fields: ['firm', 'status'] }],
   hooks: {
-    afterChange: [...auditHooks.afterChange, syncRatingAfterChange],
+    afterChange: [...auditHooks.afterChange, syncRatingAfterChange, reviewDecisionNotices],
     afterDelete: [...auditHooks.afterDelete, syncRatingAfterDelete],
     beforeChange: [
+      requireModerationReason('reviews', ['rejected']),
       ({ data, originalDoc }) => {
         const next = { ...data }
         // Data pierwszej odpowiedzi – od niej liczymy 24 h na poprawki.

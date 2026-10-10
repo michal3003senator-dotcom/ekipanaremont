@@ -6,6 +6,7 @@ import { isVerifiedStaff, nobody, staff } from '@/access'
 
 import { publishScheduled } from './content'
 import { expireAvailability, remindAvailability, remindTrialEnding } from './firms'
+import { moderationAlert, moderationDailyDigest } from './moderation'
 import { requestReviews } from './reviews'
 
 /**
@@ -60,5 +61,7 @@ export const jobs: JobsConfig = {
     remindTrialEnding,
     requestReviews,
     publishScheduled,
+    moderationAlert,
+    moderationDailyDigest,
   ],
 }

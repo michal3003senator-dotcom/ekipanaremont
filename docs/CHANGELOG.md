@@ -4,6 +4,20 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 7 – centrum moderacji i zgłoszenia (2026-10-10)
+- `/moderacja` (moderator i administrator po 2FA, telefon najpierw):
+  - kolejki Profile, Opinie, Zgłoszenia z licznikami; bez wyboru otwiera pierwszą z oczekującymi;
+  - karty z kontekstem (dane z rejestru, wcześniejsze decyzje, sankcje kont), wyszukiwanie po nazwie lub NIP;
+  - zatwierdzenie jednym dotknięciem, decyzje ograniczające z uzasadnieniem i szablonami z `settings`;
+  - ostrzeżenie lub blokada (forum, giełda, całe konto; 7, 30, 90 dni lub bezterminowo);
+  - instalacja jako aplikacja (manifest).
+- Zgłoszenia DSA: przycisk „Zgłoś” przy profilu, opinii i artykule (Zod, Turnstile, limit 5/h, e-mail szyfrowany, oświadczenie o dobrej wierze, potwierdzenie e-mailem).
+- Rejestr decyzji i odwołania (ADR 0024): każda decyzja ograniczająca – także z panelu Payload – wymaga uzasadnienia, trafia do `reports` i auditLog, autor dostaje e-mail z linkiem `/odwolanie/…` (183 dni), zgłaszający – decyzję z uzasadnieniem.
+- Blokada całego konta zamyka panel firmy do końca blokady.
+- Pulpit panelu Payload: do moderacji, nowe firmy (7 dni), aktywne terminy, zapytania (7 i 30 dni), koniec okresu próbnego w 7 dni.
+- Zadania: powiadomienie moderatorów co godzinę przy nowych zgłoszeniach i codzienne podsumowanie.
+- Migracja `phase7_moderation`. Testy: 8 integracyjnych (moderacja, zgłoszenia, odwołania, blokady), E2E: zatwierdzenie z telefonu, odrzucenie z uzasadnieniem, zgłoszenie z profilu, axe.
+
 ### Dane przykładowe i dokumenty (2026-10-07)
 - `pnpm seed demo` (tylko lokalnie):
   - 20 nowych firm z długimi opisami, 56 realizacjami ze zdjęciami i 85 opiniami (część z emotikonami i odpowiedziami firm);

@@ -55,7 +55,11 @@ export function profileApproved(panelUrl: string, trialEndsAt: string): EmailTem
   }
 }
 
-export function profileRejected(panelUrl: string, reason: string): EmailTemplate {
+export function profileRejected(
+  panelUrl: string,
+  reason: string,
+  appealUrl: string,
+): EmailTemplate {
   return {
     subject: 'Profil firmy wymaga poprawek',
     body: (
@@ -63,7 +67,7 @@ export function profileRejected(panelUrl: string, reason: string): EmailTemplate
         <Paragraph>Moderator nie zatwierdził profilu. Uzasadnienie:</Paragraph>
         <Paragraph>„{reason}”</Paragraph>
         <Action href={panelUrl}>Poprawiam profil</Action>
-        <Note>Możesz się odwołać od decyzji, odpowiadając na tę wiadomość.</Note>
+        <Note>Nie zgadzasz się z decyzją? Odwołaj się w ciągu 6 miesięcy: {appealUrl}</Note>
       </EmailLayout>
     ),
   }
@@ -181,6 +185,89 @@ export function reviewRequest(url: string, firmName: string): EmailTemplate {
         <Note>
           Link działa 30 dni i tylko raz. Opinię publikujemy po sprawdzeniu przez moderatora.
         </Note>
+      </EmailLayout>
+    ),
+  }
+}
+
+/**
+ * Decyzja ograniczająca (SPEC 3.11, art. 17 DSA): co zrobiliśmy, dlaczego i jak się odwołać.
+ * Bez treści, której dotyczy decyzja (mogła zawierać dane osobowe).
+ */
+export function moderationDecision({
+  what,
+  action,
+  reason,
+  appealUrl,
+}: {
+  what: string
+  action: string
+  reason: string
+  appealUrl: string
+}): EmailTemplate {
+  return {
+    subject: `Decyzja moderatora: ${what}`,
+    body: (
+      <EmailLayout preview={`${action}. Uzasadnienie i odwołanie w środku.`} heading={action}>
+        <Paragraph>Dotyczy: {what}.</Paragraph>
+        <Paragraph>Uzasadnienie: „{reason}”</Paragraph>
+        <Action href={appealUrl}>Odwołuję się od decyzji</Action>
+        <Note>Odwołanie rozpatruje inny moderator. Masz na nie 6 miesięcy od tej wiadomości.</Note>
+      </EmailLayout>
+    ),
+  }
+}
+
+/** Potwierdzenie przyjęcia zgłoszenia (art. 16 DSA). */
+export function reportReceived(what: string): EmailTemplate {
+  return {
+    subject: 'Przyjęliśmy zgłoszenie',
+    body: (
+      <EmailLayout
+        preview="Sprawdzimy zgłoszenie i napiszemy, co postanowiliśmy."
+        heading="Zgłoszenie przyjęte"
+      >
+        <Paragraph>Dziękujemy. Zgłoszenie dotyczy: {what}.</Paragraph>
+        <Paragraph>Moderator sprawdzi je i napisze do Ciebie z decyzją i uzasadnieniem.</Paragraph>
+      </EmailLayout>
+    ),
+  }
+}
+
+/** Decyzja w sprawie zgłoszenia – do zgłaszającego. */
+export function reportDecided(what: string, decision: string, reason: string): EmailTemplate {
+  return {
+    subject: 'Decyzja w sprawie zgłoszenia',
+    body: (
+      <EmailLayout preview={`${decision}. Szczegóły w środku.`} heading="Rozpatrzyliśmy zgłoszenie">
+        <Paragraph>Dotyczy: {what}.</Paragraph>
+        <Paragraph>Decyzja: {decision}.</Paragraph>
+        <Paragraph>Uzasadnienie: „{reason}”</Paragraph>
+        <Note>
+          Ekipa na Termin pośredniczy w kontakcie i nie rozstrzyga sporów między klientem a firmą.
+        </Note>
+      </EmailLayout>
+    ),
+  }
+}
+
+/** Podsumowanie dla moderatorów (SPEC 3.11, 5): tylko liczby, bez treści. */
+export function moderationDigest(
+  counts: { firms: number; reviews: number; reports: number },
+  url: string,
+): EmailTemplate {
+  const total = counts.firms + counts.reviews + counts.reports
+  return {
+    subject: `Do moderacji: ${total}`,
+    body: (
+      <EmailLayout
+        preview={`Profile ${counts.firms}, opinie ${counts.reviews}, zgłoszenia ${counts.reports}.`}
+        heading="Czeka na moderację"
+      >
+        <Paragraph>Profile firm: {counts.firms}</Paragraph>
+        <Paragraph>Opinie: {counts.reviews}</Paragraph>
+        <Paragraph>Zgłoszenia i odwołania: {counts.reports}</Paragraph>
+        <Action href={url}>Otwieram centrum moderacji</Action>
       </EmailLayout>
     ),
   }

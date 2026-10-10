@@ -470,6 +470,11 @@
     padding-block-end: env(safe-area-inset-bottom);
   }
 
+  /* Aplikacje instalowane (centrum moderacji) – treść nad paskiem systemowym telefonu. */
+  .safe-bottom {
+    padding-block-end: env(safe-area-inset-bottom);
+  }
+
   /* Kafel terminu (DESIGN §2): 14 dni od dziś, szersza fuga między tygodniami. */
   .tiles,
   .tiles-labels {

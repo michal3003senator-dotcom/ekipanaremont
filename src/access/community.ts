@@ -1,5 +1,7 @@
 import type { Access, PayloadRequest } from 'payload'
 
+import { hasActiveBan } from '@/lib/moderation/sanctions'
+
 import { firmIdOf, isFirmUser } from '.'
 
 export type CommunityScope = 'forum' | 'marketplace'
@@ -59,18 +61,7 @@ async function checkMembership(req: PayloadRequest, scope: CommunityScope): Prom
     return false
   }
 
-  const bans = await payload.count({
-    collection: 'sanctions',
-    overrideAccess: true,
-    req,
-    where: {
-      account: { equals: user.id },
-      type: { equals: 'ban' },
-      scope: { in: [scope, 'account'] },
-      or: [{ until: { exists: false } }, { until: { greater_than: new Date().toISOString() } }],
-    },
-  })
-  return bans.totalDocs === 0
+  return !(await hasActiveBan(payload, String(user.id), scope, req))
 }
 
 export const community =

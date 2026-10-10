@@ -70,6 +70,7 @@ export default buildConfig({
     },
     // Bez Gravatara: nie wysyłamy skrótów e-maili personelu do zewnętrznej usługi.
     avatar: 'default',
+    components: { beforeDashboard: ['@/components/admin/Dashboard#Dashboard'] },
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: ' – Ekipa na Termin' },
     user: Staff.slug,

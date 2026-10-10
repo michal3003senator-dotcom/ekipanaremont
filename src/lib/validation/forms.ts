@@ -9,7 +9,7 @@ import { CALENDAR_DATE, CALENDAR_MONTH, HTTPS_URL, isValidNip, PHONE_PL } from '
  * Schematy formularzy fazy 4 – te same w przeglądarce (React Hook Form) i w Server Actions.
  * Komunikaty konkretne, po polsku (DESIGN §8).
  */
-const email = z
+export const email = z
   .string()
   .trim()
   .toLowerCase()
@@ -21,11 +21,11 @@ const password = z
   .min(PASSWORD_MIN_LENGTH, `Hasło musi mieć co najmniej ${PASSWORD_MIN_LENGTH} znaków.`)
   .max(128, 'Hasło może mieć najwyżej 128 znaków.')
 
-const optionalText = (max: number) =>
+export const optionalText = (max: number) =>
   z.string().trim().max(max, `Najwyżej ${max} znaków.`).optional()
 const optionalInt = (min: number, max: number) =>
   z.number().int(`Podaj liczbę całkowitą.`).min(min).max(max, `Najwyżej ${max}.`).optional()
-const id = z.uuid('Nieprawidłowy identyfikator.')
+export const id = z.uuid('Nieprawidłowy identyfikator.')
 
 export const registerSchema = z.object({
   email,

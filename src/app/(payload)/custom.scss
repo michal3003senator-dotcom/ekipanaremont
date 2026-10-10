@@ -1,0 +1,48 @@
+// Pulpit panelu (SPEC 3.12): kafle z liczbami w stylu panelu Payload (jego zmienne motywu).
+.ent-dashboard {
+  margin-bottom: calc(var(--base) * 2);
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: var(--base);
+    margin: 0 0 var(--base);
+    padding: 0;
+    list-style: none;
+  }
+
+  a,
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--base) / 4);
+    height: 100%;
+    padding: var(--base);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--style-radius-m);
+    background: var(--theme-elevation-50);
+    color: var(--theme-text);
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus-visible {
+    border-color: var(--theme-elevation-400);
+  }
+
+  strong {
+    font-size: 2rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  span {
+    color: var(--theme-elevation-600);
+  }
+
+  .ent-dashboard__cta {
+    display: inline-flex;
+    width: auto;
+    height: auto;
+  }
+}

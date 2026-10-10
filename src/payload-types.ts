@@ -159,6 +159,8 @@ export interface Config {
       remindTrialEnding: TaskRemindTrialEnding;
       requestReviews: TaskRequestReviews;
       publishScheduled: TaskPublishScheduled;
+      moderationAlert: TaskModerationAlert;
+      moderationDailyDigest: TaskModerationDailyDigest;
       inline: {
         input: unknown;
         output: unknown;
@@ -1015,7 +1017,8 @@ export interface Report {
   id: string;
   targetType: 'firms' | 'reviews' | 'forumThreads' | 'forumPosts' | 'listings' | 'articles';
   targetId: string;
-  reason: 'illegal' | 'fake' | 'offensive' | 'spam' | 'theft' | 'other';
+  targetTitle?: string | null;
+  reason: 'illegal' | 'fake' | 'offensive' | 'spam' | 'theft' | 'other' | 'moderator' | 'appeal';
   description?: string | null;
   reporterName?: string | null;
   reporterEmail?: string | null;
@@ -1160,7 +1163,9 @@ export interface PayloadJob {
           | 'expireAvailability'
           | 'remindTrialEnding'
           | 'requestReviews'
-          | 'publishScheduled';
+          | 'publishScheduled'
+          | 'moderationAlert'
+          | 'moderationDailyDigest';
         taskID: string;
         input?:
           | {
@@ -1202,6 +1207,8 @@ export interface PayloadJob {
         | 'remindTrialEnding'
         | 'requestReviews'
         | 'publishScheduled'
+        | 'moderationAlert'
+        | 'moderationDailyDigest'
       )
     | null;
   queue?: string | null;
@@ -1907,6 +1914,7 @@ export interface ListingMessagesSelect<T extends boolean = true> {
 export interface ReportsSelect<T extends boolean = true> {
   targetType?: T;
   targetId?: T;
+  targetTitle?: T;
   reason?: T;
   description?: T;
   reporterName?: T;
@@ -2347,6 +2355,22 @@ export interface TaskRequestReviews {
  * via the `definition` "TaskPublishScheduled".
  */
 export interface TaskPublishScheduled {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskModerationAlert".
+ */
+export interface TaskModerationAlert {
+  input?: unknown;
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskModerationDailyDigest".
+ */
+export interface TaskModerationDailyDigest {
   input?: unknown;
   output?: unknown;
 }

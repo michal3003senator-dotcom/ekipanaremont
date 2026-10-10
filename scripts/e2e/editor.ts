@@ -1,14 +1,15 @@
 /**
  * Tylko testy E2E: redaktor z hasłem i ustawionym sekretem 2FA (TOTP), żeby test zalogował się
  * do panelu, licząc kod sam. Wypisuje sekret (base32). Wyłącznie lokalna baza.
- * Użycie: pnpm payload run scripts/e2e/editor.ts <e-mail> <hasło>
+ * Użycie: pnpm payload run scripts/e2e/editor.ts <e-mail> <hasło> [rola: editor | moderator]
  */
 import { randomBytes } from 'node:crypto'
 
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
-const [email, password] = process.argv.slice(2)
+const [email, password, roleArg] = process.argv.slice(2)
+const role: 'moderator' | 'editor' = roleArg === 'moderator' ? 'moderator' : 'editor'
 const host = new URL(process.env.DATABASE_URL ?? '').hostname
 if (!email || !password || !['localhost', '127.0.0.1'].includes(host))
   throw new Error('Tylko lokalna baza; podaj e-mail i hasło.')
@@ -37,7 +38,7 @@ const { docs } = await payload.find({
   limit: 1,
   ...system,
 })
-const data = { name: 'Redakcja E2E', role: 'editor' as const, password, totpSecret: secret }
+const data = { name: `Personel E2E (${role})`, role, password, totpSecret: secret }
 if (docs[0]) await payload.update({ collection: 'staff', id: docs[0].id, data, ...system })
 else await payload.create({ collection: 'staff', data: { ...data, email }, ...system })
 

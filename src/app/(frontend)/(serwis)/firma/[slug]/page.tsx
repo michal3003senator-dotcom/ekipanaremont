@@ -8,6 +8,7 @@ import type { ReactNode } from 'react'
 import { FirmCard } from '@/components/features/firm/FirmCard'
 import { FirmProfileHeader } from '@/components/features/firm/FirmProfileHeader'
 import { ProfileActions } from '@/components/features/firm/ProfileActions'
+import { ReportButton } from '@/components/features/report/ReportButton'
 import { ProjectGallery } from '@/components/features/firm/ProjectGallery'
 import { RatingSummary, ReviewList } from '@/components/features/firm/ReviewList'
 import { ViewBeacon } from '@/components/features/firm/ViewBeacon'
@@ -213,7 +214,7 @@ export default async function FirmProfilePage({ params }: Props) {
             {summary.rating !== null && profile.reviews.length > 0 ? (
               <div className="flex flex-col gap-8">
                 <RatingSummary average={summary.rating} distribution={profile.distribution} />
-                <ReviewList reviews={profile.reviews} />
+                <ReviewList reviews={profile.reviews} nonce={nonce} />
               </div>
             ) : (
               <p className="max-w-prose text-body text-text-muted">
@@ -257,6 +258,12 @@ export default async function FirmProfilePage({ params }: Props) {
                 .
               </span>
             </p>
+            <ReportButton
+              targetType="firms"
+              targetId={profile.id}
+              label="profil firmy"
+              nonce={nonce}
+            />
           </Section>
 
           <Section id="zapytanie" title="Wyślij zapytanie">

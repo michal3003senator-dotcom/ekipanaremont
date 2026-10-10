@@ -13,12 +13,19 @@ const NOTICES: Record<string, string> = {
   potwierdzony: 'Adres potwierdzony. Zaloguj się, żeby uzupełnić profil firmy.',
 }
 
-type Props = { searchParams: Promise<{ next?: string; haslo?: string; adres?: string }> }
+const BANNED =
+  'Konto jest zablokowane. Uzasadnienie i link do odwołania wysłaliśmy e-mailem. Po zakończeniu blokady panel znowu będzie dostępny.'
+
+type Props = {
+  searchParams: Promise<{ next?: string; haslo?: string; adres?: string; blokada?: string }>
+}
 
 export default async function LoginPage({ searchParams }: Props) {
-  if (await getFirmSession()) redirect('/panel')
   const params = await searchParams
-  const notice = NOTICES[params.haslo ?? ''] ?? NOTICES[params.adres ?? '']
+  // Zablokowane konto wraca tutaj z panelu – bez przekierowania z powrotem (pętla).
+  const banned = params.blokada === '1'
+  if (!banned && (await getFirmSession())) redirect('/panel')
+  const notice = banned ? BANNED : (NOTICES[params.haslo ?? ''] ?? NOTICES[params.adres ?? ''])
   return (
     <AccountScreen
       title="Zaloguj się do panelu firmy"

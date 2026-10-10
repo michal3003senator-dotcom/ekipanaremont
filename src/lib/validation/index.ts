@@ -31,6 +31,7 @@ export const ROUTE_SLUGS: ReadonlySet<string> = new Set([
   'logowanie',
   'moderacja',
   'monitoring',
+  'odwolanie',
   'opengraph-image',
   'opinia',
   'panel',
@@ -43,6 +44,7 @@ export const ROUTE_SLUGS: ReadonlySet<string> = new Set([
   'styleguide',
   'szukaj',
   'termin',
+  'zgloszenie',
   'zglos',
 ])
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -7,6 +8,7 @@ import { CalculatorBlock } from '@/components/features/calculators/CalculatorBlo
 import { ArticleCard } from '@/components/features/content/ArticleCard'
 import { RenderBlocks } from '@/components/features/content/blocks/RenderBlocks'
 import { PreviewBar } from '@/components/features/content/PreviewBar'
+import { ReportButton } from '@/components/features/report/ReportButton'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { faqItems, getArticle, relatedArticles } from '@/lib/content/articles'
 import { contentReader } from '@/lib/content/preview'
@@ -85,6 +87,7 @@ export default async function ArticlePage({ params }: Props) {
   const category = typeof article.category === 'object' ? article.category : null
   const cover = mediaPhoto(article.cover, 'large')
   const related = await relatedArticles(payload, article)
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   const url = new URL(
     `/artykuly/${article.slug}`,
     process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000',
@@ -149,6 +152,7 @@ export default async function ArticlePage({ params }: Props) {
             <CalculatorBlock calculator={calculator} reader={reader} />
           )}
         />
+        <ReportButton targetType="articles" targetId={article.id} label="artykuł" nonce={nonce} />
       </div>
       {related.length > 0 && (
         <section aria-labelledby="czytaj-dalej" className="border-t border-line pt-10">

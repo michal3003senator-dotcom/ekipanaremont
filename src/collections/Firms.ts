@@ -15,7 +15,8 @@ import {
 } from '@/access'
 import { auditHooks } from '@/hooks/audit'
 import { deleteFirmContent } from '@/hooks/firmCascade'
-import { notifyModerationDecision, startTrialOnApproval } from '@/hooks/firmModeration'
+import { startTrialOnApproval } from '@/hooks/firmTrial'
+import { firmDecisionNotices, requireModerationReason } from '@/hooks/moderation'
 import {
   checkAvailabilityDate,
   HTTPS_URL,
@@ -63,7 +64,7 @@ export const Firms: CollectionConfig = {
   },
   indexes: [{ fields: ['status', 'availability.date'] }],
   hooks: {
-    afterChange: [...auditHooks.afterChange, notifyModerationDecision],
+    afterChange: [...auditHooks.afterChange, firmDecisionNotices],
     beforeDelete: [deleteFirmContent],
     afterDelete: auditHooks.afterDelete,
     beforeValidate: [
@@ -72,6 +73,7 @@ export const Firms: CollectionConfig = {
         typeof data?.nip === 'string' ? { ...data, nip: normalizeNip(data.nip) } : data,
     ],
     beforeChange: [
+      requireModerationReason('firms', ['rejected', 'suspended']),
       startTrialOnApproval,
       // Każde potwierdzenie terminu (nowa data albo jawne potwierdzenie) odświeża `confirmedAt` (SPEC 3.5).
       ({ context, data, originalDoc }) => {

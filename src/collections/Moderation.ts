@@ -12,17 +12,22 @@ import {
   verifiedModeration,
 } from '@/access'
 import { auditHooks } from '@/hooks/audit'
+import {
+  reportDecisionNotices,
+  requireStatementOfReasons,
+  sanctionNotices,
+} from '@/hooks/moderation'
+import {
+  REPORT_DECISIONS,
+  REPORT_REASONS,
+  REPORT_TARGETS,
+  SANCTION_SCOPES,
+  SANCTION_TYPES,
+} from '@/lib/moderation/options'
 
 import { encrypted, options, systemOnly } from './fields'
 
-const TARGETS = options({
-  firms: 'Profil firmy',
-  reviews: 'Opinia',
-  forumThreads: 'Wątek forum',
-  forumPosts: 'Post forum',
-  listings: 'Ogłoszenie',
-  articles: 'Artykuł',
-})
+const TARGETS = options(REPORT_TARGETS)
 
 /** Personel tworzący rekord zapisuje się sam (nie da się podać kogoś innego). */
 const stampStaff =
@@ -40,8 +45,10 @@ export const Reports: CollectionConfig = {
   admin: { defaultColumns: ['targetType', 'reason', 'status', 'createdAt'], group: 'Moderacja' },
   access: { read: moderation, create: nobody, update: moderation, delete: admin },
   hooks: {
-    ...auditHooks,
+    afterChange: [...auditHooks.afterChange, reportDecisionNotices],
+    afterDelete: auditHooks.afterDelete,
     beforeChange: [
+      requireStatementOfReasons,
       ({ data, originalDoc, req: { user } }) =>
         data.status !== originalDoc?.status &&
         (data.status === 'resolved' || data.status === 'rejected')
@@ -68,19 +75,19 @@ export const Reports: CollectionConfig = {
       access: systemOnly,
     },
     {
+      name: 'targetTitle',
+      type: 'text',
+      label: 'Czego dotyczy',
+      maxLength: 200,
+      access: systemOnly,
+    },
+    {
       name: 'reason',
       type: 'select',
       label: 'Powód',
       required: true,
       access: systemOnly,
-      options: options({
-        illegal: 'Treść niezgodna z prawem',
-        fake: 'Fałszywa opinia lub dane',
-        offensive: 'Treść obraźliwa',
-        spam: 'Spam lub reklama',
-        theft: 'Podejrzenie kradzieży',
-        other: 'Inny powód',
-      }),
+      options: options(REPORT_REASONS),
     },
     { name: 'description', type: 'textarea', label: 'Opis', maxLength: 2000, access: systemOnly },
     encrypted(
@@ -126,13 +133,7 @@ export const Reports: CollectionConfig = {
       name: 'decision',
       type: 'select',
       label: 'Decyzja',
-      options: options({
-        none: 'Bez zmian',
-        hidden: 'Ukryto',
-        removed: 'Usunięto',
-        warned: 'Ostrzeżenie',
-        banned: 'Blokada',
-      }),
+      options: options(REPORT_DECISIONS),
     },
     {
       name: 'statementOfReasons',
@@ -169,7 +170,11 @@ export const Sanctions: CollectionConfig = {
     update: moderation,
     delete: admin,
   },
-  hooks: { ...auditHooks, beforeValidate: [stampStaff('createdBy')] },
+  hooks: {
+    afterChange: [...auditHooks.afterChange, sanctionNotices],
+    afterDelete: auditHooks.afterDelete,
+    beforeValidate: [stampStaff('createdBy')],
+  },
   fields: [
     {
       name: 'account',
@@ -184,14 +189,14 @@ export const Sanctions: CollectionConfig = {
       type: 'select',
       label: 'Zakres',
       required: true,
-      options: options({ forum: 'Forum', marketplace: 'Giełda', account: 'Całe konto' }),
+      options: options(SANCTION_SCOPES),
     },
     {
       name: 'type',
       type: 'select',
       label: 'Rodzaj',
       required: true,
-      options: options({ warning: 'Ostrzeżenie', ban: 'Blokada' }),
+      options: options(SANCTION_TYPES),
     },
     { name: 'until', type: 'date', label: 'Do (puste = bezterminowo)', index: true },
     { name: 'reason', type: 'textarea', label: 'Uzasadnienie', required: true, maxLength: 5000 },

@@ -27,6 +27,7 @@ Każda decyzja architektoniczna ma osobny plik `NNNN-tytul.md` (zasada 6 z CLAUD
 | [0021](0021-budzet-wydajnosci-stron-publicznych.md) | Budżet wydajności stron publicznych | zaakceptowana |
 | [0022](0022-tresci-trasy-i-harmonogram.md) | Treści: trasy, kalkulatory w panelu, harmonogram | zaakceptowana |
 | [0023](0023-podglad-na-zywo.md) | Podgląd na żywo w ramce panelu | zaakceptowana |
+| [0024](0024-moderacja-rejestr-decyzji-i-odwolania.md) | Moderacja: rejestr decyzji w `reports`, odwołania z podpisanego linku | zaakceptowana |
 
 ## Szablon
 

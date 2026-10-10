@@ -17,6 +17,8 @@ export const LIMITS = {
   phone: { points: 60, windowSeconds: 60 * 60 },
   view: { points: 300, windowSeconds: 60 * 60 },
   lead: { points: 5, windowSeconds: 60 * 60 },
+  report: { points: 5, windowSeconds: 60 * 60 },
+  appeal: { points: 3, windowSeconds: 60 * 60 },
 } as const
 
 export type LimitName = keyof typeof LIMITS
