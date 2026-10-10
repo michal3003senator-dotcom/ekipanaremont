@@ -4,6 +4,10 @@ Wszystkie istotne zmiany w projekcie. Format według [Keep a Changelog](https://
 
 ## [Nieopublikowane]
 
+### Faza 12 – przygotowanie wdrożenia (2026-10-10)
+- `docs/RUNBOOK.md`: usługi i zmienne, wdrożenie i pierwsze uruchomienie, wycofanie wersji, kopia i odtworzenie bazy (Neon PITR), rotacja kluczy, incydent (72 h na zgłoszenie do UODO), wnioski RODO klientów bez konta, zadania cykliczne, lista kontrolna startu.
+- `.env.example`: zmienne R2 (`R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`).
+
 ### Faza 10 – audyt bezpieczeństwa i RODO (2026-10-10)
 - Raport `docs/AUDYT.md`: 8 poprawek, 5 punktów otwartych z propozycjami.
 - Pliki w Cloudflare R2 (`@payloadcms/storage-s3`, prywatny kubełek, reguły dostępu Payload); bez R2 na Vercelu start się zatrzymuje. Migracja `media_storage`.
